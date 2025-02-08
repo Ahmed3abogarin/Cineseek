@@ -1,0 +1,187 @@
+package com.movies.cinemix.presentation.home
+
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
+import com.movies.cinemix.presentation.images
+import com.movies.cinemix.ui.theme.Purple40
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.yield
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ViewPagerSlider() {
+    val pagerState = rememberPagerState(
+        pageCount = { images.size },
+        initialPage = 2
+    )
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            yield()
+            delay(2000)
+            pagerState.animateScrollToPage(
+                page = (pagerState.currentPage + 1) % (pagerState.pageCount),
+                animationSpec = tween(600)
+            )
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .height(50.dp)
+                .fillMaxWidth()
+                .background(color = Purple40),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "View pager slide",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .weight(1f)
+                .padding(0.dp, 40.dp, 0.dp, 40.dp)
+        ) { page ->
+            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+
+            Card(
+                modifier = Modifier
+                    .graphicsLayer {
+                        lerp(
+                            start = 0.85f,
+                            stop = 1f,
+                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                        ).also { scale ->
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        alpha = lerp(
+                            start = 0.5f,
+                            stop = 1f,
+                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                        )
+
+                    }
+                    .fillMaxWidth()
+                    .padding(25.dp, 0.dp, 25.dp, 0.dp),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                val newImage = images[page]
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.LightGray)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Image(
+                        painter =
+                        painterResource(id = newImage),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(15.dp)
+                    ) {
+                        Text(text = "test text")
+                    }
+
+                }
+
+            }
+
+        }
+    }
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ViewPagerSlider2() {
+    val pagerState = rememberPagerState(
+        pageCount = { images.size },
+        initialPage = 2
+    )
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            yield()
+            delay(2000)
+            pagerState.animateScrollToPage(
+                page = (pagerState.currentPage + 1) % (pagerState.pageCount),
+                animationSpec = tween(600)
+            )
+        }
+    }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        HorizontalPager(
+            state = pagerState,
+            contentPadding = PaddingValues(50.dp)
+        ) { page ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+                Image(
+                    painter = painterResource(images[page]), contentDescription = null,
+                    modifier = Modifier
+                        .height(300.dp)
+                        .width(300.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+            }
+
+
+        }
+
+
+    }
+}
