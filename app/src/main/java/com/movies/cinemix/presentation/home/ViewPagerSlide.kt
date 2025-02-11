@@ -18,28 +18,35 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.movies.cinemix.domain.model.Result
 import com.movies.cinemix.presentation.images
 import com.movies.cinemix.ui.theme.Purple40
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
+import kotlin.math.abs
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViewPagerSlider() {
+fun ViewPagerSlider2() {
     val pagerState = rememberPagerState(
         pageCount = { images.size },
         initialPage = 2
@@ -55,7 +62,6 @@ fun ViewPagerSlider() {
             )
         }
     }
-
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -139,11 +145,12 @@ fun ViewPagerSlider() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViewPagerSlider2() {
+fun ViewPagerSlider(pagesCount: Int, list: List<Result>) {
     val pagerState = rememberPagerState(
-        pageCount = { images.size },
+        pageCount = { pagesCount },
         initialPage = 2
     )
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -157,28 +164,44 @@ fun ViewPagerSlider2() {
     }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
 
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(50.dp)
+            contentPadding = PaddingValues(end = 70.dp, start = 70.dp)
         ) { page ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+            val fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
 
-                Image(
-                    painter = painterResource(images[page]), contentDescription = null,
-                    modifier = Modifier
-                        .height(300.dp)
-                        .width(300.dp),
-                    contentScale = ContentScale.Crop
+            Card(modifier = Modifier.graphicsLayer {
+                lerp(
+                    start = 0.85f,
+                    stop = 1f,
+                    fraction = fraction
+                ).also { scale ->
+                    scaleX = scale
+                    scaleY = scale
+                }
+                alpha = lerp(
+                    start = 0.5f,
+                    stop = 1f,
+                    fraction =fraction
                 )
 
+            }) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data("https://image.tmdb.org/t/p/w500/" + list[page].backdrop_path)
+                        .build(),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .height(169.dp)
+                        .width(300.dp)
+                        .clip(MaterialTheme.shapes.medium),
+                    contentScale = ContentScale.Crop
+                )
             }
-
 
         }
 

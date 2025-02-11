@@ -1,7 +1,6 @@
 package com.movies.cinemix.data.remote
 
 import com.movies.cinemix.domain.model.Movie
-import com.movies.cinemix.domain.model.Result
 import retrofit2.http.GET
 import retrofit2.http.Query
 
