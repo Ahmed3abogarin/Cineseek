@@ -1,10 +1,12 @@
 package com.movies.cinemix.domain.repository
 
-import com.movies.cinemix.domain.model.Movie
+import androidx.paging.PagingData
+import com.movies.cinemix.domain.model.Result
+import kotlinx.coroutines.flow.Flow
 
 
 interface MoviesRepository {
 
-    suspend fun getNowPlayingMovies(): Movie?
+     fun getNowPlayingMovies(): Flow<PagingData<Result>>
 
 }

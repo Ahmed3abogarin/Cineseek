@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Result
@@ -145,7 +146,7 @@ fun ViewPagerSlider2() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViewPagerSlider(pagesCount: Int, list: List<Result>) {
+fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Result>) {
     val pagerState = rememberPagerState(
         pageCount = { pagesCount },
         initialPage = 2
@@ -190,17 +191,20 @@ fun ViewPagerSlider(pagesCount: Int, list: List<Result>) {
                 )
 
             }) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data("https://image.tmdb.org/t/p/w500/" + list[page].backdrop_path)
-                        .build(),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .height(169.dp)
-                        .width(300.dp)
-                        .clip(MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Crop
-                )
+                list[page]?.let {
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
+                            .build(),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .height(169.dp)
+                            .width(300.dp)
+                            .clip(MaterialTheme.shapes.medium),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
             }
 
         }

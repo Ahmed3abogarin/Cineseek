@@ -8,6 +8,7 @@ interface MoviesApi {
 
     @GET("now_playing")
     suspend fun getNowPlayingMovies(
+        @Query("page") page:Int,
         @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
-    ): Movie?
+    ): Movie
 }

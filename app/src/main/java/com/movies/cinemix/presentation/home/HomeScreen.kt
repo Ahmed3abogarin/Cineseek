@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.CinemixTheme
@@ -43,82 +44,90 @@ fun HomeScreen(
     val viewmodel: HomeViewModel = hiltViewModel()
     val state by viewmodel.state.collectAsState()
     // YoutubeButton(videoId,lifecycleOwner)
-    NowPlayingMovies(state)
+    NowPlayingMovies(state, viewmodel)
 
 }
 
 @Composable
 fun NowPlayingMovies(
     state: HomeViewState,
+    viewmodel: HomeViewModel,
 ) {
     val scrollState = rememberScrollState()
     if (state.isLoading) {
         CircularProgressIndicator()
     }
-    if (state.nowPlayingMovies != null) {
-        Column(
+    val moviesNow = viewmodel.nowPlayingMovies.collectAsLazyPagingItems()
+
+    Column(
+        modifier = Modifier
+            .background(MyColor)
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(30.dp))
+        ViewPagerSlider(
+            pagesCount = moviesNow.itemCount,
+            list = moviesNow
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
-                .background(MyColor)
-                .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
-            Spacer(modifier = Modifier.height(30.dp))
-            ViewPagerSlider(
-                pagesCount = state.nowPlayingMovies.results.size,
-                state.nowPlayingMovies.results
+            Text(
+                text = "Popular Movies",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
             )
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            ) {
-                Text(
-                    text = "Popular Movies",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text("See all", color = Color.White, fontSize = 14.sp)
-            }
-
-            MovieCard(movies = state.nowPlayingMovies.results)
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            ) {
-                Text(
-                    text = "Upcoming movies",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(text = "See all", color = Color.White, fontSize = 14.sp)
-            }
-
-            MovieCard(movies = state.nowPlayingMovies.results)
-
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            ) {
-                // space Between
-                // SpaceAround
-
-                Text(
-                    text = "Popular Movies",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text("See all", color = Color.White, fontSize = 14.sp)
-            }
-            Spacer(modifier = Modifier.height(20.dp))
+            Text("See all", color = Color.White, fontSize = 14.sp)
         }
+
+        MovieCard(moviesList = moviesNow)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Text(
+                text = "Upcoming movies",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(text = "See all", color = Color.White, fontSize = 14.sp)
+        }
+
+        MovieCard(moviesNow)
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            // space Between
+            // SpaceAround
+
+            Text(
+                text = "Popular Movies",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text("See all", color = Color.White, fontSize = 14.sp)
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        MovieCard(moviesNow)
     }
 }
 
@@ -133,7 +142,7 @@ fun NowPlayingPreview() {
     val state = HomeViewState(isLoading = false, null)
     CinemixTheme {
 
-        NowPlayingMovies(state = state)
+//        NowPlayingMovies(state = state)
     }
 }
 
