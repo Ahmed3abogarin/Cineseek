@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.movies.cinemix.presentation.common.MovieCard
+import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
@@ -87,7 +87,7 @@ fun NowPlayingMovies(
             Text("See all", color = Color.White, fontSize = 14.sp)
         }
 
-        MovieCard(moviesList = moviesNow)
+        MovieList(moviesList = moviesNow)
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -106,7 +106,7 @@ fun NowPlayingMovies(
             Text(text = "See all", color = Color.White, fontSize = 14.sp)
         }
 
-        MovieCard(moviesNow)
+        MovieList(moviesNow)
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -127,7 +127,7 @@ fun NowPlayingMovies(
             Text("See all", color = Color.White, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        MovieCard(moviesNow)
+        MovieList(moviesNow)
     }
 }
 
