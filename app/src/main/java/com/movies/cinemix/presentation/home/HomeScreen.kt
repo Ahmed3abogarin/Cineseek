@@ -13,10 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,8 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.presentation.common.MovieList
+import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.common.YoutubePlayer
-import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
 
 @Composable
@@ -42,31 +42,47 @@ fun HomeScreen(
     lifecycleOwner: LifecycleOwner,
 ) {
     val viewmodel: HomeViewModel = hiltViewModel()
-    val state by viewmodel.state.collectAsState()
     // YoutubeButton(videoId,lifecycleOwner)
-    NowPlayingMovies(state, viewmodel)
+    NowPlayingMovies(viewmodel)
 
 }
 
 @Composable
 fun NowPlayingMovies(
-    state: HomeViewState,
     viewmodel: HomeViewModel,
 ) {
     val scrollState = rememberScrollState()
-    if (state.isLoading) {
-        CircularProgressIndicator()
-    }
+
     val moviesNow = viewmodel.nowPlayingMovies.collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
             .background(MyColor)
+            .padding(top = 20.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // I added this column to not repeat the padding for the text and the search bar
+        Column(
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 24.dp).fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "What would you like to watch?",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge.copy(color = Color.White)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            MySearchBar(text = "", onValueChange = {}, readOnly = true, modifier = Modifier.padding(start = 16.dp, end = 16.dp)){
+            }
+
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+
+
         ViewPagerSlider(
             pagesCount = moviesNow.itemCount,
             list = moviesNow
@@ -139,11 +155,6 @@ fun NowPlayingPreview() {
     // using view model in preview cause the preview not to showing so don't forget not to use viewmodel in preview
     //val viewmodel: HomeViewModel = hiltViewModel()
 
-    val state = HomeViewState(isLoading = false, null)
-    CinemixTheme {
-
-//        NowPlayingMovies(state = state)
-    }
 }
 
 

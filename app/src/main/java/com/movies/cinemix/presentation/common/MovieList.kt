@@ -31,12 +31,12 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.movies.cinemix.domain.model.Result
+import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor2
 
 @Composable
-fun MovieList(moviesList: LazyPagingItems<Result>) {
+fun MovieList(moviesList: LazyPagingItems<Movies>) {
     val context = LocalContext.current
     val handlePagingResult = handlePagingResult(movies = moviesList)
     if (handlePagingResult){
@@ -85,7 +85,7 @@ fun MovieList(moviesList: LazyPagingItems<Result>) {
 
 @Composable
 fun handlePagingResult(
-    movies: LazyPagingItems<Result>
+    movies: LazyPagingItems<Movies>
 ): Boolean{
     val loadState = movies.loadState
     val error = when{

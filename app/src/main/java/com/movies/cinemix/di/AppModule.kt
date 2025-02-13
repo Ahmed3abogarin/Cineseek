@@ -3,6 +3,8 @@ package com.movies.cinemix.di
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.repository.MoviesRepositoryImpl
 import com.movies.cinemix.domain.repository.MoviesRepository
+import com.movies.cinemix.domain.usecases.GetNowPlayingMovies
+import com.movies.cinemix.domain.usecases.MoviesUseCases
 import com.movies.cinemix.util.Constants.NOW_PLAYING_URL
 import dagger.Module
 import dagger.Provides
@@ -18,7 +20,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideMoviesRepository(): MoviesApi{
+    fun provideMoviesRepository(): MoviesApi {
         return Retrofit.Builder()
             .baseUrl(NOW_PLAYING_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -28,7 +30,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(api: MoviesApi) :MoviesRepository{
+    fun provideMoviesUseCases(
+        moviesRepository: MoviesRepository,
+    ): MoviesUseCases = MoviesUseCases(
+        getNowPlayingMovies = GetNowPlayingMovies(moviesRepository)
+    )
+
+    @Provides
+    @Singleton
+    fun provideMovieRepository(api: MoviesApi): MoviesRepository {
         return MoviesRepositoryImpl(api)
 
     }

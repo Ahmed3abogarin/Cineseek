@@ -2,14 +2,13 @@ package com.movies.cinemix.data.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.movies.cinemix.domain.model.Movie
-import com.movies.cinemix.domain.model.Result
+import com.movies.cinemix.domain.model.Movies
 
 class MoviesPaging(
     private val moviesApi: MoviesApi
-) : PagingSource<Int,Result>(){
+) : PagingSource<Int,Movies>(){
     private var totalMoviesCount = 0
-    override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Movies>): Int? {
 
         return state.anchorPosition?.let { anchorPos ->
             val anchorPage = state.closestPageToPosition(anchorPosition = anchorPos)
@@ -19,7 +18,7 @@ class MoviesPaging(
 
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movies> {
         val page = params.key ?: 1
 
         return try {

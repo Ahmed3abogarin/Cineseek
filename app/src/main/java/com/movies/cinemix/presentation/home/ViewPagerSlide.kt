@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,14 +33,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.movies.cinemix.domain.model.Result
-import com.movies.cinemix.presentation.images
+import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.ui.theme.Purple40
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -47,7 +49,7 @@ import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViewPagerSlider2() {
+fun ViewPagerSlider2(images: List<Int>) {
     val pagerState = rememberPagerState(
         pageCount = { images.size },
         initialPage = 2
@@ -146,7 +148,7 @@ fun ViewPagerSlider2() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Result>) {
+fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
     val pagerState = rememberPagerState(
         pageCount = { pagesCount },
         initialPage = 2
@@ -170,40 +172,59 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Result>) {
 
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(end = 70.dp, start = 70.dp)
+            contentPadding = PaddingValues(end = 20.dp, start = 20.dp)
         ) { page ->
             val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
             val fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
 
-            Card(modifier = Modifier.graphicsLayer {
-                lerp(
-                    start = 0.85f,
-                    stop = 1f,
-                    fraction = fraction
-                ).also { scale ->
-                    scaleX = scale
-                    scaleY = scale
-                }
-                alpha = lerp(
-                    start = 0.5f,
-                    stop = 1f,
-                    fraction =fraction
-                )
-
-            }) {
-                list[page]?.let {
-                    AsyncImage(
-                        model = ImageRequest.Builder(context)
-                            .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
-                            .build(),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .height(169.dp)
-                            .width(300.dp)
-                            .clip(MaterialTheme.shapes.medium),
-                        contentScale = ContentScale.Crop
+            Box {
+                Card(modifier = Modifier.graphicsLayer {
+                    lerp(
+                        start = 0.85f,
+                        stop = 1f,
+                        fraction = fraction
+                    ).also { scale ->
+                        scaleX = scale
+                        scaleY = scale
+                    }
+                    alpha = lerp(
+                        start = 0.5f,
+                        stop = 1f,
+                        fraction = fraction
                     )
+
+                }) {
+                    list[page]?.let {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
+                                .build(),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .height(200.dp)
+                                .width(356.dp)
+                                .clip(MaterialTheme.shapes.medium),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
                 }
+
+                Row(modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth().padding(3.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(
+                        text = list[page]!!.title,
+                        style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Button(
+                        onClick = {}
+                    ) {
+                        Text(text = "Watch Now")
+                    }
+                }
+
+
 
             }
 
