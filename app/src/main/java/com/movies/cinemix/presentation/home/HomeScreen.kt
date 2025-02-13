@@ -39,16 +39,16 @@ import com.movies.cinemix.ui.theme.MyColor
 @Composable
 fun HomeScreen(
     videoId: String,
-    lifecycleOwner: LifecycleOwner,
+   // lifecycleOwner: LifecycleOwner,
 ) {
     val viewmodel: HomeViewModel = hiltViewModel()
     // YoutubeButton(videoId,lifecycleOwner)
-    NowPlayingMovies(viewmodel)
+    HomeScreenContent(viewmodel)
 
 }
 
 @Composable
-fun NowPlayingMovies(
+fun HomeScreenContent(
     viewmodel: HomeViewModel,
 ) {
     val scrollState = rememberScrollState()

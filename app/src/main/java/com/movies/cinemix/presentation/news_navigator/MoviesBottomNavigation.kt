@@ -91,7 +91,7 @@ fun MoviesBottomNav() {
         )
     }
     val indicatorWidth = (configuration.screenWidthDp/bottomItems.count())/2
-    val selectedIndex = remember {
+     val selectedIndex = remember {
         mutableIntStateOf(0)
     }
     val indicatorOffset by animateIntOffsetAsState(
