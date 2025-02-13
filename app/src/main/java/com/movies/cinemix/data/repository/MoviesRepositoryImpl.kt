@@ -16,13 +16,38 @@ class MoviesRepositoryImpl(
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging(
-                    moviesApi = moviesApi
-                )
+                MoviesPaging{page -> moviesApi.getNowPlayingMovies(page)}
             }
         ).flow
 
 
 
+    }
+
+    override fun getPopularMovies(): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging{page -> moviesApi.getPopularMovies(page)}
+            }
+        ).flow
+    }
+
+    override fun getTopRatedMovies(): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging{page -> moviesApi.getTopRatedMovies(page)}
+            }
+        ).flow
+    }
+
+    override fun getUpcomingMovies(): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging{page -> moviesApi.getUpcomingMovies(page)}
+            }
+        ).flow
     }
 }

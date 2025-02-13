@@ -1,5 +1,8 @@
 package com.movies.cinemix.domain.usecases
 
 data class MoviesUseCases (
-    val getNowPlayingMovies: GetNowPlayingMovies
+    val getNowPlayingMovies: GetNowPlayingMovies,
+    val getPopularMovies: GetPopularMovies,
+    val getTopRatedMovies: GetTopRatedMovies,
+    val getUpcomingMovies: GetUpcomingMovies
 )

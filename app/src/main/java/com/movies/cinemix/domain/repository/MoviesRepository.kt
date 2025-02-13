@@ -9,5 +9,11 @@ interface MoviesRepository {
 
      fun getNowPlayingMovies(): Flow<PagingData<Movies>>
 
+     fun getPopularMovies(): Flow<PagingData<Movies>>
+
+     fun getTopRatedMovies(): Flow<PagingData<Movies>>
+
+     fun getUpcomingMovies(): Flow<PagingData<Movies>>
+
 
 }

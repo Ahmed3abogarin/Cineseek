@@ -54,6 +54,9 @@ fun NowPlayingMovies(
     val scrollState = rememberScrollState()
 
     val moviesNow = viewmodel.nowPlayingMovies.collectAsLazyPagingItems()
+    val popularMovies = viewmodel.popularMovies.collectAsLazyPagingItems()
+    val topRatedMovies = viewmodel.topRatedMovies.collectAsLazyPagingItems()
+    val upcomingMovies = viewmodel.upcomingMovies.collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
@@ -67,13 +70,13 @@ fun NowPlayingMovies(
 
         // I added this column to not repeat the padding for the text and the search bar
         Column(
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 24.dp).fillMaxWidth(),
+            modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 24.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "What would you like to watch?",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(color = Color.White)
+                style = MaterialTheme.typography.titleLarge.copy(color = Color.White, fontSize = 28.sp )
             )
             Spacer(modifier = Modifier.height(10.dp))
             MySearchBar(text = "", onValueChange = {}, readOnly = true, modifier = Modifier.padding(start = 16.dp, end = 16.dp)){
@@ -103,7 +106,7 @@ fun NowPlayingMovies(
             Text("See all", color = Color.White, fontSize = 14.sp)
         }
 
-        MovieList(moviesList = moviesNow)
+        MovieList(moviesList = popularMovies)
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -122,7 +125,7 @@ fun NowPlayingMovies(
             Text(text = "See all", color = Color.White, fontSize = 14.sp)
         }
 
-        MovieList(moviesNow)
+        MovieList(upcomingMovies)
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -135,7 +138,7 @@ fun NowPlayingMovies(
             // SpaceAround
 
             Text(
-                text = "Popular Movies",
+                text = "Top rated",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
@@ -143,7 +146,7 @@ fun NowPlayingMovies(
             Text("See all", color = Color.White, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        MovieList(moviesNow)
+        MovieList(topRatedMovies)
     }
 }
 

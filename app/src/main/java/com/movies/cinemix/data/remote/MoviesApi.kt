@@ -11,4 +11,24 @@ interface MoviesApi {
         @Query("page") page:Int,
         @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
     ): MovieResponse
+
+
+    @GET("popular")
+    suspend fun getPopularMovies(
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+    ): MovieResponse
+
+    @GET("top_rated")
+    suspend fun getTopRatedMovies(
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+    ): MovieResponse
+
+
+    @GET("upcoming")
+    suspend fun getUpcomingMovies(
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+    ): MovieResponse
 }

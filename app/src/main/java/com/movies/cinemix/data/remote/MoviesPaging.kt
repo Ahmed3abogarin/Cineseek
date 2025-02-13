@@ -2,10 +2,11 @@ package com.movies.cinemix.data.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 
 class MoviesPaging(
-    private val moviesApi: MoviesApi
+    private val fetchMovies: suspend (Int) -> MovieResponse
 ) : PagingSource<Int,Movies>(){
     private var totalMoviesCount = 0
     override fun getRefreshKey(state: PagingState<Int, Movies>): Int? {
@@ -22,8 +23,9 @@ class MoviesPaging(
         val page = params.key ?: 1
 
         return try {
-            val moviesResponse = moviesApi.getNowPlayingMovies(page = page)
-            totalMoviesCount += moviesResponse!!.results.size
+            //val moviesResponse = moviesApi.getNowPlayingMovies(page = page)
+            val moviesResponse = fetchMovies(page)
+            totalMoviesCount += moviesResponse.results.size
             val movies =
                 moviesResponse.results
             LoadResult.Page(
