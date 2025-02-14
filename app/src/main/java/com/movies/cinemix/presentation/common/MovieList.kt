@@ -32,9 +32,10 @@ import com.movies.cinemix.ui.theme.MyColor2
 fun MovieList(moviesList: LazyPagingItems<Movies>) {
     val context = LocalContext.current
     val handlePagingResult = handlePagingResult(movies = moviesList)
+    val visibleMovies = minOf(20,moviesList.itemCount)
     if (handlePagingResult) {
         LazyRow {
-            items(moviesList.itemCount) {
+            items(visibleMovies) {
                 moviesList[it]?.let { movie ->
                     Column {
                         Card(

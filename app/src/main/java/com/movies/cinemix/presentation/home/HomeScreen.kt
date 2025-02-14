@@ -76,7 +76,7 @@ fun HomeScreenContent(
             Text(
                 text = "What would you like to watch?",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(color = Color.White, fontSize = 26.sp )
+                style = MaterialTheme.typography.titleLarge.copy(color = Color.White, fontSize = 22.sp )
             )
             Spacer(modifier = Modifier.height(10.dp))
             MySearchBar(text = "", onValueChange = {}, readOnly = true, modifier = Modifier.padding(start = 16.dp, end = 16.dp)){
