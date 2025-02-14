@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -60,40 +61,21 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun MoviesBottomNav() {
+fun MoviesBottomNav(
+    bottomItems: MutableList<BottomItem>,
+    onItemClicked: (Int) -> Unit
+) {
     val configuration = LocalConfiguration.current
-    val bottomItems = remember {
-        mutableStateListOf(
-            BottomItem(
-                icon = Icons.Rounded.Home,
-                color = Color(0xFF00AA44)
-            ),
-            BottomItem(
-                icon = Icons.Rounded.ShoppingCart,
-                color = Color(0xFF220055)
-            ),
-            BottomItem(
-                icon = Icons.Rounded.Person,
-                color = Color(0xFF654321)
-            ),
-            BottomItem(
-                icon = Icons.Rounded.Search,
-                color = Color(0xFFff1554)
-            ),
-            BottomItem(
-                icon = Icons.Rounded.Call,
-                color = Color(0xFF123456)
-            )
 
-        )
-    }
     val indicatorWidth = (configuration.screenWidthDp / bottomItems.count()) / 2
+
     val selectedIndex = remember {
         mutableIntStateOf(0)
     }
+
     val indicatorOffset by animateIntOffsetAsState(
         targetValue = IntOffset(
-            bottomItems[selectedIndex.intValue].offset.x.toInt() + (bottomItems[selectedIndex.intValue].size.width / 4) - (bottomItems.count() * 2) + (-2),
+            bottomItems[selectedIndex.intValue].offset.x.toInt() + (bottomItems[selectedIndex.value].size.width / 4) - (bottomItems.count() * 2) + (-2),
             15
         ), animationSpec = tween(400)
     )
@@ -154,7 +136,8 @@ fun MoviesBottomNav() {
                             },
                             onClick = {
                                 switching.value = true
-                                selectedIndex.intValue = index
+                                selectedIndex.value = index
+                                onItemClicked(selectedIndex.value)
                             }
                         ),
                     contentAlignment = Alignment.Center
