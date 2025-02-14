@@ -59,9 +59,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
 
-
-
-
 @Composable
 fun MoviesBottomNav() {
     val configuration = LocalConfiguration.current
@@ -90,13 +87,13 @@ fun MoviesBottomNav() {
 
         )
     }
-    val indicatorWidth = (configuration.screenWidthDp/bottomItems.count())/2
-     val selectedIndex = remember {
+    val indicatorWidth = (configuration.screenWidthDp / bottomItems.count()) / 2
+    val selectedIndex = remember {
         mutableIntStateOf(0)
     }
     val indicatorOffset by animateIntOffsetAsState(
         targetValue = IntOffset(
-            bottomItems[selectedIndex.intValue].offset.x.toInt() + (bottomItems[selectedIndex.intValue].size.width / 4) - (bottomItems.count()*2)+(-2),
+            bottomItems[selectedIndex.intValue].offset.x.toInt() + (bottomItems[selectedIndex.intValue].size.width / 4) - (bottomItems.count() * 2) + (-2),
             15
         ), animationSpec = tween(400)
     )
@@ -105,7 +102,7 @@ fun MoviesBottomNav() {
         animationSpec = tween(500)
     )
     val infiniteTransition = rememberInfiniteTransition()
-    val indicatorFlashingColor  by infiniteTransition.animateFloat(
+    val indicatorFlashingColor by infiniteTransition.animateFloat(
         initialValue = .7f,
         targetValue = .6f,
         animationSpec = infiniteRepeatable(
@@ -215,7 +212,7 @@ fun MoviesBottomNav() {
                                             alpha = indicatorFlashingColor - .2f
                                         ),
                                         indicatorColor.copy(
-                                            alpha = indicatorFlashingColor-.4f
+                                            alpha = indicatorFlashingColor - .4f
                                         ),
                                         Color.Transparent
                                     )

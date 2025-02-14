@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.movies.cinemix.ui.theme.CinemixTheme
+import com.movies.cinemix.ui.theme.MyGray
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,9 +78,9 @@ fun MySearchBar(
                     color = Color.Gray
                 )
             },
-            shape = MaterialTheme.shapes.medium,
+
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.DarkGray,
+                containerColor = MyGray,
                 unfocusedTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
                 cursorColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
                 disabledIndicatorColor = Color.Transparent,
@@ -87,6 +89,7 @@ fun MySearchBar(
                 unfocusedIndicatorColor = Color.Transparent,
             ),
             singleLine = true,
+            shape = RoundedCornerShape(30.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions (
                 onSearch = {
@@ -105,7 +108,7 @@ fun Modifier.searchBarBorder() = composed {
         border(
             width = 1.dp,
             color = Color.Black,
-            shape = MaterialTheme.shapes.medium
+            shape = RoundedCornerShape(30.dp)
         )
     } else {
         this

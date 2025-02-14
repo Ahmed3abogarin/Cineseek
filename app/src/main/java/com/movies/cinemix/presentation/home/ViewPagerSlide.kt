@@ -210,20 +210,30 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
 
                 }
 
-                Row(modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth().padding(3.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(
-                        text = list[page]!!.title,
-                        style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Box(
+                        modifier = Modifier.weight(1f) // Allows Text to take up available space
+                    ) {
+                        Text(
+                            text = list[page]!!.title,
+                            style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                     Button(
                         onClick = {}
                     ) {
                         Text(text = "Watch Now")
                     }
                 }
-
 
 
             }
