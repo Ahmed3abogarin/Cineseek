@@ -31,12 +31,9 @@ class MainActivity : ComponentActivity() {
 //                    //YouTubeDialog("WTs49l7IGg0", LocalLifecycleOwner.current)
 //                    HomeScreen("WTs49l7IGg0", LocalLifecycleOwner.current)
 //                }
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+
                     NavGraph()
-                }
+
             }
         }
     }

@@ -155,91 +155,96 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
     )
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            yield()
-            delay(2000)
-            pagerState.animateScrollToPage(
-                page = (pagerState.currentPage + 1) % (pagerState.pageCount),
-                animationSpec = tween(600)
-            )
+
+
+    if (list.itemCount > 0){
+        LaunchedEffect(Unit) {
+            while (true) {
+                yield()
+                delay(2000)
+                pagerState.animateScrollToPage(
+                    page = (pagerState.currentPage + 1) % (pagerState.pageCount),
+                    animationSpec = tween(600)
+                )
+            }
         }
-    }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
 
-        HorizontalPager(
-            state = pagerState,
-            contentPadding = PaddingValues(end = 20.dp, start = 20.dp)
-        ) { page ->
-            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-            val fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
+            HorizontalPager(
+                state = pagerState,
+                contentPadding = PaddingValues(end = 20.dp, start = 20.dp)
+            ) { page ->
+                val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                val fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
 
-            Box {
-                Card(modifier = Modifier.graphicsLayer {
-                    lerp(
-                        start = 0.85f,
-                        stop = 1f,
-                        fraction = fraction
-                    ).also { scale ->
-                        scaleX = scale
-                        scaleY = scale
-                    }
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = fraction
-                    )
-
-                }) {
-                    list[page]?.let {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context)
-                                .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
-                                .build(),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .height(200.dp)
-                                .width(356.dp)
-                                .clip(MaterialTheme.shapes.medium),
-                            contentScale = ContentScale.Crop
+                Box {
+                    Card(modifier = Modifier.graphicsLayer {
+                        lerp(
+                            start = 0.85f,
+                            stop = 1f,
+                            fraction = fraction
+                        ).also { scale ->
+                            scaleX = scale
+                            scaleY = scale
+                        }
+                        alpha = lerp(
+                            start = 0.5f,
+                            stop = 1f,
+                            fraction = fraction
                         )
+
+                    }) {
+                        list[page]?.let {
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
+                                    .build(),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .width(356.dp)
+                                    .clip(MaterialTheme.shapes.medium),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
                     }
+
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Box(
+                            modifier = Modifier.weight(1f) // Allows Text to take up available space
+                        ) {
+                            Text(
+                                text = list[page]!!.title,
+                                style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                        Button(
+                            onClick = {}
+                        ) {
+                            Text(text = "Watch Now")
+                        }
+                    }
+
 
                 }
-
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Box(
-                        modifier = Modifier.weight(1f) // Allows Text to take up available space
-                    ) {
-                        Text(
-                            text = list[page]!!.title,
-                            style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    Button(
-                        onClick = {}
-                    ) {
-                        Text(text = "Watch Now")
-                    }
-                }
-
 
             }
 
+
         }
-
-
     }
+
 }

@@ -146,6 +146,8 @@ fun HomeScreenContent(
             Text("See all", color = Color.White, fontSize = 14.sp)
         }
         MovieList(topRatedMovies)
+        Spacer(modifier = Modifier.height(110.dp))
+
     }
 }
 

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,6 +50,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.movies.cinemix.ui.theme.BottomColor
 import kotlinx.coroutines.delay
 
 
@@ -96,11 +98,12 @@ fun MoviesBottomNav(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(8.dp, RoundedCornerShape(10.dp))
+            .padding(start = 12.dp, end = 12.dp)
+            .shadow(8.dp, RoundedCornerShape(30.dp))
             .clip(
                 RoundedCornerShape(10.dp)
             )
-            .background(Color(0xff212121))
+            .background(BottomColor)
     ) {
 
         Row(
@@ -135,6 +138,7 @@ fun MoviesBottomNav(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
+                        modifier = Modifier.size(36.dp),
                         imageVector = item.icon,
                         contentDescription = null,
                         tint = Color.White
