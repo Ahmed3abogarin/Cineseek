@@ -1,6 +1,6 @@
 [versions]
 accompanistSystemuicontroller = "0.31.4-beta"
-agp = "8.8.0"
+agp = "8.8.1"
 converterGson = "2.11.0"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"

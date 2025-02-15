@@ -86,8 +86,7 @@ fun MovieCard2(movie: Movies, modifier: Modifier = Modifier){
             }
         }
 
-        Spacer(modifier = Modifier.height(7.dp))
-        Box(modifier = Modifier.width(140.dp).padding(start = 5.dp)){
+        Box(modifier = Modifier.width(200.dp).padding(start = 5.dp, top = 3.dp)){
             Text(
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,
@@ -97,6 +96,8 @@ fun MovieCard2(movie: Movies, modifier: Modifier = Modifier){
                 overflow = TextOverflow.Ellipsis
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
+
 
 
     }
