@@ -19,19 +19,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
 
@@ -46,8 +43,9 @@ fun SeeAllMovies(
 
     val moviesList = viewModel.getMovies(movieCategory).collectAsLazyPagingItems()
     Scaffold (modifier = Modifier.background(Color.Magenta).fillMaxSize()) {
+        val bottomPadding = it.calculateTopPadding()
         LazyVerticalStaggeredGrid(
-            modifier = Modifier.fillMaxSize().padding(top = it.calculateTopPadding()).background(
+            modifier = Modifier.fillMaxSize().padding(top =bottomPadding , bottom =bottomPadding ).background(
                 MyColor),
             columns = StaggeredGridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
