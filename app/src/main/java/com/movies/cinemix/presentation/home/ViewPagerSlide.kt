@@ -19,6 +19,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +43,7 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.ui.theme.MyRed
 import com.movies.cinemix.ui.theme.Purple40
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -151,9 +154,14 @@ fun ViewPagerSlider2(images: List<Int>) {
 fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
     val pagerState = rememberPagerState(
         pageCount = { pagesCount },
-        initialPage = 2
+        initialPage = 0
     )
     val context = LocalContext.current
+    val colors = listOf(
+        Color.Black,
+        Color.Black.copy(alpha = .7f),
+        Color.Transparent
+    ).reversed()
 
 
 
@@ -175,12 +183,12 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
 
             HorizontalPager(
                 state = pagerState,
-                contentPadding = PaddingValues(end = 20.dp, start = 20.dp)
+                contentPadding = PaddingValues(end = 40.dp, start = 40.dp)
             ) { page ->
                 val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
                 val fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
 
-                Box {
+
                     Card(modifier = Modifier.graphicsLayer {
                         lerp(
                             start = 0.85f,
@@ -198,48 +206,57 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
 
                     }) {
                         list[page]?.let {
-                            AsyncImage(
-                                model = ImageRequest.Builder(context)
-                                    .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
-                                    .build(),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .height(200.dp)
-                                    .width(356.dp)
-                                    .clip(MaterialTheme.shapes.medium),
-                                contentScale = ContentScale.Crop
-                            )
+                            Box{
+                                AsyncImage(
+                                    model = ImageRequest.Builder(context)
+                                        .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
+                                        .build(),
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .width(356.dp)
+                                        .clip(MaterialTheme.shapes.medium),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Row(
+                                    modifier = Modifier
+                                        .background(brush = Brush.verticalGradient(colors))
+                                        .align(Alignment.BottomStart)
+                                        .fillMaxWidth()
+                                        .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Box(
+                                        modifier = Modifier.weight(1f) // Allows Text to take up available space
+                                    ) {
+                                        Text(
+                                            text = list[page]!!.title,
+                                            style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                    Button(
+                                        onClick = {},
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MyRed
+                                        )
+                                    ) {
+                                        Text(text = "Watch Now")
+                                    }
+                                }
+
+                            }
+
                         }
 
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Box(
-                            modifier = Modifier.weight(1f) // Allows Text to take up available space
-                        ) {
-                            Text(
-                                text = list[page]!!.title,
-                                style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                        Button(
-                            onClick = {}
-                        ) {
-                            Text(text = "Watch Now")
-                        }
-                    }
 
 
-                }
+
+
 
             }
 

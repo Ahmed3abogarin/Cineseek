@@ -43,6 +43,7 @@ fun SeeAllMovies(
 
     val moviesList = viewModel.getMovies(movieCategory).collectAsLazyPagingItems()
     Scaffold (modifier = Modifier.background(Color.Magenta).fillMaxSize()) {
+        Spacer(modifier = Modifier.height(20.dp))
         val bottomPadding = it.calculateTopPadding()
         LazyVerticalStaggeredGrid(
             modifier = Modifier.fillMaxSize().padding(top =bottomPadding , bottom =bottomPadding ).background(
@@ -96,8 +97,7 @@ fun MovieCard2(movie: Movies, modifier: Modifier = Modifier){
                 overflow = TextOverflow.Ellipsis
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-
+        Spacer(modifier = Modifier.height(24.dp))
 
 
     }

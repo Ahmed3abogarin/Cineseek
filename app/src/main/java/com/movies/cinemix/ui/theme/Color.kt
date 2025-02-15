@@ -19,3 +19,5 @@ val MyGray = Color(0xFFe6e6e8)
 
 val MyPink = Color(0xFFff1554)
 val MyGreen = Color(0xFF00AA44)
+
+val MyRed = Color(0xFFc30101)
