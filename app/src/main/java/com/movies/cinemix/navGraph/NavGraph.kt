@@ -1,6 +1,5 @@
 package com.movies.cinemix.navGraph
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,13 +28,18 @@ import androidx.navigation.compose.rememberNavController
 import com.movies.cinemix.presentation.favorite.FavoriteScreen
 import com.movies.cinemix.presentation.favorite.SearchScreen
 import com.movies.cinemix.presentation.home.HomeScreen
+import com.movies.cinemix.presentation.home.HomeViewModel
 import com.movies.cinemix.presentation.news_navigator.BottomItem
 import com.movies.cinemix.presentation.news_navigator.MoviesBottomNav
+import com.movies.cinemix.presentation.seeall.SeeAllMovies
+import com.movies.cinemix.presentation.seeall.SeeAllViewModel
 import com.movies.cinemix.ui.theme.MyGreen
 import com.movies.cinemix.ui.theme.MyPink
 
 @Composable
-fun NavGraph(){
+fun NavGraph() {
+    val homeViewmodel: HomeViewModel = hiltViewModel()
+    val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
 
     val bottomItems = remember {
         mutableStateListOf(
@@ -60,8 +64,8 @@ fun NavGraph(){
         mutableIntStateOf(0)
     }
 
-    selectedItem = remember (key1 = backstackState){
-        when(backstackState?.destination?.route){
+    selectedItem = remember(key1 = backstackState) {
+        when (backstackState?.destination?.route) {
             Route.HomeScreen.route -> 0
             Route.SearchScreen.route -> 1
             Route.FavoriteScreen.route -> 2
@@ -70,30 +74,55 @@ fun NavGraph(){
 
     }
 
-    Box (modifier = Modifier.fillMaxSize()
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
         NavHost(
             navController,
             startDestination = Route.HomeScreen.route,
         ) {
 
-            composable(Route.HomeScreen.route){
-                HomeScreen("")
+            composable(Route.HomeScreen.route) {
+
+                HomeScreen(
+                    viewmodel = homeViewmodel,
+                    "", navigateToAll = { category ->
+                        navigateToAll(
+                            navController = navController,
+                            movieCategory = category
+                        )
+                    })
             }
-            composable(Route.SearchScreen.route){
+            composable(Route.SearchScreen.route) {
                 SearchScreen()
             }
-            composable(Route.FavoriteScreen.route){
+            composable(Route.FavoriteScreen.route) {
                 FavoriteScreen()
+            }
+            composable(Route.SeeAllScreen.route) {
+                navController.previousBackStackEntry?.savedStateHandle?.get<String>("movieCategory")?.let { category ->
+                    SeeAllMovies(
+                        movieCategory = category,
+                        viewModel = seeAllViewmodel
+                    )
+
+                }
+
+
+
             }
 
         }
 
-        Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 25.dp)) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 25.dp)
+        ) {
             MoviesBottomNav(
                 bottomItems = bottomItems,
-                onItemClicked = {index ->
-                    when(index){
+                onItemClicked = { index ->
+                    when (index) {
                         0 -> navigateToTab(
                             navController,
                             route = Route.HomeScreen.route
@@ -116,25 +145,6 @@ fun NavGraph(){
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 fun navigateToTab(navController: NavController, route: String) {
@@ -151,4 +161,12 @@ fun navigateToTab(navController: NavController, route: String) {
 
 
     }
+}
+
+private fun navigateToAll(navController: NavController, movieCategory: String) {
+    navController.currentBackStackEntry?.savedStateHandle?.set("movieCategory", movieCategory)
+    navController.navigate(
+        route = Route.SeeAllScreen.route
+    )
+
 }

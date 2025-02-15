@@ -1,6 +1,7 @@
 package com.movies.cinemix.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.presentation.common.MovieList
@@ -38,18 +38,21 @@ import com.movies.cinemix.ui.theme.MyColor
 
 @Composable
 fun HomeScreen(
+    viewmodel: HomeViewModel,
     videoId: String,
-   // lifecycleOwner: LifecycleOwner,
+    navigateToAll: (String) -> Unit
+    // lifecycleOwner: LifecycleOwner,
 ) {
-    val viewmodel: HomeViewModel = hiltViewModel()
     // YoutubeButton(videoId,lifecycleOwner)
-    HomeScreenContent(viewmodel)
+    HomeScreenContent(viewmodel, navigateToAll = navigateToAll)
 
 }
+
 
 @Composable
 fun HomeScreenContent(
     viewmodel: HomeViewModel,
+    navigateToAll: (String) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -70,16 +73,26 @@ fun HomeScreenContent(
 
         // I added this column to not repeat the padding for the text and the search bar
         Column(
-            modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 24.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(start = 4.dp, end = 4.dp, top = 24.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "What would you like to watch?",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(color = Color.White, fontSize = 22.sp )
+                style = MaterialTheme.typography.titleLarge.copy(
+                    color = Color.White,
+                    fontSize = 24.sp
+                )
             )
             Spacer(modifier = Modifier.height(10.dp))
-            MySearchBar(text = "", onValueChange = {}, readOnly = true, modifier = Modifier.padding(start = 16.dp, end = 16.dp)){
+            MySearchBar(
+                text = "",
+                onValueChange = {},
+                readOnly = true,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            ) {
             }
 
         }
@@ -98,12 +111,20 @@ fun HomeScreenContent(
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
             Text(
-                text = "Popular Movies",
+                text = "What's Popular",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text("See all", color = Color.White, fontSize = 14.sp)
+            Text(
+                "See all",
+                color = Color.White,
+                fontSize = 14.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("popular")
+
+                })
+            )
         }
 
         MovieList(moviesList = popularMovies)
@@ -122,7 +143,15 @@ fun HomeScreenContent(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text(text = "See all", color = Color.White, fontSize = 14.sp)
+            Text(
+                text = "See all",
+                color = Color.White,
+                fontSize = 14.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("upcoming")
+
+                })
+            )
         }
 
         MovieList(upcomingMovies)
@@ -143,7 +172,15 @@ fun HomeScreenContent(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text("See all", color = Color.White, fontSize = 14.sp)
+            Text(
+                "See all",
+                color = Color.White,
+                fontSize = 14.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("topRated")
+
+                })
+            )
         }
         MovieList(topRatedMovies)
         Spacer(modifier = Modifier.height(110.dp))

@@ -7,10 +7,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    moviesUseCases: MoviesUseCases,
+    private val moviesUseCases: MoviesUseCases,
+
 ) : ViewModel() {
     val nowPlayingMovies = moviesUseCases.getNowPlayingMovies.invoke()
     val popularMovies = moviesUseCases.getPopularMovies.invoke()
     val topRatedMovies = moviesUseCases.getTopRatedMovies.invoke()
     val upcomingMovies = moviesUseCases.getUpcomingMovies.invoke()
+
+
 }
