@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph
-import com.movies.cinemix.navGraph.NavGraph
+import com.movies.cinemix.presentation.navGraph.NavGraph
 import com.movies.cinemix.presentation.news_navigator.MoviesBottomNav
 import com.movies.cinemix.ui.theme.CinemixTheme
 import dagger.hilt.android.AndroidEntryPoint

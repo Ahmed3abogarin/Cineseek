@@ -1,4 +1,4 @@
-package com.movies.cinemix.navGraph
+package com.movies.cinemix.presentation.navGraph
 
 sealed class Route(
     val route: String

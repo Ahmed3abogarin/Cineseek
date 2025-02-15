@@ -1,4 +1,4 @@
-package com.movies.cinemix.navGraph
+package com.movies.cinemix.presentation.navGraph
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +38,6 @@ import com.movies.cinemix.ui.theme.MyPink
 
 @Composable
 fun NavGraph() {
-    val homeViewmodel: HomeViewModel = hiltViewModel()
     val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
 
     val bottomItems = remember {
@@ -83,7 +82,7 @@ fun NavGraph() {
         ) {
 
             composable(Route.HomeScreen.route) {
-
+                val homeViewmodel: HomeViewModel = hiltViewModel()
                 HomeScreen(
                     viewmodel = homeViewmodel,
                     "", navigateToAll = { category ->
