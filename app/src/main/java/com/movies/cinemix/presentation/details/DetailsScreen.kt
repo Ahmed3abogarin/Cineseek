@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -30,20 +32,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
 @Composable
 fun DetailsScreen(
     movie: Movies,
+    detailsViewModel: DetailsViewModel,
+    event: (DetailsEvent) -> Unit
 ) {
     val context = LocalContext.current
+    val actors = detailsViewModel.state.value.castList
+    event(DetailsEvent.UpdateMovieId(movieId = movie.id))
+
 
 
 
@@ -86,6 +92,8 @@ fun DetailsScreen(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxSize()
+                    .shadow(elevation = 1.dp)
+                    .background(Color.Black.copy(alpha = .4f))
             ) {
                 Row(
                     modifier = Modifier
@@ -111,7 +119,7 @@ fun DetailsScreen(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(1.dp) // Maximum thickness in the middle
+                        .height(2.dp) // Maximum thickness in the middle
                         .background(
                             brush = Brush.horizontalGradient(
                                 colors = listOf(
@@ -142,6 +150,29 @@ fun DetailsScreen(
                     style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
+                if (actors != null){
+                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                        items(actors.cast){ person ->
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
+                                    .placeholder(R.drawable.second)
+                                    .build(),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(231.dp)
+                                    .fillMaxWidth(),
+                                contentScale = ContentScale.FillBounds
+                            )
+
+                        }
+
+                    }
+                }
+
+
+
 
 
             }
@@ -165,27 +196,12 @@ fun DetailsScreen(
 }
 
 
-@Preview
-@Composable
-fun DetailsPreView() {
-    CinemixTheme {
-        DetailsScreen(
-            movie = Movies(
-                true,
-                "",
-                listOf(1, 2),
-                2,
-                "",
-                "",
-                "A group of words or expressions that convey little to no meaningful content or value, often used excessively or inappropriately in communication, rendering them ineffective in conveying ideas or arguments.",
-                2.33,
-                "",
-                "2024",
-                "No Body",
-                false,
-                2.44,
-                2
-            )
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun DetailsPreView() {
+//    CinemixTheme {
+//        DetailsScreen(
+//
+//        )
+//    }
+//}

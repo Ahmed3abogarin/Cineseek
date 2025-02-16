@@ -27,6 +27,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.details.DetailsScreen
+import com.movies.cinemix.presentation.details.DetailsViewModel
 import com.movies.cinemix.presentation.favorite.FavoriteScreen
 import com.movies.cinemix.presentation.favorite.SearchScreen
 import com.movies.cinemix.presentation.home.HomeScreen
@@ -41,6 +42,7 @@ import com.movies.cinemix.ui.theme.MyPink
 @Composable
 fun NavGraph() {
     val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
+    val detailsViewModel: DetailsViewModel = hiltViewModel()
 
     val bottomItems = remember {
         mutableStateListOf(
@@ -113,7 +115,7 @@ fun NavGraph() {
 
             composable(Route.DetailsScreen.route){
                 navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")?.let { movie ->
-                    DetailsScreen(movie)
+                    DetailsScreen(movie,detailsViewModel, detailsViewModel::onEvent)
                 }
 
             }
