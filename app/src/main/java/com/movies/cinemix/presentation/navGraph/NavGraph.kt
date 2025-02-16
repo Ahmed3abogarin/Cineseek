@@ -25,6 +25,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.details.DetailsScreen
 import com.movies.cinemix.presentation.favorite.FavoriteScreen
 import com.movies.cinemix.presentation.favorite.SearchScreen
 import com.movies.cinemix.presentation.home.HomeScreen
@@ -90,7 +92,8 @@ fun NavGraph() {
                             navController = navController,
                             movieCategory = category
                         )
-                    })
+                    },
+                    navigateToDetails = {navigateToDetails(navController = navController, movie = it)})
             }
             composable(Route.SearchScreen.route) {
                 SearchScreen()
@@ -106,8 +109,12 @@ fun NavGraph() {
                     )
 
                 }
+            }
 
-
+            composable(Route.DetailsScreen.route){
+                navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")?.let { movie ->
+                    DetailsScreen(movie)
+                }
 
             }
 
@@ -168,4 +175,12 @@ private fun navigateToAll(navController: NavController, movieCategory: String) {
         route = Route.SeeAllScreen.route
     )
 
+}
+
+// Helper function to navigate to details screen
+private fun navigateToDetails(navController: NavController,movie: Movies){
+    navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
+    navController.navigate(
+        route = Route.DetailsScreen.route
+    )
 }

@@ -1,6 +1,7 @@
 package com.movies.cinemix.presentation.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,15 +39,19 @@ import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor2
 
 @Composable
-fun MovieList(moviesList: LazyPagingItems<Movies>) {
+fun MovieList(
+    moviesList: LazyPagingItems<Movies>,
+    onClick: (Movies) -> Unit,
+) {
     val handlePagingResult = handlePagingResult(movies = moviesList)
     val visibleMovies = minOf(20, moviesList.itemCount)
     if (handlePagingResult) {
         LazyRow {
             items(visibleMovies) {
                 moviesList[it]?.let { movie ->
+                    val currentMovie = moviesList[it]
                     Column {
-                        MovieCard(movie)
+                        MovieCard(movie, onClick = {onClick(currentMovie!!)})
 
                     }
                 }
@@ -94,10 +99,10 @@ fun handlePagingResult(
 }
 
 @Composable
-fun MovieCard(movie: Movies, modifier: Modifier = Modifier) {
+fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
-    Column {
+    Column(modifier = Modifier.clickable { onClick() }) {
         Box {
 
             Card(
@@ -127,11 +132,17 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier) {
                     .padding(top = 10.dp, start = 10.dp)
                     .align(Alignment.TopStart)
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
-                    .background(Color.Black.copy(alpha = .5f))
-                    , contentAlignment = Alignment.Center
+                    .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
                 Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
-                    Icon(Icons.Rounded.Star, contentDescription = null, tint = Gold, modifier = Modifier.size(18.dp).padding(top = 6.dp))
+                    Icon(
+                        Icons.Rounded.Star,
+                        contentDescription = null,
+                        tint = Gold,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .padding(top = 6.dp)
+                    )
                     Text(text = "%.1f".format(movie.vote_average), color = Gold, fontSize = 12.sp)
                 }
             }
@@ -139,9 +150,11 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier) {
 
 
         Spacer(modifier = Modifier.height(7.dp))
-        Box(modifier = Modifier
-            .width(140.dp)
-            .padding(start = 5.dp)) {
+        Box(
+            modifier = Modifier
+                .width(140.dp)
+                .padding(start = 5.dp)
+        ) {
             Text(
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,

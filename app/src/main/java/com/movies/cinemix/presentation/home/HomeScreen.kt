@@ -1,5 +1,6 @@
 package com.movies.cinemix.presentation.home
 
+import android.graphics.Movie
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.common.YoutubePlayer
@@ -40,11 +42,12 @@ import com.movies.cinemix.ui.theme.MyColor
 fun HomeScreen(
     viewmodel: HomeViewModel,
     videoId: String,
-    navigateToAll: (String) -> Unit
+    navigateToAll: (String) -> Unit,
+    navigateToDetails: (Movies) -> Unit
     // lifecycleOwner: LifecycleOwner,
 ) {
     // YoutubeButton(videoId,lifecycleOwner)
-    HomeScreenContent(viewmodel, navigateToAll = navigateToAll)
+    HomeScreenContent(viewmodel, navigateToAll = navigateToAll, navigateToDetails = navigateToDetails )
 
 }
 
@@ -53,6 +56,7 @@ fun HomeScreen(
 fun HomeScreenContent(
     viewmodel: HomeViewModel,
     navigateToAll: (String) -> Unit,
+    navigateToDetails: (Movies) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -127,7 +131,7 @@ fun HomeScreenContent(
             )
         }
 
-        MovieList(moviesList = popularMovies)
+        MovieList(moviesList = popularMovies, onClick = {navigateToDetails(it)})
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -154,7 +158,7 @@ fun HomeScreenContent(
             )
         }
 
-        MovieList(upcomingMovies)
+        MovieList(upcomingMovies, onClick = {navigateToDetails(it)})
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -182,7 +186,7 @@ fun HomeScreenContent(
                 })
             )
         }
-        MovieList(topRatedMovies)
+        MovieList(topRatedMovies, onClick = {navigateToDetails(it)})
         Spacer(modifier = Modifier.height(110.dp))
 
     }
