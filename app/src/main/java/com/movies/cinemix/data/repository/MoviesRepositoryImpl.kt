@@ -7,7 +7,6 @@ import androidx.paging.PagingData
 import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
-import com.movies.cinemix.domain.model.Cast
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.Movies
 import kotlinx.coroutines.flow.Flow

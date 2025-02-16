@@ -1,6 +1,5 @@
 package com.movies.cinemix.presentation.home
 
-import android.graphics.Movie
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
