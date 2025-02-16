@@ -92,7 +92,7 @@ fun DetailsScreen(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxSize()
-                    .shadow(elevation = 1.dp)
+                    .shadow(elevation = 2.dp)
                     .background(Color.Black.copy(alpha = .4f))
             ) {
                 Row(
@@ -119,15 +119,9 @@ fun DetailsScreen(
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(2.dp) // Maximum thickness in the middle
+                        .height(0.8.dp) // Maximum thickness in the middle
                         .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color.Transparent, // Start with transparent (thin)
-                                    Color.White,       // Middle with white (thickest point)
-                                    Color.Transparent  // End with transparent (thin)
-                                )
-                            )
+                            Color.White
                         )
                 )
                 Row(
@@ -136,7 +130,7 @@ fun DetailsScreen(
                 ) {
                     Text(text = "${movie.release_date} - 2h 33m", style = MaterialTheme.typography.bodyLarge.copy(Color.White))
 
-                    Text(text = "IMDB ${movie.vote_average}", style = MaterialTheme.typography.bodyLarge.copy(Color.White))
+                    Text(text = "IMDB ${"%.1f".format(movie.vote_average)}", style = MaterialTheme.typography.bodyLarge.copy(Color.White))
                 }
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -171,25 +165,27 @@ fun DetailsScreen(
                     }
                 }
 
-
+                Row (modifier = Modifier.padding(top = 8.dp)){
+                    Button(
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MyRed
+                        )) {
+                        Text(text = "Watch Trailer")
+                    }
+                }
 
 
 
             }
 
 
+
         }
 
 
 
-        Row (modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 142.dp)){
-            Button(onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MyRed
-                    )) {
-                Text(text = "Watch Trailer")
-            }
-        }
+
 
 
     }
