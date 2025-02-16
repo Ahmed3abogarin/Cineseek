@@ -45,11 +45,7 @@ fun DetailsScreen(
 ) {
     val context = LocalContext.current
 
-    val colors = listOf(
-        Color.Black,
-        Color.Black.copy(alpha = .7f),
-        Color.Transparent
-    ).reversed()
+
 
     Box(
         modifier = Modifier
@@ -94,7 +90,7 @@ fun DetailsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp, end = 12.dp, top = 12.dp),
+                        .padding( end = 12.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
