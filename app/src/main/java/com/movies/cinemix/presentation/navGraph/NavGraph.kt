@@ -126,7 +126,13 @@ fun NavGraph() {
                     ?.let { category ->
                         SeeAllMovies(
                             movieCategory = category,
-                            viewModel = seeAllViewmodel
+                            viewModel = seeAllViewmodel,
+                            navigateToDetails = {
+                                navigateToDetails(
+                                    navController = navController,
+                                    movie = it
+                                )
+                            }
                         )
 
                     }

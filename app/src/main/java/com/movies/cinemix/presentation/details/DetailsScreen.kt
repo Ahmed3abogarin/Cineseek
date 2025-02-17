@@ -61,16 +61,17 @@ fun DetailsScreen(
 
     ) {
     val context = LocalContext.current
-    val actors = detailsViewModel.state.value.castList
-    val movieKey = detailsViewModel.state.value.movieKey
+    val state = detailsViewModel.state.value
+
 
     event(DetailsEvent.UpdateMovieId(movieId = movie.id))
+    event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
 
     var showDialog by remember { mutableStateOf(false) }
 
 
-    if (showDialog && movieKey != null) {
-        YoutubePlayer(movieKey, lifecycleOwner, onDismiss = {
+    if (showDialog && state.movieKey != null) {
+        YoutubePlayer(state.movieKey.toString(), lifecycleOwner, onDismiss = {
             showDialog = false
         })
     }
@@ -121,10 +122,12 @@ fun DetailsScreen(
 
 
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.Center)
-            .padding(top = 190.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+                .padding(top = 190.dp)
+        ) {
 
             Column(
                 modifier = Modifier
@@ -165,7 +168,18 @@ fun DetailsScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(40.dp))
+
+
+
+                    if (state.genres.isNotEmpty()) {
+                        LazyRow (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
+                            items(state.genres) { genre ->
+                                Text(text = genre, color = Color.White)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     Spacer(
                         modifier = Modifier
@@ -209,12 +223,12 @@ fun DetailsScreen(
                         style = MaterialTheme.typography.titleMedium.copy(Color.White)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (actors != null) {
+                    if (state.castList != null) {
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            items(actors.cast) { person ->
+                            items(state.castList.cast) { person ->
                                 Column(modifier = Modifier.width(74.dp)) {
                                     AsyncImage(
                                         model = ImageRequest.Builder(context)
@@ -251,7 +265,6 @@ fun DetailsScreen(
                 Button(
                     onClick = {
                         showDialog = true
-
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MyRed

@@ -1,34 +1,43 @@
 package com.movies.cinemix.presentation.seeall
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
 
@@ -37,23 +46,28 @@ import com.movies.cinemix.ui.theme.MyColor2
 fun SeeAllMovies(
     movieCategory: String,
     viewModel: SeeAllViewModel,
+    navigateToDetails: (Movies) -> Unit
 ) {
 
 
-
     val moviesList = viewModel.getMovies(movieCategory).collectAsLazyPagingItems()
-    Scaffold (modifier = Modifier.background(Color.Magenta).fillMaxSize()) {
-        Spacer(modifier = Modifier.height(20.dp))
-        val bottomPadding = it.calculateTopPadding()
+    Box(modifier = Modifier
+        .background(Color.Magenta)
+        .fillMaxSize()) {
+        Spacer(modifier = Modifier.height(50.dp))
         LazyVerticalStaggeredGrid(
-            modifier = Modifier.fillMaxSize().padding(top =bottomPadding , bottom =bottomPadding ).background(
-                MyColor),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 30.dp, bottom = 30.dp)
+                .background(
+                    MyColor
+                ),
             columns = StaggeredGridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
+        ) {
             items(moviesList.itemCount) { page ->
                 moviesList[page]?.let { movie ->
-                    MovieCard2(movie)
+                    MovieCard2(movie, onClick = {navigateToDetails(moviesList[page]!!)})
                 }
             }
         }
@@ -61,33 +75,59 @@ fun SeeAllMovies(
 }
 
 @Composable
-fun MovieCard2(movie: Movies, modifier: Modifier = Modifier){
+fun MovieCard2(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
-    Column(modifier = Modifier.background(MyColor) ){
-        Card(
-            modifier = modifier
-                .height(271.dp)
-                .width(200.dp),
-            shape = RoundedCornerShape(10.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
-            Column(modifier = Modifier.background(MyColor2)) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
-                        .build(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(271.dp)
-                        .fillMaxWidth(),
-                    contentScale = ContentScale.FillBounds
-                )
+    Column(modifier = Modifier.background(MyColor).clickable { onClick() }) {
+
+        Box{
+            Card(
+                modifier = modifier
+                    .height(271.dp)
+                    .width(200.dp),
+                shape = RoundedCornerShape(10.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Column(modifier = Modifier.background(MyColor2)) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(271.dp)
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+            }
+            Box(
+                Modifier
+                    .padding(top = 10.dp, start = 10.dp)
+                    .align(Alignment.TopStart)
+                    .shadow(2.dp, shape = RoundedCornerShape(30.dp))
+                    .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
+            ) {
+                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                    Icon(
+                        Icons.Rounded.Star,
+                        contentDescription = null,
+                        tint = Gold,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .padding(top = 6.dp)
+                    )
+                    Text(text = "%.1f".format(movie.vote_average), color = Gold, fontSize = 12.sp)
+                }
             }
         }
 
-        Box(modifier = Modifier.width(200.dp).padding(start = 5.dp, top = 3.dp)){
+
+
+        Box(modifier = Modifier
+            .width(200.dp)
+            .padding(start = 5.dp, top = 3.dp)) {
             Text(
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,
@@ -98,8 +138,5 @@ fun MovieCard2(movie: Movies, modifier: Modifier = Modifier){
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-
-
     }
-
 }
