@@ -4,6 +4,7 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.repository.MoviesRepositoryImpl
 import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.domain.usecases.GetMovieCast
+import com.movies.cinemix.domain.usecases.GetMovieKey
 import com.movies.cinemix.domain.usecases.GetNowPlayingMovies
 import com.movies.cinemix.domain.usecases.GetPopularMovies
 import com.movies.cinemix.domain.usecases.GetTopRatedMovies
@@ -41,7 +42,8 @@ object AppModule {
         getPopularMovies = GetPopularMovies(moviesRepository),
         getTopRatedMovies = GetTopRatedMovies(moviesRepository),
         getUpcomingMovies = GetUpcomingMovies(moviesRepository),
-        getMovieCast = GetMovieCast(moviesRepository)
+        getMovieCast = GetMovieCast(moviesRepository),
+        getMovieKey = GetMovieKey(moviesRepository)
     )
 
     @Provides

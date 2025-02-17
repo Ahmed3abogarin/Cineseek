@@ -38,7 +38,6 @@ fun YoutubePlayer(
                     lifecycleOwner.lifecycle.addObserver(this)
                     addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                         override fun onReady(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.toggleFullscreen()
                             youTubePlayer.loadVideo(videoId, 0f)
                         }
                     })

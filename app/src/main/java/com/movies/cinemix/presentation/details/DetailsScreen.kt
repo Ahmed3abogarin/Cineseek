@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -26,6 +25,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,10 +42,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
@@ -51,11 +56,25 @@ fun DetailsScreen(
     movie: Movies,
     detailsViewModel: DetailsViewModel,
     event: (DetailsEvent) -> Unit,
-    navigateUp: () -> Unit
-) {
+    navigateUp: () -> Unit,
+    lifecycleOwner: LifecycleOwner,
+
+    ) {
     val context = LocalContext.current
     val actors = detailsViewModel.state.value.castList
+    val movieKey = detailsViewModel.state.value.movieKey
+
     event(DetailsEvent.UpdateMovieId(movieId = movie.id))
+
+    var showDialog by remember { mutableStateOf(false) }
+
+
+    if (showDialog && movieKey != null) {
+        YoutubePlayer(movieKey, lifecycleOwner, onDismiss = {
+            showDialog = false
+        })
+    }
+
 
 
 
@@ -83,8 +102,13 @@ fun DetailsScreen(
                 contentScale = ContentScale.FillBounds
             )
 
-            IconButton(onClick = { navigateUp() },
-                Modifier.size(70.dp).align(Alignment.TopStart).padding(start = 16.dp, top = 32.dp)) {
+            IconButton(
+                onClick = { navigateUp() },
+                Modifier
+                    .size(70.dp)
+                    .align(Alignment.TopStart)
+                    .padding(start = 16.dp, top = 32.dp)
+            ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
                     tint = Color.White,
@@ -97,7 +121,10 @@ fun DetailsScreen(
 
 
 
-        Box(modifier = Modifier.fillMaxWidth().align(Alignment.Center).padding(top = 190.dp)) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.Center)
+            .padding(top = 190.dp)) {
 
             Column(
                 modifier = Modifier
@@ -106,7 +133,6 @@ fun DetailsScreen(
                     .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
                     .clip(shape = RoundedCornerShape(20.dp))
                     .background(Color.Black.copy(alpha = .68f))
-
 
 
             ) {
@@ -119,7 +145,7 @@ fun DetailsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding( end = 12.dp, top = 12.dp),
+                            .padding(end = 12.dp, top = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
@@ -130,8 +156,12 @@ fun DetailsScreen(
                             )
                         )
                         Icon(
-                            painter = painterResource(R.drawable.bookmark), contentDescription = null, tint = Color.White,
-                            modifier = Modifier.size(36.dp).padding(end = 10.dp)
+                            painter = painterResource(R.drawable.bookmark),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(36.dp)
+                                .padding(end = 10.dp)
                         )
                     }
 
@@ -146,12 +176,20 @@ fun DetailsScreen(
                             )
                     )
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "${movie.release_date} - 2h 33m", style = MaterialTheme.typography.bodyLarge.copy(Color.White))
+                        Text(
+                            text = "${movie.release_date} - 2h 33m",
+                            style = MaterialTheme.typography.bodyLarge.copy(Color.White)
+                        )
 
-                        Text(text = "IMDB ${"%.1f".format(movie.vote_average)}", style = MaterialTheme.typography.bodyLarge.copy(Color.White))
+                        Text(
+                            text = "IMDB ${"%.1f".format(movie.vote_average)}",
+                            style = MaterialTheme.typography.bodyLarge.copy(Color.White)
+                        )
                     }
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -171,11 +209,12 @@ fun DetailsScreen(
                         style = MaterialTheme.typography.titleMedium.copy(Color.White)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (actors != null){
-                        LazyRow(modifier = Modifier.fillMaxWidth(),
+                    if (actors != null) {
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
-                            items(actors.cast){ person ->
+                            items(actors.cast) { person ->
                                 Column(modifier = Modifier.width(74.dp)) {
                                     AsyncImage(
                                         model = ImageRequest.Builder(context)
@@ -184,7 +223,8 @@ fun DetailsScreen(
                                             .error(R.drawable.first)
                                             .build(),
                                         contentDescription = null,
-                                        modifier = Modifier.size(74.dp)
+                                        modifier = Modifier
+                                            .size(74.dp)
                                             .clip(RoundedCornerShape(50.dp)),
                                         contentScale = ContentScale.Crop
                                     )
@@ -207,22 +247,29 @@ fun DetailsScreen(
                 }
             }
 
-            Row (modifier = Modifier.align(Alignment.BottomCenter)){
+            Row(modifier = Modifier.align(Alignment.BottomCenter)) {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        showDialog = true
+
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MyRed
-                    )) {
-                    Text(text = "Watch Trailer", modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 4.dp, top = 4.dp))
+                    )
+                ) {
+                    Text(
+                        text = "Watch Trailer",
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            bottom = 4.dp,
+                            top = 4.dp
+                        )
+                    )
                 }
             }
 
         }
-
-
-
-
-
 
 
     }

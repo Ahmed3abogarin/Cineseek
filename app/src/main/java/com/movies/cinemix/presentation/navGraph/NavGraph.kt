@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -43,6 +44,8 @@ import com.movies.cinemix.ui.theme.MyPink
 fun NavGraph() {
     val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
     val detailsViewModel: DetailsViewModel = hiltViewModel()
+
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     val bottomItems = remember {
         mutableStateListOf(
@@ -79,7 +82,7 @@ fun NavGraph() {
 
 
     // we want to hide the bottom navigation bar when we in the details/bookmark screen
-    val isBottomBarVisible = remember(key1 = backstackState){
+    val isBottomBarVisible = remember(key1 = backstackState) {
         backstackState?.destination?.route == Route.HomeScreen.route ||
                 backstackState?.destination?.route == Route.SearchScreen.route ||
                 backstackState?.destination?.route == Route.FavoriteScreen.route
@@ -105,7 +108,12 @@ fun NavGraph() {
                             movieCategory = category
                         )
                     },
-                    navigateToDetails = {navigateToDetails(navController = navController, movie = it)})
+                    navigateToDetails = {
+                        navigateToDetails(
+                            navController = navController,
+                            movie = it
+                        )
+                    })
             }
             composable(Route.SearchScreen.route) {
                 SearchScreen()
@@ -114,19 +122,27 @@ fun NavGraph() {
                 FavoriteScreen()
             }
             composable(Route.SeeAllScreen.route) {
-                navController.previousBackStackEntry?.savedStateHandle?.get<String>("movieCategory")?.let { category ->
-                    SeeAllMovies(
-                        movieCategory = category,
-                        viewModel = seeAllViewmodel
-                    )
+                navController.previousBackStackEntry?.savedStateHandle?.get<String>("movieCategory")
+                    ?.let { category ->
+                        SeeAllMovies(
+                            movieCategory = category,
+                            viewModel = seeAllViewmodel
+                        )
 
-                }
+                    }
             }
 
-            composable(Route.DetailsScreen.route){
-                navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")?.let { movie ->
-                    DetailsScreen(movie,detailsViewModel, detailsViewModel::onEvent, navigateUp = {navController.navigateUp()})
-                }
+            composable(Route.DetailsScreen.route) {
+                navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")
+                    ?.let { movie ->
+                        DetailsScreen(
+                            movie,
+                            detailsViewModel,
+                            detailsViewModel::onEvent,
+                            navigateUp = { navController.navigateUp() },
+                            lifecycleOwner = lifecycleOwner
+                        )
+                    }
 
             }
 
@@ -137,7 +153,7 @@ fun NavGraph() {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 25.dp)
         ) {
-            if (isBottomBarVisible){
+            if (isBottomBarVisible) {
                 MoviesBottomNav(
                     bottomItems = bottomItems,
                     onItemClicked = { index ->
@@ -193,9 +209,11 @@ private fun navigateToAll(navController: NavController, movieCategory: String) {
 }
 
 // Helper function to navigate to details screen
-private fun navigateToDetails(navController: NavController,movie: Movies){
+private fun navigateToDetails(navController: NavController, movie: Movies) {
     navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
     navController.navigate(
         route = Route.DetailsScreen.route
     )
 }
+
+

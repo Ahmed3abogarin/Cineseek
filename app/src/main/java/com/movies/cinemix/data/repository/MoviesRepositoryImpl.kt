@@ -4,24 +4,24 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
+import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
 
 class MoviesRepositoryImpl(
-    private val moviesApi: MoviesApi
-): MoviesRepository {
+    private val moviesApi: MoviesApi,
+) : MoviesRepository {
     override fun getNowPlayingMovies(): Flow<PagingData<Movies>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging{page -> moviesApi.getNowPlayingMovies(page)}
+                MoviesPaging { page -> moviesApi.getNowPlayingMovies(page) }
             }
         ).flow
-
 
 
     }
@@ -30,7 +30,7 @@ class MoviesRepositoryImpl(
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging{page -> moviesApi.getPopularMovies(page)}
+                MoviesPaging { page -> moviesApi.getPopularMovies(page) }
             }
         ).flow
     }
@@ -39,7 +39,7 @@ class MoviesRepositoryImpl(
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging{page -> moviesApi.getTopRatedMovies(page)}
+                MoviesPaging { page -> moviesApi.getTopRatedMovies(page) }
             }
         ).flow
     }
@@ -48,7 +48,7 @@ class MoviesRepositoryImpl(
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging{page -> moviesApi.getUpcomingMovies(page)}
+                MoviesPaging { page -> moviesApi.getUpcomingMovies(page) }
             }
         ).flow
     }
@@ -56,12 +56,18 @@ class MoviesRepositoryImpl(
     override suspend fun getMovieCrew(movieId: Int): CastResponse {
         return try {
             moviesApi.getMovieCrew(movieId = movieId)
-        }catch (e :Exception){
-            Log.v("Movies",e.message.toString())
+        } catch (e: Exception) {
+            Log.v("Movies", e.message.toString())
             throw e
         }
-
     }
 
-
+    override suspend fun getMovieKey(movieId: Int): MovieKeyResponse {
+        return try {
+            moviesApi.getMovieKey(movieId = movieId)
+        } catch (e: Exception) {
+            Log.v("Movies", e.message.toString())
+            throw e
+        }
+    }
 }

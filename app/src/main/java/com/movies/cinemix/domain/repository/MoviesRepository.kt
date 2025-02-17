@@ -2,6 +2,7 @@ package com.movies.cinemix.domain.repository
 
 import androidx.paging.PagingData
 import com.movies.cinemix.domain.model.CastResponse
+import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.Movies
 import kotlinx.coroutines.flow.Flow
 
@@ -17,6 +18,8 @@ interface MoviesRepository {
      fun getUpcomingMovies(): Flow<PagingData<Movies>>
 
      suspend fun getMovieCrew(movieId: Int): CastResponse
+
+     suspend fun getMovieKey(movieId: Int): MovieKeyResponse
 
 
 }

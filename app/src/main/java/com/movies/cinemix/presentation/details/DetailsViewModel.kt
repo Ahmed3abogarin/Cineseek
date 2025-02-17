@@ -17,7 +17,17 @@ class DetailsViewModel @Inject constructor(
     private val _state = mutableStateOf(DetailsState())
     val state: State<DetailsState> = _state
 
-    fun getMovieCast(){
+
+    fun openDialog(){
+        _state.value = _state.value.copy(showDialog = true)
+    }
+    fun closeDialog(){
+        _state.value = _state.value.copy(showDialog = false)
+    }
+
+
+
+    private fun getMovieCast(){
         viewModelScope.launch {
             val movies = moviesUseCases.getMovieCast.invoke(movieId = state.value.movieId!!)
             _state.value = state.value.copy(castList = movies)
@@ -25,11 +35,20 @@ class DetailsViewModel @Inject constructor(
 
     }
 
+    private fun getMovieKey(){
+        viewModelScope.launch {
+            val movieKey = moviesUseCases.getMovieKey.invoke(movieId = state.value.movieId!!)
+            _state.value = state.value.copy(movieKey = movieKey.results[0].key)
+        }
+    }
+
     fun onEvent(event: DetailsEvent){
         when(event){
             is DetailsEvent.UpdateMovieId ->{
                 _state.value = state.value.copy(movieId = event.movieId)
                 getMovieCast()
+                getMovieKey()
+
 
             }
         }

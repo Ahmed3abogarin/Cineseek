@@ -202,26 +202,3 @@ fun NowPlayingPreview() {
 }
 
 
-// TODO : Temporary
-@Composable
-fun YoutubeButton(
-    videoId: String,
-    lifecycleOwner: LifecycleOwner,
-) {
-    var showDialog by remember { mutableStateOf(false) }
-
-
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Button(
-            onClick = { showDialog = true }
-        ) {
-            Text(text = "Display youtube pop up window", fontSize = 22.sp)
-        }
-        if (showDialog) {
-            YoutubePlayer(videoId, lifecycleOwner, onDismiss = {
-                showDialog = false
-            })
-        }
-    }
-
-}
