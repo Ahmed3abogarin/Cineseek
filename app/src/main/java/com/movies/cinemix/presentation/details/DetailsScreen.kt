@@ -17,10 +17,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,7 +50,8 @@ import com.movies.cinemix.ui.theme.MyRed
 fun DetailsScreen(
     movie: Movies,
     detailsViewModel: DetailsViewModel,
-    event: (DetailsEvent) -> Unit
+    event: (DetailsEvent) -> Unit,
+    navigateUp: () -> Unit
 ) {
     val context = LocalContext.current
     val actors = detailsViewModel.state.value.castList
@@ -78,10 +82,22 @@ fun DetailsScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
+
+            IconButton(onClick = { navigateUp() },
+                Modifier.size(70.dp).align(Alignment.TopStart).padding(start = 16.dp, top = 32.dp)) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+            }
         }
 
 
-        Box(modifier = Modifier.fillMaxWidth().align(Alignment.Center)) {
+
+
+        Box(modifier = Modifier.fillMaxWidth().align(Alignment.Center).padding(top = 190.dp)) {
 
             Column(
                 modifier = Modifier
@@ -114,8 +130,8 @@ fun DetailsScreen(
                             )
                         )
                         Icon(
-                            Icons.Filled.FavoriteBorder, contentDescription = null, tint = Color.White,
-                            modifier = Modifier.size(36.dp)
+                            painter = painterResource(R.drawable.bookmark), contentDescription = null, tint = Color.White,
+                            modifier = Modifier.size(36.dp).padding(end = 10.dp)
                         )
                     }
 
@@ -197,7 +213,7 @@ fun DetailsScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MyRed
                     )) {
-                    Text(text = "Watch Trailer")
+                    Text(text = "Watch Trailer", modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 4.dp, top = 4.dp))
                 }
             }
 

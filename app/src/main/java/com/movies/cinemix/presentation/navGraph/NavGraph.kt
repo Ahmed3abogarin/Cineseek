@@ -77,6 +77,16 @@ fun NavGraph() {
 
     }
 
+
+    // we want to hide the bottom navigation bar when we in the details/bookmark screen
+    val isBottomBarVisible = remember(key1 = backstackState){
+        backstackState?.destination?.route == Route.HomeScreen.route ||
+                backstackState?.destination?.route == Route.SearchScreen.route ||
+                backstackState?.destination?.route == Route.FavoriteScreen.route
+    }
+
+
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -115,7 +125,7 @@ fun NavGraph() {
 
             composable(Route.DetailsScreen.route){
                 navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")?.let { movie ->
-                    DetailsScreen(movie,detailsViewModel, detailsViewModel::onEvent)
+                    DetailsScreen(movie,detailsViewModel, detailsViewModel::onEvent, navigateUp = {navController.navigateUp()})
                 }
 
             }
@@ -127,27 +137,30 @@ fun NavGraph() {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 25.dp)
         ) {
-            MoviesBottomNav(
-                bottomItems = bottomItems,
-                onItemClicked = { index ->
-                    when (index) {
-                        0 -> navigateToTab(
-                            navController,
-                            route = Route.HomeScreen.route
-                        )
+            if (isBottomBarVisible){
+                MoviesBottomNav(
+                    bottomItems = bottomItems,
+                    onItemClicked = { index ->
+                        when (index) {
+                            0 -> navigateToTab(
+                                navController,
+                                route = Route.HomeScreen.route
+                            )
 
-                        1 -> navigateToTab(
-                            navController = navController,
-                            route = Route.SearchScreen.route
-                        )
+                            1 -> navigateToTab(
+                                navController = navController,
+                                route = Route.SearchScreen.route
+                            )
 
-                        2 -> navigateToTab(
-                            navController = navController,
-                            route = Route.FavoriteScreen.route
-                        )
+                            2 -> navigateToTab(
+                                navController = navController,
+                                route = Route.FavoriteScreen.route
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
+
         }
 
     }
