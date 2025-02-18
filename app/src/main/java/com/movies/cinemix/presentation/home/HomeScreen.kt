@@ -92,12 +92,16 @@ fun HomeScreenContent(
 
         }
         Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Trending this week",
-            color = Color.White,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
-        )
+
+        Row (modifier = Modifier.fillMaxWidth().align(Alignment.Start)){
+            Text(
+                text = "Trending this week",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
 
         Spacer(modifier = Modifier.height(10.dp))
         ViewPagerSlider(
