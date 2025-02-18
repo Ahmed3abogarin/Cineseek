@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -96,14 +97,15 @@ fun HomeScreenContent(
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row (modifier = Modifier.fillMaxWidth().align(Alignment.Start)){
+        Row (modifier = Modifier.fillMaxWidth().align(Alignment.Start).padding(start = 10.dp)){
             Text(
                 text = "Trending this week",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Icon(painter = painterResource(R.drawable.fire), contentDescription = null)
+            Icon(painter = painterResource(R.drawable.fire), contentDescription = null,
+                modifier = Modifier.size(48.dp).align(Alignment.CenterVertically))
         }
 
 
