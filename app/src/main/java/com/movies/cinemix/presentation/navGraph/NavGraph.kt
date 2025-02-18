@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.details.DetailsScreen
 import com.movies.cinemix.presentation.details.DetailsViewModel
@@ -100,9 +101,18 @@ fun NavGraph() {
 
             composable(Route.HomeScreen.route) {
                 val homeViewmodel: HomeViewModel = hiltViewModel()
+                val moviesNow = homeViewmodel.nowPlayingMovies.collectAsLazyPagingItems()
+                val popularMovies = homeViewmodel.popularMovies.collectAsLazyPagingItems()
+                val topRatedMovies = homeViewmodel.topRatedMovies.collectAsLazyPagingItems()
+                val upcomingMovies = homeViewmodel.upcomingMovies.collectAsLazyPagingItems()
+                val trendWeek = homeViewmodel.trendWeek.collectAsLazyPagingItems()
                 HomeScreen(
-                    viewmodel = homeViewmodel,
-                    "", navigateToAll = { category ->
+                    trendWeek = trendWeek,
+                    moviesNow = moviesNow,
+                    popularMovies = popularMovies,
+                    topRatedMovies = topRatedMovies,
+                    upcomingMovies = upcomingMovies,
+                    navigateToAll = { category ->
                         navigateToAll(
                             navController = navController,
                             movieCategory = category
@@ -134,7 +144,6 @@ fun NavGraph() {
                                 )
                             }
                         )
-
                     }
             }
 

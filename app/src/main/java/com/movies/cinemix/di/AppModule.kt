@@ -8,6 +8,7 @@ import com.movies.cinemix.domain.usecases.GetMovieKey
 import com.movies.cinemix.domain.usecases.GetNowPlayingMovies
 import com.movies.cinemix.domain.usecases.GetPopularMovies
 import com.movies.cinemix.domain.usecases.GetTopRatedMovies
+import com.movies.cinemix.domain.usecases.GetTrendWeek
 import com.movies.cinemix.domain.usecases.GetUpcomingMovies
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import com.movies.cinemix.util.Constants.NOW_PLAYING_URL
@@ -43,7 +44,8 @@ object AppModule {
         getTopRatedMovies = GetTopRatedMovies(moviesRepository),
         getUpcomingMovies = GetUpcomingMovies(moviesRepository),
         getMovieCast = GetMovieCast(moviesRepository),
-        getMovieKey = GetMovieKey(moviesRepository)
+        getMovieKey = GetMovieKey(moviesRepository),
+        getTrendWeek = GetTrendWeek(moviesRepository)
     )
 
     @Provides

@@ -11,41 +11,49 @@ interface MoviesApi {
 
     @GET("now_playing")
     suspend fun getNowPlayingMovies(
-        @Query("page") page:Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
 
-    @GET("popular")
+    @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page") page: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
-    @GET("top_rated")
+    @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page") page: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
 
-    @GET("upcoming")
+    @GET("movie/upcoming")
     suspend fun getUpcomingMovies(
         @Query("page") page: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
+    ): MovieResponse
+
+    @GET("trending/movie/week")
+    suspend fun getTrendingWeek(
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
 
-    @GET("{movie_id}/credits")
+    @GET("movie/{movie_id}/credits")
     suspend fun getMovieCrew(
-        @Path("movie_id") movieId: Int ,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): CastResponse
 
 
-    @GET("{movie_id}/videos")
+    @GET("movie/{movie_id}/videos")
     suspend fun getMovieKey(
         @Path("movie_id") movieId: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieKeyResponse
+
+
 }

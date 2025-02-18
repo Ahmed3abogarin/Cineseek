@@ -8,9 +8,11 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
+import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
+import kotlin.concurrent.thread
 
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
@@ -52,6 +54,16 @@ class MoviesRepositoryImpl(
             }
         ).flow
     }
+
+    override fun getTrendingWeek(): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging { page -> moviesApi.getTrendingWeek(page) }
+            }
+        ).flow
+    }
+
 
     override suspend fun getMovieCrew(movieId: Int): CastResponse {
         return try {

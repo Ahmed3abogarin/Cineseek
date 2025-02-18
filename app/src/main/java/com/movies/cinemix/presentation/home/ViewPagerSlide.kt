@@ -205,48 +205,45 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
                         )
 
                     }) {
-                        list[page]?.let {
-                            Box{
-                                AsyncImage(
-                                    model = ImageRequest.Builder(context)
-                                        .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
-                                        .build(),
-                                    contentDescription = "",
-                                    modifier = Modifier
-                                        .height(200.dp)
-                                        .width(356.dp)
-                                        .clip(MaterialTheme.shapes.medium),
-                                    contentScale = ContentScale.Crop
-                                )
-                                Row(
-                                    modifier = Modifier
-                                        .background(brush = Brush.verticalGradient(colors))
-                                        .align(Alignment.BottomStart)
-                                        .fillMaxWidth()
-                                        .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                        Box{
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
+                                    .build(),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .width(356.dp)
+                                    .clip(MaterialTheme.shapes.medium),
+                                contentScale = ContentScale.Crop
+                            )
+                            Row(
+                                modifier = Modifier
+                                    .background(brush = Brush.verticalGradient(colors))
+                                    .align(Alignment.BottomStart)
+                                    .fillMaxWidth()
+                                    .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Box(
+                                    modifier = Modifier.weight(1f) // Allows Text to take up available space
                                 ) {
-                                    Box(
-                                        modifier = Modifier.weight(1f) // Allows Text to take up available space
-                                    ) {
-                                        Text(
-                                            text = list[page]!!.title,
-                                            style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-                                    Button(
-                                        onClick = {},
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MyRed
-                                        )
-                                    ) {
-                                        Text(text = "Watch Now")
-                                    }
+                                    Text(
+                                        text = list[page]!!.title,
+                                        style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
                                 }
-
+                                Button(
+                                    onClick = {},
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MyRed
+                                    )
+                                ) {
+                                    Text(text = "Watch Now")
+                                }
                             }
 
                         }

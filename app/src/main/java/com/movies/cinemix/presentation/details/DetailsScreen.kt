@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -48,6 +50,7 @@ import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.YoutubePlayer
+import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
@@ -148,10 +151,12 @@ fun DetailsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .height(70.dp)
                             .padding(end = 12.dp, top = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
+                            modifier = Modifier.weight(1f),
                             text = movie.title,
                             style = MaterialTheme.typography.titleLarge.copy(
                                 Color.White,
@@ -169,17 +174,22 @@ fun DetailsScreen(
                     }
 
 
-
-
+//                    Spacer(modifier = Modifier.height(10.dp))
                     if (state.genres.isNotEmpty()) {
-                        LazyRow (horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp,Alignment.CenterHorizontally),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             items(state.genres) { genre ->
-                                Text(text = genre, color = Color.White)
+
+                                Text(text = genre, fontSize = 14.sp, color = Color.White, modifier = Modifier.clip(
+                                    RoundedCornerShape(30.dp)
+                                ).background(BottomColor).padding(start = 8.dp, end = 8.dp))
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
                     Spacer(
                         modifier = Modifier
@@ -196,7 +206,7 @@ fun DetailsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "${movie.release_date} - 2h 33m",
+                            text = movie.release_date,
                             style = MaterialTheme.typography.bodyLarge.copy(Color.White)
                         )
 
@@ -210,20 +220,29 @@ fun DetailsScreen(
 
                     Text("Summery", style = MaterialTheme.typography.titleMedium.copy(Color.White))
 
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = movie.overview,
-                        textAlign = TextAlign.Justify,
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Column(
+                        modifier = Modifier
+                            .height(115.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Text(
+                            text = movie.overview,
+                            textAlign = TextAlign.Justify,
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                        )
+                    }
+
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "Cast",
-                        style = MaterialTheme.typography.titleMedium.copy(Color.White)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
                     if (state.castList != null) {
+                        Text(
+                            text = "Cast",
+                            style = MaterialTheme.typography.titleMedium.copy(Color.White)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(6.dp)

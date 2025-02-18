@@ -6,5 +6,6 @@ data class MoviesUseCases (
     val getTopRatedMovies: GetTopRatedMovies,
     val getUpcomingMovies: GetUpcomingMovies,
     val getMovieCast: GetMovieCast,
-    val getMovieKey: GetMovieKey
+    val getMovieKey: GetMovieKey,
+    val getTrendWeek: GetTrendWeek
 )

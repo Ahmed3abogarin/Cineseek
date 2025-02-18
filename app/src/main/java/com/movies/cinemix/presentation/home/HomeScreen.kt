@@ -3,66 +3,65 @@ package com.movies.cinemix.presentation.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LifecycleOwner
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
-import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.MyColor
 
 @Composable
 fun HomeScreen(
-    viewmodel: HomeViewModel,
-    videoId: String,
+    trendWeek: LazyPagingItems<Movies>,
     navigateToAll: (String) -> Unit,
-    navigateToDetails: (Movies) -> Unit
-    // lifecycleOwner: LifecycleOwner,
+    navigateToDetails: (Movies) -> Unit,
+    moviesNow: LazyPagingItems<Movies>,
+    popularMovies: LazyPagingItems<Movies>,
+    topRatedMovies: LazyPagingItems<Movies>,
+    upcomingMovies: LazyPagingItems<Movies>,
 ) {
     // YoutubeButton(videoId,lifecycleOwner)
-    HomeScreenContent(viewmodel, navigateToAll = navigateToAll, navigateToDetails = navigateToDetails )
+    HomeScreenContent(
+        trendWeek = trendWeek,
+        moviesNow = moviesNow,
+        popularMovies = popularMovies,
+        topRatedMovies = topRatedMovies,
+        upcomingMovies = upcomingMovies,
+        navigateToAll = navigateToAll, navigateToDetails = navigateToDetails
+    )
 
 }
 
 
 @Composable
 fun HomeScreenContent(
-    viewmodel: HomeViewModel,
+    trendWeek: LazyPagingItems<Movies>,
+    moviesNow: LazyPagingItems<Movies>,
+    popularMovies: LazyPagingItems<Movies>,
+    topRatedMovies: LazyPagingItems<Movies>,
+    upcomingMovies: LazyPagingItems<Movies>,
     navigateToAll: (String) -> Unit,
-    navigateToDetails: (Movies) -> Unit
+    navigateToDetails: (Movies) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
-    val moviesNow = viewmodel.nowPlayingMovies.collectAsLazyPagingItems()
-    val popularMovies = viewmodel.popularMovies.collectAsLazyPagingItems()
-    val topRatedMovies = viewmodel.topRatedMovies.collectAsLazyPagingItems()
-    val upcomingMovies = viewmodel.upcomingMovies.collectAsLazyPagingItems()
+
 
     Column(
         modifier = Modifier
@@ -81,14 +80,6 @@ fun HomeScreenContent(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "What would you like to watch?",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    color = Color.White,
-                    fontSize = 24.sp
-                )
-            )
             Spacer(modifier = Modifier.height(10.dp))
             MySearchBar(
                 text = "",
@@ -100,11 +91,17 @@ fun HomeScreenContent(
 
         }
         Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "Trending this week",
+            color = Color.White,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold
+        )
 
-
+        Spacer(modifier = Modifier.height(10.dp))
         ViewPagerSlider(
-            pagesCount = moviesNow.itemCount,
-            list = moviesNow
+            pagesCount = trendWeek.itemCount,
+            list = trendWeek
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -130,7 +127,7 @@ fun HomeScreenContent(
             )
         }
 
-        MovieList(moviesList = popularMovies, onClick = {navigateToDetails(it)})
+        MovieList(moviesList = popularMovies, onClick = { navigateToDetails(it) })
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -157,7 +154,7 @@ fun HomeScreenContent(
             )
         }
 
-        MovieList(upcomingMovies, onClick = {navigateToDetails(it)})
+        MovieList(upcomingMovies, onClick = { navigateToDetails(it) })
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -185,7 +182,7 @@ fun HomeScreenContent(
                 })
             )
         }
-        MovieList(topRatedMovies, onClick = {navigateToDetails(it)})
+        MovieList(topRatedMovies, onClick = { navigateToDetails(it) })
         Spacer(modifier = Modifier.height(110.dp))
 
     }
