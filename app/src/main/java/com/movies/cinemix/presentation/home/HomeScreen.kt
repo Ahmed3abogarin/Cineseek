@@ -26,6 +26,7 @@ import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.ui.theme.MyColor
 
+
 @Composable
 fun HomeScreen(
     trendWeek: LazyPagingItems<Movies>,
