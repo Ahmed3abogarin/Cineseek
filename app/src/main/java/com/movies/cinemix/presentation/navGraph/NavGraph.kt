@@ -124,6 +124,7 @@ fun NavGraph() {
                             movie = it
                         )
                     })
+
             }
             composable(Route.SearchScreen.route) {
                 SearchScreen()
