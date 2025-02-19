@@ -60,7 +60,7 @@ fun MySearchBar(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .searchBarBorder(),
+                ,
             value = text,
             onValueChange = onValueChange,
             readOnly = readOnly,
@@ -104,17 +104,6 @@ fun MySearchBar(
 
 }
 
-fun Modifier.searchBarBorder() = composed {
-    if (!isSystemInDarkTheme()) {
-        border(
-            width = 1.dp,
-            color = Color.Black,
-            shape = RoundedCornerShape(30.dp)
-        )
-    } else {
-        this
-    }
-}
 
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)

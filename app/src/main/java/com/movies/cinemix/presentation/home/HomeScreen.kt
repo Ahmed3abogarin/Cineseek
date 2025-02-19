@@ -28,6 +28,7 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.ui.theme.MyColor
+import com.movies.cinemix.ui.theme.MyGray2
 
 
 @Composable
@@ -138,7 +139,7 @@ fun HomeScreenContent(
             Text(
                 "See all",
                 color = Color.White,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
                     navigateToAll("upcoming")
                 })
@@ -162,8 +163,8 @@ fun HomeScreenContent(
             )
             Text(
                 "See all",
-                color = Color.White,
-                fontSize = 14.sp,
+                color = MyGray2,
+                fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
                     navigateToAll("popular")
 
