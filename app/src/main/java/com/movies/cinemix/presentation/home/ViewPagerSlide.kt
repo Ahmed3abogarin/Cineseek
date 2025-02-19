@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -151,7 +152,7 @@ fun ViewPagerSlider2(images: List<Int>) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
+fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
     val pagerState = rememberPagerState(
         pageCount = { pagesCount },
         initialPage = 0
@@ -205,7 +206,7 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
                         )
 
                     }) {
-                        Box{
+                        Box(modifier = Modifier.clickable { onClick(list[page]!!) }){
                             AsyncImage(
                                 model = ImageRequest.Builder(context)
                                     .data("https://image.tmdb.org/t/p/w500/" + list[page]!!.backdrop_path)
@@ -242,7 +243,7 @@ fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>) {
                                         containerColor = MyRed
                                     )
                                 ) {
-                                    Text(text = "Watch Now")
+                                    Text(text = "Watch Trailer")
                                 }
                             }
 
