@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.movies.cinemix.ui.theme.CinemixTheme
+import com.movies.cinemix.ui.theme.MyColor2
 import com.movies.cinemix.ui.theme.MyGray
 
 
@@ -65,10 +66,10 @@ fun MySearchBar(
             readOnly = readOnly,
             leadingIcon = {
                 Icon(
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(38.dp),
                     imageVector = Icons.Default.Search,
                     contentDescription = null,
-                    tint = Color.Gray
+                    tint = MyColor2
                 )
             },
             placeholder = {
@@ -89,7 +90,7 @@ fun MySearchBar(
                 unfocusedIndicatorColor = Color.Transparent,
             ),
             singleLine = true,
-            shape = RoundedCornerShape(30.dp),
+            shape = RoundedCornerShape(15.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions (
                 onSearch = {
