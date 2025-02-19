@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor2
-import com.movies.cinemix.ui.theme.MyGray
+import com.movies.cinemix.ui.theme.MyGray2
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,8 +57,7 @@ fun MySearchBar(
     Box(modifier = modifier) {
         TextField(
             modifier = Modifier
-                .fillMaxWidth()
-                ,
+                .fillMaxWidth(),
             value = text,
             onValueChange = onValueChange,
             readOnly = readOnly,
@@ -79,7 +78,7 @@ fun MySearchBar(
             },
 
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MyGray,
+                containerColor = MyGray2,
                 unfocusedTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
                 cursorColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
                 disabledIndicatorColor = Color.Transparent,
