@@ -9,22 +9,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
-import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
@@ -108,9 +107,8 @@ fun HomeScreenContent(
                 fontWeight = FontWeight.SemiBold
             )
             Icon(
-                painter = painterResource(R.drawable.fire), contentDescription = null,
+                Icons.Default.ThumbUp, tint = Color.Red, contentDescription = null,
                 modifier = Modifier
-                    .size(48.dp)
                     .align(Alignment.CenterVertically)
             )
         }
@@ -124,6 +122,10 @@ fun HomeScreenContent(
                 navigateToDetails(it)
             }
         )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        MovieList(moviesList = moviesNow, onClick = { navigateToDetails(it) })
+
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
@@ -148,7 +150,6 @@ fun HomeScreenContent(
             )
         }
 
-        MovieList(moviesList = moviesNow, onClick = { navigateToDetails(it) })
 
         MovieList(moviesList = popularMovies, onClick = { navigateToDetails(it) })
 

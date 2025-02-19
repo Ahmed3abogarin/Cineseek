@@ -1,8 +1,6 @@
 package com.movies.cinemix.presentation.home
 
 import androidx.lifecycle.ViewModel
-import com.movies.cinemix.domain.model.MovieResponse
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

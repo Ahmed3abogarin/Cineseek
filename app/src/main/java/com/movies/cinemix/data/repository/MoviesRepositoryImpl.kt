@@ -8,11 +8,9 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
-import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
-import kotlin.concurrent.thread
 
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
