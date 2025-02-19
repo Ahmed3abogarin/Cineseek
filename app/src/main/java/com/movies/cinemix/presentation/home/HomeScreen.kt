@@ -123,6 +123,27 @@ fun HomeScreenContent(
             }
         )
         Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Text(
+                text = "Upcoming",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                "See all",
+                color = Color.White,
+                fontSize = 14.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("upcoming")
+                })
+            )
+        }
 
         MovieList(moviesList = moviesNow, onClick = { navigateToDetails(it) })
 
