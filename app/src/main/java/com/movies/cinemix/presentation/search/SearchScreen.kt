@@ -26,10 +26,15 @@ import com.movies.cinemix.ui.theme.MyColor
 fun SearchScreen(
     state: SearchState,
     event: (SearchEvent) -> Unit,
-    navigateToDetails: (Movies) -> Unit
+    navigateToDetails: (Movies) -> Unit,
 ) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .background(MyColor)
+            .fillMaxSize()
+            .padding(top = 50.dp, start = 16.dp, end = 16.dp)
+    ) {
 
         MySearchBar(
             text = state.searchQuery,
@@ -37,20 +42,18 @@ fun SearchScreen(
             onValueChange = { event(SearchEvent.UpdateSearchQuery(searchQuery = it)) },
             onSearch = { event(SearchEvent.SearchMovie) }
         )
+        Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
         state.moviesList?.let { movieList ->
             val movies = movieList.collectAsLazyPagingItems()
-
-
-            Box(modifier = Modifier
-                .background(Color.Magenta)
-                .fillMaxSize()) {
-                Spacer(modifier = Modifier.height(50.dp))
+            Box(
+                modifier = Modifier
+                    .background(Color.Magenta)
+                    .fillMaxSize()
+            ) {
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 30.dp, bottom = 30.dp)
                         .background(
                             MyColor
                         ),
@@ -59,7 +62,7 @@ fun SearchScreen(
                 ) {
                     items(movies.itemCount) { page ->
                         movies[page]?.let { movie ->
-                            MovieCard2(movie, onClick = {navigateToDetails(movies[page]!!)})
+                            MovieCard2(movie, onClick = { navigateToDetails(movies[page]!!) })
                         }
                     }
                 }

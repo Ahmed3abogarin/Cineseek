@@ -29,7 +29,6 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.ui.theme.MyColor
-import com.movies.cinemix.ui.theme.MyGray2
 
 
 @Composable
@@ -133,7 +132,7 @@ fun HomeScreenContent(
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
             Text(
-                text = "Upcoming",
+                text = "Now playing",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
@@ -143,7 +142,7 @@ fun HomeScreenContent(
                 color = Color.White,
                 fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
-                    navigateToAll("upcoming")
+                    navigateToAll("nowPlaying")
                 })
             )
         }
@@ -165,7 +164,7 @@ fun HomeScreenContent(
             )
             Text(
                 "See all",
-                color = MyGray2,
+                color = Color.White,
                 fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
                     navigateToAll("popular")
@@ -194,7 +193,7 @@ fun HomeScreenContent(
             Text(
                 text = "See all",
                 color = Color.White,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
                     navigateToAll("upcoming")
 
@@ -223,7 +222,7 @@ fun HomeScreenContent(
             Text(
                 "See all",
                 color = Color.White,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
                     navigateToAll("topRated")
 
@@ -232,7 +231,6 @@ fun HomeScreenContent(
         }
         MovieList(topRatedMovies, onClick = { navigateToDetails(it) })
         Spacer(modifier = Modifier.height(110.dp))
-
     }
 }
 
