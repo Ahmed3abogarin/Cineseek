@@ -41,14 +41,14 @@ fun HomeScreen(
     topRatedMovies: LazyPagingItems<Movies>,
     upcomingMovies: LazyPagingItems<Movies>,
 ) {
-    // YoutubeButton(videoId,lifecycleOwner)
     HomeScreenContent(
         trendWeek = trendWeek,
         moviesNow = moviesNow,
         popularMovies = popularMovies,
         topRatedMovies = topRatedMovies,
         upcomingMovies = upcomingMovies,
-        navigateToAll = navigateToAll, navigateToDetails = navigateToDetails
+        navigateToAll = navigateToAll,
+        navigateToDetails = navigateToDetails
     )
 
 }
@@ -97,22 +97,32 @@ fun HomeScreenContent(
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row (modifier = Modifier.fillMaxWidth().align(Alignment.Start).padding(start = 10.dp)){
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.Start)
+            .padding(start = 10.dp)) {
             Text(
                 text = "Trending this week",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Icon(painter = painterResource(R.drawable.fire), contentDescription = null,
-                modifier = Modifier.size(48.dp).align(Alignment.CenterVertically))
+            Icon(
+                painter = painterResource(R.drawable.fire), contentDescription = null,
+                modifier = Modifier
+                    .size(48.dp)
+                    .align(Alignment.CenterVertically)
+            )
         }
 
 
         Spacer(modifier = Modifier.height(10.dp))
         ViewPagerSlider(
             pagesCount = trendWeek.itemCount,
-            list = trendWeek
+            list = trendWeek,
+            onClick = {
+                navigateToDetails(it)
+            }
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -137,6 +147,8 @@ fun HomeScreenContent(
                 })
             )
         }
+
+        MovieList(moviesList = moviesNow, onClick = { navigateToDetails(it) })
 
         MovieList(moviesList = popularMovies, onClick = { navigateToDetails(it) })
 
