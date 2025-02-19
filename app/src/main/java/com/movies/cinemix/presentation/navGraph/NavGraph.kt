@@ -31,11 +31,12 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.details.DetailsScreen
 import com.movies.cinemix.presentation.details.DetailsViewModel
 import com.movies.cinemix.presentation.favorite.FavoriteScreen
-import com.movies.cinemix.presentation.favorite.SearchScreen
 import com.movies.cinemix.presentation.home.HomeScreen
 import com.movies.cinemix.presentation.home.HomeViewModel
 import com.movies.cinemix.presentation.news_navigator.BottomItem
 import com.movies.cinemix.presentation.news_navigator.MoviesBottomNav
+import com.movies.cinemix.presentation.search.SearchScreen
+import com.movies.cinemix.presentation.search.SearchViewModel
 import com.movies.cinemix.presentation.seeall.SeeAllMovies
 import com.movies.cinemix.presentation.seeall.SeeAllViewModel
 import com.movies.cinemix.ui.theme.MyGreen
@@ -127,7 +128,18 @@ fun NavGraph() {
 
             }
             composable(Route.SearchScreen.route) {
-                SearchScreen()
+                val viewmodel: SearchViewModel = hiltViewModel()
+                val state = viewmodel.state.value
+                SearchScreen(
+                    state = state,
+                    event = viewmodel::onEvent,
+                    navigateToDetails = {
+                        navigateToDetails(
+                            navController = navController,
+                            movie = it
+                        )
+                    }
+                )
             }
             composable(Route.FavoriteScreen.route) {
                 FavoriteScreen()

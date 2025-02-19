@@ -11,6 +11,7 @@ import com.movies.cinemix.domain.usecases.GetTopRatedMovies
 import com.movies.cinemix.domain.usecases.GetTrendWeek
 import com.movies.cinemix.domain.usecases.GetUpcomingMovies
 import com.movies.cinemix.domain.usecases.MoviesUseCases
+import com.movies.cinemix.domain.usecases.SearchMovie
 import com.movies.cinemix.util.Constants.NOW_PLAYING_URL
 import dagger.Module
 import dagger.Provides
@@ -45,7 +46,8 @@ object AppModule {
         getUpcomingMovies = GetUpcomingMovies(moviesRepository),
         getMovieCast = GetMovieCast(moviesRepository),
         getMovieKey = GetMovieKey(moviesRepository),
-        getTrendWeek = GetTrendWeek(moviesRepository)
+        getTrendWeek = GetTrendWeek(moviesRepository),
+        searchMovie = SearchMovie(moviesRepository)
     )
 
     @Provides

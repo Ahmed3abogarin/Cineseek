@@ -51,6 +51,7 @@ import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
+import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
@@ -212,7 +213,7 @@ fun DetailsScreen(
 
                         Text(
                             text = "IMDB ${"%.1f".format(movie.vote_average)}",
-                            style = MaterialTheme.typography.bodyLarge.copy(Color.White)
+                            style = MaterialTheme.typography.bodyLarge.copy(color = Gold)
                         )
                     }
                     Spacer(modifier = Modifier.height(10.dp))

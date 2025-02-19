@@ -62,6 +62,15 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
+    override fun searchMovie(movieName: String): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging { page -> moviesApi.getMovie(page = page,movieName = movieName)}
+            }
+        ).flow
+    }
+
 
     override suspend fun getMovieCrew(movieId: Int): CastResponse {
         return try {

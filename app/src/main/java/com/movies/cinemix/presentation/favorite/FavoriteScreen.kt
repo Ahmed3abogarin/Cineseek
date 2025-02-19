@@ -14,12 +14,6 @@ fun FavoriteScreen(){
     }
 }
 
-@Composable
-fun SearchScreen(){
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Text(text = "This is the Search screen" )
-    }
-}
 
 @Composable
 fun ContactScreen(){
