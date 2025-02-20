@@ -6,5 +6,6 @@ data class DetailsState(
     val castList: CastResponse? = null,
     val showDialog: Boolean = false,
     val movieKey: String? = null,
-    val genres: List<String> = emptyList()
+    val genres: List<String> = emptyList(),
+    val savedStatus: Boolean = false
 )

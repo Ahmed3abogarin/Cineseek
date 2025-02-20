@@ -43,7 +43,7 @@ fun FavoriteScreen(
         if (movies.isEmpty()) {
             EmptyScreen()
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Box(
             modifier = Modifier
@@ -66,6 +66,9 @@ fun FavoriteScreen(
             }
         }
         MovieList(moviesList = state.favoriteMovies, onClick = { onClick(it) })
+
+        Spacer(modifier = Modifier.height(110.dp))
+
     }
 }
 

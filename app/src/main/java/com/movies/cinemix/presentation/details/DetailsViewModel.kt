@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,6 +74,15 @@ class DetailsViewModel @Inject constructor(
                         upsertMovie(event.movie)
                     } else {
                         deleteMovie(event.movie)
+                    }
+                }
+            }
+
+            is DetailsEvent.CheckSaveStatus -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val isSaved = moviesUseCases.getMovie(movieId = event.movieId) != null
+                    withContext(Dispatchers.Main) {
+                        _state.value = _state.value.copy(savedStatus = isSaved)
                     }
                 }
             }

@@ -20,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -38,7 +40,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,6 +71,7 @@ fun DetailsScreen(
 
     event(DetailsEvent.UpdateMovieId(movieId = movie.id))
     event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
+    event(DetailsEvent.CheckSaveStatus(movie.id))
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -165,13 +167,14 @@ fun DetailsScreen(
                             )
                         )
                         IconButton(onClick = {event(DetailsEvent.SaveDeleteMovie(movie))}) {
+//                            painter = painterResource(if (state.savedStatus)R.drawable.saved_filled else R.drawable.bookmark)
                             Icon(
-                                painter = painterResource(R.drawable.bookmark),
+                                if (state.savedStatus)Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                 contentDescription = null,
                                 tint = Color.White,
                                 modifier = Modifier
-                                    .size(36.dp)
-                                    .padding(end = 10.dp)
+                                    .size(42.dp)
+                                    .padding(end = 5.dp, bottom = 7.dp)
                             )
                         }
 

@@ -9,5 +9,7 @@ sealed class DetailsEvent {
     data class SaveDeleteMovie(val movie: Movies): DetailsEvent()
     data object RemoveSideEffect: DetailsEvent()
 
+    data class CheckSaveStatus(val movieId: Int): DetailsEvent()
+
 
 }
