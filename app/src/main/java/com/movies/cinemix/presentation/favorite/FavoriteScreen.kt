@@ -26,10 +26,12 @@ fun FavoriteScreen(
     onClick: (Movies) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = Modifier.background(
+            MyColor
+        )
             .fillMaxSize()
             .statusBarsPadding()
-            .padding(top = 24.dp, start = 24.dp, end = 24.dp)
+            .padding(top = 24.dp)
     ) {
         Text(text = " Favorite screen")
         val movies = state.favoriteMovies
@@ -58,7 +60,6 @@ fun FavoriteScreen(
                 }
             }
         }
-
         MovieList(moviesList = state.favoriteMovies, onClick = { onClick(it) })
     }
 }
