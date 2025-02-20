@@ -1,11 +1,16 @@
 package com.movies.cinemix.presentation.details
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,19 +23,20 @@ class DetailsViewModel @Inject constructor(
     val state: State<DetailsState> = _state
 
 
+    var sideEffect by mutableStateOf<String?>(null)
+        private set // this mean it can not be changed out side this fucking class
 
 
-
-    fun openDialog(){
+    fun openDialog() {
         _state.value = _state.value.copy(showDialog = true)
     }
-    fun closeDialog(){
+
+    fun closeDialog() {
         _state.value = _state.value.copy(showDialog = false)
     }
 
 
-
-    private fun getMovieCast(movieId: Int){
+    private fun getMovieCast(movieId: Int) {
         viewModelScope.launch {
             val movies = moviesUseCases.getMovieCast.invoke(movieId = movieId)
             _state.value = state.value.copy(castList = movies)
@@ -38,29 +44,63 @@ class DetailsViewModel @Inject constructor(
 
     }
 
-    private fun getMovieKey(movieId: Int){
+    private fun getMovieKey(movieId: Int) {
         viewModelScope.launch {
             val movieKey = moviesUseCases.getMovieKey.invoke(movieId = movieId)
-            if (movieKey.results.isNotEmpty()){
+            if (movieKey.results.isNotEmpty()) {
                 _state.value = state.value.copy(movieKey = movieKey.results[0].key)
             }
 
         }
     }
 
-    fun onEvent(event: DetailsEvent){
-        when(event){
-            is DetailsEvent.UpdateMovieId ->{
+    fun onEvent(event: DetailsEvent) {
+        when (event) {
+            is DetailsEvent.UpdateMovieId -> {
                 getMovieCast(event.movieId)
                 getMovieKey(event.movieId)
             }
-            is DetailsEvent.UpdateMovieGenre ->{
+
+            is DetailsEvent.UpdateMovieGenre -> {
                 getMovieGenre(event.genres)
+            }
+
+            is DetailsEvent.SaveDeleteMovie -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    // search in the DB if the movie by id in the database so delelte it otherwise the variable eqaul to null means it is not been saved
+                    val movie = moviesUseCases.getMovie(movieId = event.movie.id)
+                    if (movie == null) { // I think this to check if it in the db
+                        upsertMovie(event.movie)
+                    } else {
+                        deleteMovie(event.movie)
+                    }
+                }
+            }
+
+            is DetailsEvent.RemoveSideEffect -> {
+                sideEffect = null
+
             }
         }
     }
 
-    private fun getMovieGenre(genreIds: List<Int>){
+    private fun deleteMovie(movie: Movies) {
+        CoroutineScope(Dispatchers.IO).launch {
+            moviesUseCases.deleteMovie(movie)
+            sideEffect = "Movie deleted :("
+        }
+
+    }
+
+    private fun upsertMovie(movie: Movies) {
+        CoroutineScope(Dispatchers.IO).launch {
+            moviesUseCases.upsertMovie(movie)
+            sideEffect = "Movie Saved"
+
+        }
+    }
+
+    private fun getMovieGenre(genreIds: List<Int>) {
         val genreMap = mapOf(
             28 to "Action",
             12 to "Adventure",
@@ -87,7 +127,6 @@ class DetailsViewModel @Inject constructor(
         _state.value = _state.value.copy(genres = genres)
 
     }
-
 
 
 }

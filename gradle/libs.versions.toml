@@ -12,12 +12,16 @@ activityCompose = "1.10.0"
 composeBom = "2024.04.01"
 pagingRuntimeKtxKtx = "3.3.5"
 retrofit = "2.11.0"
+roomRuntime = "2.6.1"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntimeKtxKtx" }
 androidx-paging-runtime-ktx-ktx = { module = "androidx.paging:paging-runtime-ktx-ktx", version.ref = "pagingRuntimeKtxKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -53,7 +53,7 @@ fun MovieList(
                 moviesList[it]?.let { movie ->
                     val currentMovie = moviesList[it]
                     Column {
-                        MovieCard(movie, onClick = {onClick(currentMovie!!)})
+                        MovieCard(movie, onClick = { onClick(currentMovie!!) })
 
                     }
                 }
@@ -64,10 +64,38 @@ fun MovieList(
 
 }
 
+
+@Composable
+fun MovieList(
+    moviesList: List<Movies>,
+    onClick: (Movies) -> Unit,
+) {
+
+    if (moviesList.isEmpty()) {
+        EmptyScreen()
+    }
+
+    LazyRow {
+        items(moviesList.size) {
+            moviesList[it].let { movie ->
+                val currentMovie = moviesList[it]
+                Column {
+                    MovieCard(movie, onClick = { onClick(currentMovie) })
+
+                }
+            }
+
+        }
+    }
+
+
+}
+
+
 @Composable
 fun handlePagingResult(
     movies: LazyPagingItems<Movies>,
-    num: Int = 2
+    num: Int = 2,
 ): Boolean {
     val loadState = movies.loadState
     val error = when {
@@ -78,12 +106,18 @@ fun handlePagingResult(
     }
     return when {
         loadState.refresh is LoadState.Loading -> {
-            when(num){
+            when (num) {
                 1 -> {
                     MyEffect()
                 }
+
                 2 -> {
-                    Box(modifier = Modifier.fillMaxSize().background(Color.Red), contentAlignment = Alignment.Center){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Red),
+                        contentAlignment = Alignment.Center
+                    ) {
                         CircularProgressIndicator()
                     }
                 }

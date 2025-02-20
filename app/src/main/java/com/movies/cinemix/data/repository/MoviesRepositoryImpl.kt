@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.movies.cinemix.data.local.MoviesDao
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
+    private val moviesDao: MoviesDao
 ) : MoviesRepository {
     override fun getNowPlayingMovies(): Flow<PagingData<Movies>> {
         return Pager(
@@ -88,5 +90,21 @@ class MoviesRepositoryImpl(
             Log.v("Movies", e.message.toString())
             throw e
         }
+    }
+
+    override suspend fun upsertMovie(movie: Movies) {
+        moviesDao.upsert(movie)
+    }
+
+    override suspend fun deleteMovie(movie: Movies) {
+        moviesDao.delete(movie)
+    }
+
+    override fun getMovies(): Flow<List<Movies>> {
+        return moviesDao.getMovies()
+    }
+
+    override fun getMovie(movieId: Int): Movies? {
+        return moviesDao.getMovie(movieId)
     }
 }

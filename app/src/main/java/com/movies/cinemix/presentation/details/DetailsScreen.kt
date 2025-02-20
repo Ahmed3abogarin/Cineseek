@@ -164,14 +164,17 @@ fun DetailsScreen(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-                        Icon(
-                            painter = painterResource(R.drawable.bookmark),
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier
-                                .size(36.dp)
-                                .padding(end = 10.dp)
-                        )
+                        IconButton(onClick = {event(DetailsEvent.SaveDeleteMovie(movie))}) {
+                            Icon(
+                                painter = painterResource(R.drawable.bookmark),
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .padding(end = 10.dp)
+                            )
+                        }
+
                     }
 
 

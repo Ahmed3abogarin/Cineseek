@@ -9,23 +9,30 @@ import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
 
-     fun getNowPlayingMovies(): Flow<PagingData<Movies>>
+    fun getNowPlayingMovies(): Flow<PagingData<Movies>>
 
-     fun getPopularMovies(): Flow<PagingData<Movies>>
+    fun getPopularMovies(): Flow<PagingData<Movies>>
 
-     fun getTopRatedMovies(): Flow<PagingData<Movies>>
+    fun getTopRatedMovies(): Flow<PagingData<Movies>>
 
-     fun getUpcomingMovies(): Flow<PagingData<Movies>>
+    fun getUpcomingMovies(): Flow<PagingData<Movies>>
 
-     fun getTrendingWeek(): Flow<PagingData<Movies>>
+    fun getTrendingWeek(): Flow<PagingData<Movies>>
 
-     fun searchMovie(movieName: String): Flow<PagingData<Movies>>
+    fun searchMovie(movieName: String): Flow<PagingData<Movies>>
 
-     suspend fun getMovieCrew(movieId: Int): CastResponse
+    suspend fun getMovieCrew(movieId: Int): CastResponse
 
-     suspend fun getMovieKey(movieId: Int): MovieKeyResponse
+    suspend fun getMovieKey(movieId: Int): MovieKeyResponse
 
+    // Room DB
+    suspend fun upsertMovie(movie: Movies)
 
+    suspend fun deleteMovie(movie: Movies)
+
+    fun getMovies(): Flow<List<Movies>>
+
+    fun getMovie(movieId: Int): Movies?
 
 
 }

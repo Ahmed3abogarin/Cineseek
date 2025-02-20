@@ -1,5 +1,6 @@
 package com.movies.cinemix.presentation.navGraph
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,9 +30,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.details.DetailsEvent
 import com.movies.cinemix.presentation.details.DetailsScreen
 import com.movies.cinemix.presentation.details.DetailsViewModel
 import com.movies.cinemix.presentation.favorite.FavoriteScreen
+import com.movies.cinemix.presentation.favorite.FavoriteViewModel
 import com.movies.cinemix.presentation.home.HomeScreen
 import com.movies.cinemix.presentation.home.HomeViewModel
 import com.movies.cinemix.presentation.news_navigator.BottomItem
@@ -142,7 +146,14 @@ fun NavGraph() {
                 )
             }
             composable(Route.FavoriteScreen.route) {
-                FavoriteScreen()
+                val viewmodel: FavoriteViewModel = hiltViewModel()
+                val state = viewmodel.state.value
+                FavoriteScreen(state, onClick = {
+                    navigateToDetails(
+                        navController = navController,
+                        movie = it
+                    )
+                })
             }
             composable(Route.SeeAllScreen.route) {
                 navController.previousBackStackEntry?.savedStateHandle?.get<String>("movieCategory")
@@ -161,6 +172,11 @@ fun NavGraph() {
             }
 
             composable(Route.DetailsScreen.route) {
+                if (detailsViewModel.sideEffect != null){
+                    Toast.makeText(LocalContext.current,detailsViewModel.sideEffect, Toast.LENGTH_SHORT).show()
+                    detailsViewModel.onEvent(DetailsEvent.RemoveSideEffect)
+                }
+
                 navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")
                     ?.let { movie ->
                         DetailsScreen(

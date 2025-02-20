@@ -1,10 +1,18 @@
 package com.movies.cinemix.di
 
+import android.app.Application
+import androidx.room.Room
+import com.movies.cinemix.data.local.MovieDatabase
+import com.movies.cinemix.data.local.MoviesDao
+import com.movies.cinemix.data.local.MoviesTypeConverter
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.repository.MoviesRepositoryImpl
 import com.movies.cinemix.domain.repository.MoviesRepository
+import com.movies.cinemix.domain.usecases.DeleteMovie
+import com.movies.cinemix.domain.usecases.GetMovie
 import com.movies.cinemix.domain.usecases.GetMovieCast
 import com.movies.cinemix.domain.usecases.GetMovieKey
+import com.movies.cinemix.domain.usecases.GetMovies
 import com.movies.cinemix.domain.usecases.GetNowPlayingMovies
 import com.movies.cinemix.domain.usecases.GetPopularMovies
 import com.movies.cinemix.domain.usecases.GetTopRatedMovies
@@ -12,6 +20,7 @@ import com.movies.cinemix.domain.usecases.GetTrendWeek
 import com.movies.cinemix.domain.usecases.GetUpcomingMovies
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import com.movies.cinemix.domain.usecases.SearchMovie
+import com.movies.cinemix.domain.usecases.UpsertMovie
 import com.movies.cinemix.util.Constants.NOW_PLAYING_URL
 import dagger.Module
 import dagger.Provides
@@ -47,13 +56,38 @@ object AppModule {
         getMovieCast = GetMovieCast(moviesRepository),
         getMovieKey = GetMovieKey(moviesRepository),
         getTrendWeek = GetTrendWeek(moviesRepository),
-        searchMovie = SearchMovie(moviesRepository)
+        searchMovie = SearchMovie(moviesRepository),
+        upsertMovie = UpsertMovie(moviesRepository),
+        deleteMovie = DeleteMovie(moviesRepository),
+        getMovies = GetMovies(moviesRepository),
+        getMovie = GetMovie(moviesRepository)
     )
 
     @Provides
     @Singleton
-    fun provideMovieRepository(api: MoviesApi): MoviesRepository {
-        return MoviesRepositoryImpl(api)
+    fun provideMovieRepository(
+        api: MoviesApi,
+        moviesDao: MoviesDao
+    ): MoviesRepository = MoviesRepositoryImpl(api, moviesDao)
 
+
+    @Provides
+    @Singleton
+    fun provideMoviesDatabase(
+        application: Application,
+    ): MovieDatabase {
+        return Room.databaseBuilder(
+            context = application,
+            klass = MovieDatabase::class.java,
+            name = "movies_db" // gotta move to constant
+        ).addTypeConverter(MoviesTypeConverter())
+            .fallbackToDestructiveMigration()
+            .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideMoviesDao(
+        moviesDatabase: MovieDatabase,
+    ): MoviesDao = moviesDatabase.moviesDao
 }
