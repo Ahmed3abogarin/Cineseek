@@ -1,6 +1,5 @@
 package com.movies.cinemix.presentation.favorite
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -24,14 +23,9 @@ class FavoriteViewModel @Inject constructor(
     }
 
     private fun getSavedMovies() {
-        Log.v("COSETTEMOVIES", "get movies called")
-
-
         moviesUseCases.getMovies().onEach {
-            _state.value = _state.value.copy(favoriteMovies = it.asReversed())
+            _state.value = _state.value.copy(favoriteMovies = it)
         }.launchIn(viewModelScope)
-
         // The problem was it just not launched in viewmodel scope
-
     }
 }

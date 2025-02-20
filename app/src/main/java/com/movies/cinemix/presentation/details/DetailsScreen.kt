@@ -1,5 +1,6 @@
 package com.movies.cinemix.presentation.details
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -166,11 +168,30 @@ fun DetailsScreen(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-                        IconButton(onClick = {event(DetailsEvent.SaveDeleteMovie(movie))}) {
+                        IconButton(onClick = { event(DetailsEvent.SaveDeleteMovie(movie)) }) {
 //                            painter = painterResource(if (state.savedStatus)R.drawable.saved_filled else R.drawable.bookmark)
                             Icon(
-                                if (state.savedStatus)Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                if (state.savedStatus) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                 contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .size(42.dp)
+                                    .padding(end = 5.dp, bottom = 7.dp)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                Intent(Intent.ACTION_SEND).also {
+                                    it.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=${state.movieKey}")
+                                    it.type = "text/plain"
+                                    if (it.resolveActivity(context.packageManager) != null){
+                                        context.startActivity(it)
+                                    }
+                                }
+                            }
+                        ) {
+                            Icon(
+                                Icons.Filled.Share, contentDescription = null,
                                 tint = Color.White,
                                 modifier = Modifier
                                     .size(42.dp)
@@ -184,14 +205,25 @@ fun DetailsScreen(
 //                    Spacer(modifier = Modifier.height(10.dp))
                     if (state.genres.isNotEmpty()) {
                         LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp,Alignment.CenterHorizontally),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                6.dp,
+                                Alignment.CenterHorizontally
+                            ),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             items(state.genres) { genre ->
 
-                                Text(text = genre, fontSize = 14.sp, color = Color.White, modifier = Modifier.clip(
-                                    RoundedCornerShape(30.dp)
-                                ).background(BottomColor).padding(start = 8.dp, end = 8.dp))
+                                Text(
+                                    text = genre,
+                                    fontSize = 14.sp,
+                                    color = Color.White,
+                                    modifier = Modifier
+                                        .clip(
+                                            RoundedCornerShape(30.dp)
+                                        )
+                                        .background(BottomColor)
+                                        .padding(start = 8.dp, end = 8.dp)
+                                )
                             }
                         }
                     }
