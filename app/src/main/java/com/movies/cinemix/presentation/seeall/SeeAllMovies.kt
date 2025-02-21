@@ -17,10 +17,12 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +39,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
@@ -46,19 +49,41 @@ import com.movies.cinemix.ui.theme.MyColor2
 fun SeeAllMovies(
     movieCategory: String,
     viewModel: SeeAllViewModel,
-    navigateToDetails: (Movies) -> Unit
+    navigateToDetails: (Movies) -> Unit,
+    navigateUp: () -> Unit,
 ) {
 
 
     val moviesList = viewModel.getMovies(movieCategory).collectAsLazyPagingItems()
-    Box(modifier = Modifier
-        .background(Color.Magenta)
-        .fillMaxSize()) {
-        Spacer(modifier = Modifier.height(50.dp))
+
+    Column(
+        modifier = Modifier
+            .background(MyColor)
+            .fillMaxSize()
+    ) {
+        Row(modifier = Modifier.fillMaxWidth().shadow(elevation = 3.dp).background(BottomColor)) {
+
+
+            IconButton(
+                onClick = { navigateUp() },
+                Modifier
+                    .size(62.dp)
+                    .padding(start = 16.dp, top = 32.dp)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+            }
+        }
+
+
         LazyVerticalStaggeredGrid(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 30.dp, bottom = 30.dp)
+                .padding(top = 5.dp)
                 .background(
                     MyColor
                 ),
@@ -67,7 +92,7 @@ fun SeeAllMovies(
         ) {
             items(moviesList.itemCount) { page ->
                 moviesList[page]?.let { movie ->
-                    MovieCard2(movie, onClick = {navigateToDetails(moviesList[page]!!)})
+                    MovieCard2(movie, onClick = { navigateToDetails(moviesList[page]!!) })
                 }
             }
         }
@@ -78,9 +103,11 @@ fun SeeAllMovies(
 fun MovieCard2(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
-    Column(modifier = Modifier.background(MyColor).clickable { onClick() }) {
+    Column(modifier = Modifier
+        .background(MyColor)
+        .clickable { onClick() }) {
 
-        Box{
+        Box {
             Card(
                 modifier = modifier
                     .height(271.dp)
@@ -125,9 +152,11 @@ fun MovieCard2(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit
 
 
 
-        Box(modifier = Modifier
-            .width(200.dp)
-            .padding(start = 5.dp, top = 3.dp)) {
+        Box(
+            modifier = Modifier
+                .width(200.dp)
+                .padding(start = 5.dp, top = 3.dp)
+        ) {
             Text(
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,

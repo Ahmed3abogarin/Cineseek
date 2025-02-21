@@ -166,14 +166,19 @@ fun NavGraph() {
                                     navController = navController,
                                     movie = it
                                 )
-                            }
+                            },
+                            navigateUp = { navController.navigateUp() }
                         )
                     }
             }
 
             composable(Route.DetailsScreen.route) {
-                if (detailsViewModel.sideEffect != null){
-                    Toast.makeText(LocalContext.current,detailsViewModel.sideEffect, Toast.LENGTH_SHORT).show()
+                if (detailsViewModel.sideEffect != null) {
+                    Toast.makeText(
+                        LocalContext.current,
+                        detailsViewModel.sideEffect,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     detailsViewModel.onEvent(DetailsEvent.RemoveSideEffect)
                 }
 
