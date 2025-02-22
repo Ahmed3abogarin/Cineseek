@@ -30,8 +30,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,24 +57,23 @@ import kotlinx.coroutines.delay
 @Composable
 fun MoviesBottomNav(
     bottomItems: MutableList<BottomItem>,
+    selectedIndex: Int,
     onItemClicked: (Int) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
 
     val indicatorWidth = (configuration.screenWidthDp / bottomItems.count()) / 2
 
-    val selectedIndex = remember {
-        mutableIntStateOf(0)
-    }
+
 
     val indicatorOffset by animateIntOffsetAsState(
         targetValue = IntOffset(
-            bottomItems[selectedIndex.intValue].offset.x.toInt() + (bottomItems[selectedIndex.intValue].size.width / 4) - (bottomItems.count() * 2) + (-2),
+            bottomItems[selectedIndex].offset.x.toInt() + (bottomItems[selectedIndex].size.width / 4) - (bottomItems.count() * 2) + (-2),
             15
         ), animationSpec = tween(400)
     )
     val indicatorColor by animateColorAsState(
-        targetValue = bottomItems[selectedIndex.intValue].color,
+        targetValue = bottomItems[selectedIndex].color,
         animationSpec = tween(500)
     )
     val infiniteTransition = rememberInfiniteTransition()
@@ -131,8 +130,7 @@ fun MoviesBottomNav(
                             },
                             onClick = {
                                 switching.value = true
-                                selectedIndex.intValue = index
-                                onItemClicked(selectedIndex.intValue)
+                                onItemClicked(index)
                             }
                         ),
                     contentAlignment = Alignment.Center

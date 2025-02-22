@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.details.DetailsEvent
 import com.movies.cinemix.presentation.details.DetailsScreen
@@ -50,6 +48,8 @@ import com.movies.cinemix.ui.theme.MyPink
 fun NavGraph() {
     val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
     val detailsViewModel: DetailsViewModel = hiltViewModel()
+    val homeViewmodel: HomeViewModel = hiltViewModel()
+
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -72,7 +72,7 @@ fun NavGraph() {
 
     val navController = rememberNavController()
     val backstackState = navController.currentBackStackEntryAsState().value
-    var selectedItem by rememberSaveable {
+    var selectedItem by remember {
         mutableIntStateOf(0)
     }
 
@@ -105,18 +105,10 @@ fun NavGraph() {
         ) {
 
             composable(Route.HomeScreen.route) {
-                val homeViewmodel: HomeViewModel = hiltViewModel()
-                val moviesNow = homeViewmodel.nowPlayingMovies.collectAsLazyPagingItems()
-                val popularMovies = homeViewmodel.popularMovies.collectAsLazyPagingItems()
-                val topRatedMovies = homeViewmodel.topRatedMovies.collectAsLazyPagingItems()
-                val upcomingMovies = homeViewmodel.upcomingMovies.collectAsLazyPagingItems()
-                val trendWeek = homeViewmodel.trendWeek.collectAsLazyPagingItems()
+                val state = homeViewmodel.state.value
+
                 HomeScreen(
-                    trendWeek = trendWeek,
-                    moviesNow = moviesNow,
-                    popularMovies = popularMovies,
-                    topRatedMovies = topRatedMovies,
-                    upcomingMovies = upcomingMovies,
+                    state = state,
                     navigateToAll = { category ->
                         navigateToAll(
                             navController = navController,
@@ -204,6 +196,7 @@ fun NavGraph() {
         ) {
             if (isBottomBarVisible) {
                 MoviesBottomNav(
+                    selectedIndex = selectedItem,
                     bottomItems = bottomItems,
                     onItemClicked = { index ->
                         when (index) {
@@ -235,26 +228,20 @@ fun NavGraph() {
 
 fun navigateToTab(navController: NavController, route: String) {
     navController.navigate(route) {
-        // every time we navigate to tab we wanna pop the backstack until we reach the home screen
-        navController.graph.startDestinationRoute?.let { homeScreen ->
-            popUpTo(homeScreen) {
-                saveState = true
-            }
-            restoreState = true
-            launchSingleTop =
-                true // if you clicked multiple time on home screen icon that won't create a new instance of home screen each time
+        popUpTo(navController.graph.startDestinationId) {
+            saveState = true
         }
-
-
+        restoreState = true
+        launchSingleTop = true
     }
 }
 
 private fun navigateToAll(navController: NavController, movieCategory: String) {
-    navController.currentBackStackEntry?.savedStateHandle?.set("movieCategory", movieCategory)
-    navController.navigate(
-        route = Route.SeeAllScreen.route
-    )
-
+    val currentDestination = navController.currentDestination?.route
+    if (currentDestination != Route.SeeAllScreen.route) {  // Prevent duplicate navigation
+        navController.currentBackStackEntry?.savedStateHandle?.set("movieCategory", movieCategory)
+        navController.navigate(Route.SeeAllScreen.route)
+    }
 }
 
 // Helper function to navigate to details screen

@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieList
@@ -33,22 +33,14 @@ import com.movies.cinemix.ui.theme.MyColor
 
 @Composable
 fun HomeScreen(
-    trendWeek: LazyPagingItems<Movies>,
     navigateToAll: (String) -> Unit,
     navigateToDetails: (Movies) -> Unit,
-    moviesNow: LazyPagingItems<Movies>,
-    popularMovies: LazyPagingItems<Movies>,
-    topRatedMovies: LazyPagingItems<Movies>,
-    upcomingMovies: LazyPagingItems<Movies>,
+    state: HomeState,
 ) {
     HomeScreenContent(
-        trendWeek = trendWeek,
-        moviesNow = moviesNow,
-        popularMovies = popularMovies,
-        topRatedMovies = topRatedMovies,
-        upcomingMovies = upcomingMovies,
+        state = state,
         navigateToAll = navigateToAll,
-        navigateToDetails = navigateToDetails
+        navigateToDetails = navigateToDetails,
     )
 
 }
@@ -56,11 +48,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    trendWeek: LazyPagingItems<Movies>,
-    moviesNow: LazyPagingItems<Movies>,
-    popularMovies: LazyPagingItems<Movies>,
-    topRatedMovies: LazyPagingItems<Movies>,
-    upcomingMovies: LazyPagingItems<Movies>,
+    state: HomeState,
     navigateToAll: (String) -> Unit,
     navigateToDetails: (Movies) -> Unit,
 ) {
@@ -97,10 +85,12 @@ fun HomeScreenContent(
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.Start)
-            .padding(start = 10.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Start)
+                .padding(start = 10.dp)
+        ) {
             Text(
                 text = "Trending this week ",
                 color = Color.White,
@@ -117,13 +107,18 @@ fun HomeScreenContent(
 
 
         Spacer(modifier = Modifier.height(10.dp))
-        ViewPagerSlider(
-            pagesCount = trendWeek.itemCount,
-            list = trendWeek,
-            onClick = {
-                navigateToDetails(it)
-            }
-        )
+
+        state.trendWeek?.let {
+            val trendMovies = state.trendWeek.collectAsLazyPagingItems()
+            ViewPagerSlider(
+                pagesCount = trendMovies.itemCount,
+                list = trendMovies,
+                onClick = {
+                    navigateToDetails(it)
+                }
+            )
+        }
+
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
@@ -146,8 +141,13 @@ fun HomeScreenContent(
                 })
             )
         }
+        state.nowPlaying?.let {
+            MovieList(
+                moviesList = state.nowPlaying.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
 
-        MovieList(moviesList = moviesNow, onClick = { navigateToDetails(it) })
+
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -173,8 +173,14 @@ fun HomeScreenContent(
             )
         }
 
+        state.popularMovies?.let {
+            MovieList(
+                moviesList = state.popularMovies.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
 
-        MovieList(moviesList = popularMovies, onClick = { navigateToDetails(it) })
+
+
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -201,7 +207,13 @@ fun HomeScreenContent(
             )
         }
 
-        MovieList(upcomingMovies, onClick = { navigateToDetails(it) })
+        state.upcomingMovies?.let {
+            MovieList(
+                state.upcomingMovies.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
+
+
 
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -229,7 +241,12 @@ fun HomeScreenContent(
                 })
             )
         }
-        MovieList(topRatedMovies, onClick = { navigateToDetails(it) })
+
+        state.topRatedMovies?.let {
+            MovieList(
+                state.topRatedMovies.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
         Spacer(modifier = Modifier.height(110.dp))
     }
 }
