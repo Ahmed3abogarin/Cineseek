@@ -2,6 +2,7 @@ package com.movies.cinemix.presentation.details
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
@@ -65,6 +67,7 @@ fun DetailsScreen(
     event: (DetailsEvent) -> Unit,
     navigateUp: () -> Unit,
     lifecycleOwner: LifecycleOwner,
+    navigateToCastDetails: (Int) -> Unit
 
     ) {
     val context = LocalContext.current
@@ -287,7 +290,11 @@ fun DetailsScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             items(state.castList.cast) { person ->
-                                Column(modifier = Modifier.width(74.dp)) {
+                                Column(modifier = Modifier.width(74.dp).clickable(
+                                    onClick = {
+                                        navigateToCastDetails(person.id)
+                                    }
+                                )) {
                                     AsyncImage(
                                         model = ImageRequest.Builder(context)
                                             .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)

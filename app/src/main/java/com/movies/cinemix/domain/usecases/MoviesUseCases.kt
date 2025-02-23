@@ -13,5 +13,7 @@ data class MoviesUseCases (
     val upsertMovie: UpsertMovie,
     val deleteMovie: DeleteMovie,
     val getMovies: GetMovies,
-    val getMovie: GetMovie
+    val getMovie: GetMovie,
+
+    val getPersonInfo: GetPersonInfo
 )

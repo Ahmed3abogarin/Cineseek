@@ -10,6 +10,7 @@ import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -106,5 +107,9 @@ class MoviesRepositoryImpl(
 
     override fun getMovie(movieId: Int): Movies? {
         return moviesDao.getMovie(movieId)
+    }
+
+    override suspend fun getPersonInfo(personId: Int): PersonResponse {
+        return moviesApi.getPersonInfo(personId)
     }
 }

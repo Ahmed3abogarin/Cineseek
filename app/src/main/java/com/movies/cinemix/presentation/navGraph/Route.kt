@@ -8,4 +8,5 @@ sealed class Route(
     data object FavoriteScreen: Route(route = "favoriteScreen")
     data object SeeAllScreen: Route(route = "seeAllScreen")
     data object DetailsScreen: Route(route = "detailsScreen")
+    data object CastDetailsScreen: Route(route = "castDetailsScreen")
 }

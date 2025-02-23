@@ -3,6 +3,7 @@ package com.movies.cinemix.data.remote
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.MovieResponse
+import com.movies.cinemix.domain.model.PersonResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -61,6 +62,12 @@ interface MoviesApi {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieKeyResponse
+
+    @GET("person/{person_id}")
+    suspend fun getPersonInfo(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+    ): PersonResponse
 
 
 }

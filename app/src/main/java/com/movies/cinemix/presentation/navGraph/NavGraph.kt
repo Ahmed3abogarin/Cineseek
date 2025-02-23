@@ -28,6 +28,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.CastScreen
+import com.movies.cinemix.presentation.CastViewModel
 import com.movies.cinemix.presentation.details.DetailsEvent
 import com.movies.cinemix.presentation.details.DetailsScreen
 import com.movies.cinemix.presentation.details.DetailsViewModel
@@ -181,10 +183,27 @@ fun NavGraph() {
                             detailsViewModel,
                             detailsViewModel::onEvent,
                             navigateUp = { navController.navigateUp() },
-                            lifecycleOwner = lifecycleOwner
+                            lifecycleOwner = lifecycleOwner,
+                            navigateToCastDetails = {
+                                navigateToCastDetails(
+                                    navigator = navController,
+                                    personId = it
+                                )
+                            }
                         )
                     }
 
+            }
+            composable(Route.CastDetailsScreen.route) {
+                val castViewModel: CastViewModel = hiltViewModel()
+                navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
+                    ?.let { personId ->
+                        CastScreen(
+                            personId,
+                            state = castViewModel.state.value,
+                            event = castViewModel::onEvent, navigateUp = {navController.navigateUp()}
+                        )
+                    }
             }
 
         }
@@ -249,6 +268,13 @@ private fun navigateToDetails(navController: NavController, movie: Movies) {
     navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
     navController.navigate(
         route = Route.DetailsScreen.route
+    )
+}
+
+private fun navigateToCastDetails(navigator: NavController, personId: Int) {
+    navigator.currentBackStackEntry?.savedStateHandle?.set("person_id", personId)
+    navigator.navigate(
+        route = Route.CastDetailsScreen.route
     )
 }
 
