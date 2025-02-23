@@ -38,7 +38,7 @@ interface MoviesRepository {
 
     suspend fun getPersonInfo(personId: Int): PersonResponse
 
-    suspend fun getPersonMovies(personId: Int): MovieResponse
+    fun getPersonMovies(personId: Int): Flow<PagingData<Movies>>
 
 
 }

@@ -51,6 +51,7 @@ fun NavGraph() {
     val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
     val detailsViewModel: DetailsViewModel = hiltViewModel()
     val homeViewmodel: HomeViewModel = hiltViewModel()
+    val castViewModel: CastViewModel = hiltViewModel()
 
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -195,7 +196,6 @@ fun NavGraph() {
 
             }
             composable(Route.CastDetailsScreen.route) {
-                val castViewModel: CastViewModel = hiltViewModel()
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
                     ?.let { personId ->
                         CastScreen(

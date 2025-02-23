@@ -9,7 +9,6 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
-import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
@@ -114,7 +113,12 @@ class MoviesRepositoryImpl(
         return moviesApi.getPersonInfo(personId)
     }
 
-    override suspend fun getPersonMovies(personId: Int): MovieResponse {
-        return moviesApi.getPersonMovies(personId = personId)
+    override fun getPersonMovies(personId: Int): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging{ page -> moviesApi.getPersonMovies(personId = personId, page = page)}
+            }
+        ).flow
     }
 }

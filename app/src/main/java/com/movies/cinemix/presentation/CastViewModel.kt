@@ -1,11 +1,14 @@
 package com.movies.cinemix.presentation
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,13 +25,28 @@ class CastViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is CastEvent.UpdatePersonId -> {
-                    val personInfo = moviesUseCases.getPersonInfo.invoke(event.personId)
-                    val personMovies = moviesUseCases.getPersonMovies.invoke(event.personId)
-                    _state.value = _state.value.copy(personInfo = personInfo)
-                    _state.value = _state.value.copy(personMovies = personMovies)
+                    getPersonMovies(event.personId)
+                    Log.v("PERSONID",event.personId.toString())
+                    getPersonInfo(event.personId)
+
                 }
             }
         }
+    }
+
+    private fun getPersonMovies(personId: Int) {
+
+            val personMovies = moviesUseCases.getPersonMovies(personId)
+            _state.value = _state.value.copy(personMovies = personMovies)
+
+    }
+
+    private fun getPersonInfo(personId: Int) {
+        viewModelScope.launch {
+            val personInfo = moviesUseCases.getPersonInfo.invoke(personId)
+            _state.value = _state.value.copy(personInfo = personInfo)
+        }
+
     }
 
 }

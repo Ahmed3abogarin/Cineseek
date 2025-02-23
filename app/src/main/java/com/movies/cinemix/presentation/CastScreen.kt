@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,10 +38,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.presentation.common.MovieList
+import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.MyColor
 
@@ -49,11 +52,14 @@ fun CastScreen(
     event: (CastEvent) -> Unit,
     state: CastState,
     navigateUp: () -> Unit,
-    navigateToDetails: (Movies) -> Unit
+    navigateToDetails: (Movies) -> Unit,
 ) {
-    event(CastEvent.UpdatePersonId(personId))
+
     val context = LocalContext.current
 
+    LaunchedEffect(false) {
+        event(CastEvent.UpdatePersonId(personId = personId))
+    }
 
 
     if (state.personInfo != null) {
@@ -68,7 +74,7 @@ fun CastScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .height(285.dp)
+                    .height(300.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
                     .background(MyColor)
@@ -77,7 +83,7 @@ fun CastScreen(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
                         .width(192.dp)
-                        .height(210.dp)
+                        .height(220.dp)
                         .align(Alignment.Center),
                     model = ImageRequest.Builder(context)
                         .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
@@ -91,17 +97,23 @@ fun CastScreen(
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 8.dp),
                     text = state.personInfo.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = Color.White,
+                        fontSize = 24.sp
+                    )
                 )
 
                 IconButton(
                     onClick = { navigateUp() },
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .padding(start = 16.dp, top = 16.dp).statusBarsPadding()
+                        .padding(start = 16.dp, top = 16.dp)
+                        .statusBarsPadding()
                 ) {
                     Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color.White,
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = Color.White,
                     )
                 }
             }
@@ -142,13 +154,23 @@ fun CastScreen(
                     text = "Movies",
                     style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
                 )
-                if (state.personMovies != null){
-                    val personMovies = state.personMovies.results
-                    MovieList(personMovies){
-                     navigateToDetails(it)
+                if (state.personMovies != null) {
+                    val personMovies = state.personMovies.collectAsLazyPagingItems()
+
+                    LazyRow {
+                        items(personMovies.itemCount) { page ->
+                            personMovies[page]?.let { movie ->
+                                Column {
+                                    MovieCard(movie, onClick = { navigateToDetails(movie)})
+
+                                }
+                            }
+
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
             }
@@ -161,11 +183,11 @@ fun CastScreen(
 @Composable
 fun ExpandableText(
     text: String,
-    maxLines: Int = 11 // Limit before expanding
+    maxLines: Int = 11, // Limit before expanding
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    Column{
+    Column {
         Text(
             text = text,
             maxLines = if (isExpanded) Int.MAX_VALUE else maxLines,
@@ -178,7 +200,7 @@ fun ExpandableText(
         Spacer(modifier = Modifier.height(4.dp))
 
 
-        if (Int.MAX_VALUE > maxLines){
+        if (Int.MAX_VALUE > maxLines) {
             Text(
                 text = if (isExpanded) "Show Less" else "Show More",
                 color = Color.Gray,
