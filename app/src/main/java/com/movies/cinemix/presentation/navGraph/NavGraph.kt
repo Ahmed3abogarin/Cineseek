@@ -105,7 +105,6 @@ fun NavGraph() {
             navController,
             startDestination = Route.HomeScreen.route,
         ) {
-
             composable(Route.HomeScreen.route) {
                 val state = homeViewmodel.state.value
 
@@ -122,7 +121,8 @@ fun NavGraph() {
                             navController = navController,
                             movie = it
                         )
-                    })
+                    }
+                )
 
             }
             composable(Route.SearchScreen.route) {
@@ -201,7 +201,8 @@ fun NavGraph() {
                         CastScreen(
                             personId,
                             state = castViewModel.state.value,
-                            event = castViewModel::onEvent, navigateUp = {navController.navigateUp()}
+                            event = castViewModel::onEvent,
+                            navigateUp = { navController.navigateUp() }
                         )
                     }
             }
