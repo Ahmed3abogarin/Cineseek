@@ -22,8 +22,10 @@ class CastViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is CastEvent.UpdatePersonId -> {
-                    val personInfo = moviesUseCases.getPersonInfo(event.personId)
+                    val personInfo = moviesUseCases.getPersonInfo.invoke(event.personId)
+                    val personMovies = moviesUseCases.getPersonMovies.invoke(event.personId)
                     _state.value = _state.value.copy(personInfo = personInfo)
+                    _state.value = _state.value.copy(personMovies = personMovies)
                 }
             }
         }

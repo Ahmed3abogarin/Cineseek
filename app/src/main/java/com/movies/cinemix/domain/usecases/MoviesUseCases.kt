@@ -15,5 +15,6 @@ data class MoviesUseCases (
     val getMovies: GetMovies,
     val getMovie: GetMovie,
 
-    val getPersonInfo: GetPersonInfo
+    val getPersonInfo: GetPersonInfo,
+    val getPersonMovies: GetPersonMovies
 )

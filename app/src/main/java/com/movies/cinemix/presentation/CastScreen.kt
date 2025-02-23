@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.MyColor
 
@@ -47,6 +49,7 @@ fun CastScreen(
     event: (CastEvent) -> Unit,
     state: CastState,
     navigateUp: () -> Unit,
+    navigateToDetails: (Movies) -> Unit
 ) {
     event(CastEvent.UpdatePersonId(personId))
     val context = LocalContext.current
@@ -139,7 +142,14 @@ fun CastScreen(
                     text = "Movies",
                     style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
                 )
+                if (state.personMovies != null){
+                    val personMovies = state.personMovies.results
+                    MovieList(personMovies){
+                     navigateToDetails(it)
+                    }
 
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
             }
 

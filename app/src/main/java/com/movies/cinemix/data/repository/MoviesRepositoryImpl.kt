@@ -9,6 +9,7 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
+import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
-    private val moviesDao: MoviesDao
+    private val moviesDao: MoviesDao,
 ) : MoviesRepository {
     override fun getNowPlayingMovies(): Flow<PagingData<Movies>> {
         return Pager(
@@ -69,7 +70,7 @@ class MoviesRepositoryImpl(
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging { page -> moviesApi.getMovie(page = page,movieName = movieName)}
+                MoviesPaging { page -> moviesApi.getMovie(page = page, movieName = movieName) }
             }
         ).flow
     }
@@ -111,5 +112,9 @@ class MoviesRepositoryImpl(
 
     override suspend fun getPersonInfo(personId: Int): PersonResponse {
         return moviesApi.getPersonInfo(personId)
+    }
+
+    override suspend fun getPersonMovies(personId: Int): MovieResponse {
+        return moviesApi.getPersonMovies(personId = personId)
     }
 }

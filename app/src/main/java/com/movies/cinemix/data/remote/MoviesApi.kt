@@ -70,4 +70,10 @@ interface MoviesApi {
     ): PersonResponse
 
 
+    @GET("discover/movie")
+    suspend fun getPersonMovies(
+        @Query("with_cast") personId: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+    ): MovieResponse
+
 }

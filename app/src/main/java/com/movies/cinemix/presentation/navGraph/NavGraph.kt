@@ -199,10 +199,16 @@ fun NavGraph() {
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
                     ?.let { personId ->
                         CastScreen(
-                            personId,
+                            personId = personId,
                             state = castViewModel.state.value,
                             event = castViewModel::onEvent,
-                            navigateUp = { navController.navigateUp() }
+                            navigateUp = { navController.navigateUp() },
+                            navigateToDetails = {
+                                navigateToDetails(
+                                    navController = navController,
+                                    movie = it
+                                )
+                            }
                         )
                     }
             }
