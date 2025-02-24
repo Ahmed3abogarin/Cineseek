@@ -32,6 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,10 +74,11 @@ fun DetailsScreen(
     val context = LocalContext.current
     val state = detailsViewModel.state.value
 
-
-    event(DetailsEvent.UpdateMovieId(movieId = movie.id))
-    event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
-    event(DetailsEvent.CheckSaveStatus(movie.id))
+    LaunchedEffect (false){
+        event(DetailsEvent.UpdateMovieId(movieId = movie.id))
+        event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
+        event(DetailsEvent.CheckSaveStatus(movie.id))
+    }
 
     var showDialog by remember { mutableStateOf(false) }
 

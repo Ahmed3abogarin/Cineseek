@@ -97,7 +97,7 @@ fun CastScreen(
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 8.dp),
                     text = state.personInfo.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(
+                    style = MaterialTheme.typography.displaySmall.copy(
                         color = Color.White,
                         fontSize = 24.sp
                     )
@@ -151,8 +151,8 @@ fun CastScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "Movies",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                    text = "Movies by ${person.name}",
+                    style = MaterialTheme.typography.displaySmall.copy(color = Color.White)
                 )
                 if (state.personMovies != null) {
                     val personMovies = state.personMovies.collectAsLazyPagingItems()
