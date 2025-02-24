@@ -28,8 +28,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.presentation.CastScreen
-import com.movies.cinemix.presentation.CastViewModel
+import com.movies.cinemix.presentation.castdetails.CastScreen
+import com.movies.cinemix.presentation.castdetails.CastViewModel
 import com.movies.cinemix.presentation.details.DetailsEvent
 import com.movies.cinemix.presentation.details.DetailsScreen
 import com.movies.cinemix.presentation.details.DetailsViewModel

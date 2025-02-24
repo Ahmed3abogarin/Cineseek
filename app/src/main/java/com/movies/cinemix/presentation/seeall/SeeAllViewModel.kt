@@ -18,6 +18,8 @@ class SeeAllViewModel @Inject constructor(
             "nowPlaying" -> moviesUseCases.getNowPlayingMovies.invoke()
             "topRated" -> moviesUseCases.getTopRatedMovies.invoke()
             "upcoming" -> moviesUseCases.getUpcomingMovies.invoke()
+            "popular" -> moviesUseCases.getPopularMovies.invoke()
+            "arabic" -> moviesUseCases.getArabicMovies.invoke()
             else -> moviesUseCases.getPopularMovies.invoke() // default
         }
     }

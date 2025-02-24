@@ -40,5 +40,7 @@ interface MoviesRepository {
 
     fun getPersonMovies(personId: Int): Flow<PagingData<Movies>>
 
+    fun getArabicMovies(): Flow<PagingData<Movies>>
+
 
 }

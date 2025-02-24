@@ -33,9 +33,10 @@ fun FavoriteScreen(
         modifier = Modifier.background(
             MyColor
         )
-            .fillMaxSize()
+
             .statusBarsPadding()
             .padding(top = 24.dp)
+            .fillMaxSize()
     ) {
         Text(text = " Favorite", style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold, color = Color.White), modifier = Modifier.padding(start = 24.dp))
         val movies = state.favoriteMovies

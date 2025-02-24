@@ -222,9 +222,6 @@ fun HomeScreenContent(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
-            // space Between
-            // SpaceAround
-
             Text(
                 text = "Top rated",
                 color = Color.White,
@@ -241,12 +238,41 @@ fun HomeScreenContent(
                 })
             )
         }
-
         state.topRatedMovies?.let {
             MovieList(
                 state.topRatedMovies.collectAsLazyPagingItems(),
                 onClick = { navigateToDetails(it) })
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Text(
+                text = "Arabic Movies",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                "See all",
+                color = Color.White,
+                fontSize = 12.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("topRated")
+
+                })
+            )
+        }
+        state.arabicMovies?.let {
+            MovieList(
+                state.arabicMovies.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
+
         Spacer(modifier = Modifier.height(110.dp))
     }
 }

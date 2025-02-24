@@ -1,7 +1,6 @@
-package com.movies.cinemix.presentation
+package com.movies.cinemix.presentation.castdetails
 
 import androidx.paging.PagingData
-import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
 import kotlinx.coroutines.flow.Flow

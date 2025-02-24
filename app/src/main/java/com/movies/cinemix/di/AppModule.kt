@@ -9,6 +9,7 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.repository.MoviesRepositoryImpl
 import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.domain.usecases.DeleteMovie
+import com.movies.cinemix.domain.usecases.GetArabicMovies
 import com.movies.cinemix.domain.usecases.GetMovie
 import com.movies.cinemix.domain.usecases.GetMovieCast
 import com.movies.cinemix.domain.usecases.GetMovieKey
@@ -55,6 +56,7 @@ object AppModule {
         getPopularMovies = GetPopularMovies(moviesRepository),
         getTopRatedMovies = GetTopRatedMovies(moviesRepository),
         getUpcomingMovies = GetUpcomingMovies(moviesRepository),
+        getArabicMovies = GetArabicMovies(moviesRepository),
         getMovieCast = GetMovieCast(moviesRepository),
         getMovieKey = GetMovieKey(moviesRepository),
         getTrendWeek = GetTrendWeek(moviesRepository),

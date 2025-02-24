@@ -117,7 +117,16 @@ class MoviesRepositoryImpl(
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
-                MoviesPaging{ page -> moviesApi.getPersonMovies(personId = personId, page = page)}
+                MoviesPaging { page -> moviesApi.getPersonMovies(personId = personId, page = page) }
+            }
+        ).flow
+    }
+
+    override fun getArabicMovies(): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(10),
+            pagingSourceFactory = {
+                MoviesPaging { page -> moviesApi.getArabicMovies(page = page) }
             }
         ).flow
     }
