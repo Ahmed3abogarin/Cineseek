@@ -54,7 +54,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
@@ -354,14 +353,3 @@ fun DetailsScreen(
 
     }
 }
-
-
-//@Preview
-//@Composable
-//fun DetailsPreView() {
-//    CinemixTheme {
-//        DetailsScreen(
-//
-//        )
-//    }
-//}
