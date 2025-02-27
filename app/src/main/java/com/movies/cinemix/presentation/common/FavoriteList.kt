@@ -23,12 +23,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -77,7 +79,6 @@ fun FavoriteCard(
         modifier = Modifier
             .height(190.dp)
             .fillMaxWidth()
-
             .clickable {
                 onClick()
             }
@@ -105,21 +106,31 @@ fun FavoriteCard(
             Column {
                 Text(
                     text = movie.title,
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = movie.overview,
                     style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
-                    maxLines = 3
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Image(
-                        painter = painterResource(R.drawable.ic_time), contentDescription = null
+                        painter = painterResource(R.drawable.ic_time), contentDescription = null,
+                        modifier = Modifier.padding(bottom = 3.dp)
                     )
-                    Text(text = "2h33m", fontSize = 12.sp, color = Color.White)
+                    Text(
+                        text = "2h33m", fontSize = 12.sp, color = Color.White,
+                        modifier = Modifier.padding(start = 3.dp, end = 3.dp)
+                    )
                     Icon(
                         Icons.Default.Star, contentDescription = null, tint = Gold,
                         modifier = Modifier.size(18.dp)
@@ -138,7 +149,7 @@ fun FavoriteCard(
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                     )
                     Image(
-                        painter = painterResource(R.drawable.ic_play),
+                        painter = painterResource(R.drawable.ic_p),
                         contentDescription = null,
                         modifier = Modifier.size(35.dp)
                     )
