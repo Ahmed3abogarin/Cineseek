@@ -44,13 +44,12 @@ import com.movies.cinemix.ui.theme.MyRed
 fun FavoriteList(
     movies: List<Movies>,
     onClick: (Movies) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-
-    LazyColumn (
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier.padding(start = 8.dp, end = 8.dp)
-    ){
+    ) {
         items(movies.size) {
             movies[it].let { movie ->
                 val currentMovie = movies[it]
@@ -58,8 +57,10 @@ fun FavoriteList(
                     FavoriteCard(movie = movie, onClick = { onClick(currentMovie) })
 
                 }
+                if (it == movies.size - 1) {
+                    Spacer(modifier = Modifier.height(110.dp))
+                }
             }
-
         }
     }
 
@@ -80,7 +81,8 @@ fun FavoriteCard(
             .clickable {
                 onClick()
             }
-            .clip(RoundedCornerShape(8.dp)).background(BottomColor)
+            .clip(RoundedCornerShape(8.dp))
+            .background(BottomColor)
     ) {
         Row(
             modifier = Modifier
@@ -117,25 +119,29 @@ fun FavoriteCard(
                     Image(
                         painter = painterResource(R.drawable.ic_time), contentDescription = null
                     )
-                    Text(text = "2h33m",fontSize = 12.sp, color = Color.White)
+                    Text(text = "2h33m", fontSize = 12.sp, color = Color.White)
                     Icon(
                         Icons.Default.Star, contentDescription = null, tint = Gold,
                         modifier = Modifier.size(18.dp)
                     )
-                    Text(text = "7.6", color = Gold , fontSize = 12.sp)
+                    Text(text = "7.6", color = Gold, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.height(3.dp))
                 Button(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.padding(start = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MyRed),
-                    onClick = {  }
+                    onClick = { }
                 ) {
                     Text(
                         text = "Watch Trailer",
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                     )
-                    Image(painter = painterResource(R.drawable.ic_play), contentDescription = null, modifier = Modifier.size(35.dp))
+                    Image(
+                        painter = painterResource(R.drawable.ic_play),
+                        contentDescription = null,
+                        modifier = Modifier.size(35.dp)
+                    )
 
                 }
 
