@@ -49,9 +49,7 @@ fun FavoriteScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
 
-        FavoriteList(movies = movies, onClick = { onClick(it) })
-
-
+        FavoriteList(movies = movies, onClick = { onClick(it) }, modifier = Modifier.weight(1f))
 
         Spacer(modifier = Modifier.height(110.dp).weight(1f))
 
