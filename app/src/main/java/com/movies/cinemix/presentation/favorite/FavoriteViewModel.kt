@@ -24,7 +24,7 @@ class FavoriteViewModel @Inject constructor(
 
     private fun getSavedMovies() {
         moviesUseCases.getMovies().onEach {
-            _state.value = _state.value.copy(favoriteMovies = it)
+            _state.value = _state.value.copy(favoriteMovies = it.asReversed())
         }.launchIn(viewModelScope)
         // The problem was it just not launched in viewmodel scope
     }
