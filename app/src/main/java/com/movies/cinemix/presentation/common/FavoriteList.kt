@@ -44,11 +44,12 @@ import com.movies.cinemix.ui.theme.MyRed
 fun FavoriteList(
     movies: List<Movies>,
     onClick: (Movies) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     LazyColumn (
         verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+        modifier = modifier.padding(start = 8.dp, end = 8.dp)
     ){
         items(movies.size) {
             movies[it].let { movie ->
