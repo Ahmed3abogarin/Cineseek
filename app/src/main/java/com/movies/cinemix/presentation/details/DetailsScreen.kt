@@ -76,9 +76,9 @@ fun DetailsScreen(
     LaunchedEffect (false){
         event(DetailsEvent.UpdateMovieId(movieId = movie.id))
         event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
-        event(DetailsEvent.CheckSaveStatus(movie.id))
-    }
 
+    }
+    event(DetailsEvent.CheckSaveStatus(movie.id))
     var showDialog by remember { mutableStateOf(false) }
 
 
@@ -172,7 +172,9 @@ fun DetailsScreen(
                                 fontWeight = FontWeight.Bold
                             )
                         )
-                        IconButton(onClick = { event(DetailsEvent.SaveDeleteMovie(movie)) }) {
+                        IconButton(onClick = {
+                            event(DetailsEvent.SaveDeleteMovie(movie))
+                        }) {
 //                            painter = painterResource(if (state.savedStatus)R.drawable.saved_filled else R.drawable.bookmark)
                             Icon(
                                 if (state.savedStatus) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
