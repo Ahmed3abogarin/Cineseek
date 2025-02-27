@@ -95,7 +95,7 @@ fun MovieList(
 @Composable
 fun handlePagingResult(
     movies: LazyPagingItems<Movies>,
-    num: Int = 2,
+    num: Int = 1,
 ): Boolean {
     val loadState = movies.loadState
     val error = when {
