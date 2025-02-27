@@ -1,5 +1,6 @@
 package com.movies.cinemix.presentation.favorite
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,8 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.EmptyScreen
 import com.movies.cinemix.presentation.common.FavoriteList
@@ -26,7 +29,6 @@ fun FavoriteScreen(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .background(
                 MyColor
             )
@@ -34,7 +36,7 @@ fun FavoriteScreen(
             .padding(top = 24.dp)
     ) {
         Text(
-            text = " Favorite",
+            text = "Favorite",
             style = MaterialTheme.typography.displayMedium.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -50,9 +52,6 @@ fun FavoriteScreen(
 
 
         FavoriteList(movies = movies, onClick = { onClick(it) }, modifier = Modifier.weight(1f))
-
-        Spacer(modifier = Modifier.height(110.dp).weight(1f))
-
     }
 }
 
