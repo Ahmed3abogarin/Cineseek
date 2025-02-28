@@ -15,37 +15,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MyEffect() {
-
     // The one purpose of this fun is for control how the shimmer effect will be displayed
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Spacer(modifier = Modifier.height(30.dp))
-        Row {
-            repeat(10){
-                MovieMyEffect(modifier = Modifier
-                    .height(169.dp)
-                    .width(300.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .padding(4.dp))
-            }
-
+    Row {
+        repeat(10) {
+            MovieMyEffect(modifier = Modifier.padding(horizontal = 4.dp))
         }
-        Spacer(modifier = Modifier.height(40.dp))
-        Row{
-            repeat(10) {
-                MovieMyEffect(modifier = Modifier.padding(horizontal = 4.dp))
-            }
-        }
-
-        Spacer(modifier = Modifier.height(40.dp))
-        Row{
-            repeat(10) {
-                MovieMyEffect(modifier = Modifier.padding(horizontal = 4.dp))
-            }
-        }
-
-
     }
 }
