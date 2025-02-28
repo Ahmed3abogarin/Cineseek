@@ -273,6 +273,34 @@ fun HomeScreenContent(
                 onClick = { navigateToDetails(it) })
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Text(
+                text = "Coming in 2026",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                "See all",
+                color = Color.White,
+                fontSize = 12.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("nextYear")
+                })
+            )
+        }
+        state.nextYearMovies?.let {
+            MovieList(
+                state.nextYearMovies.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
+
         Spacer(modifier = Modifier.height(110.dp))
     }
 }

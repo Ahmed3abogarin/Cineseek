@@ -21,6 +21,8 @@ interface MoviesRepository {
 
     fun getTrendingWeek(): Flow<PagingData<Movies>>
 
+    fun getNextYearMovies(): Flow<PagingData<Movies>>
+
     fun searchMovie(movieName: String): Flow<PagingData<Movies>>
 
     suspend fun getMovieCrew(movieId: Int): CastResponse

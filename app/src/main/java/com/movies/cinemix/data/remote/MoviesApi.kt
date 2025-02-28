@@ -42,6 +42,13 @@ interface MoviesApi {
         @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
+    @GET("discover/movie")
+    suspend fun getNextYearMovies(
+        @Query("primary_release_year") year: Int = 2026,
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+    ): MovieResponse
+
     @GET("search/movie")
     suspend fun getMovie(
         @Query("query") movieName: String,

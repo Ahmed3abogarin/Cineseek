@@ -14,6 +14,7 @@ import com.movies.cinemix.domain.usecases.GetMovie
 import com.movies.cinemix.domain.usecases.GetMovieCast
 import com.movies.cinemix.domain.usecases.GetMovieKey
 import com.movies.cinemix.domain.usecases.GetMovies
+import com.movies.cinemix.domain.usecases.GetNextYearMovies
 import com.movies.cinemix.domain.usecases.GetNowPlayingMovies
 import com.movies.cinemix.domain.usecases.GetPersonInfo
 import com.movies.cinemix.domain.usecases.GetPersonMovies
@@ -60,6 +61,7 @@ object AppModule {
         getMovieCast = GetMovieCast(moviesRepository),
         getMovieKey = GetMovieKey(moviesRepository),
         getTrendWeek = GetTrendWeek(moviesRepository),
+        getNextYearMovies = GetNextYearMovies(moviesRepository),
         searchMovie = SearchMovie(moviesRepository),
         upsertMovie = UpsertMovie(moviesRepository),
         deleteMovie = DeleteMovie(moviesRepository),

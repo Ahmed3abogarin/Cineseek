@@ -11,15 +11,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SeeAllViewModel @Inject constructor(
-    private val moviesUseCases: MoviesUseCases
-): ViewModel() {
+    private val moviesUseCases: MoviesUseCases,
+) : ViewModel() {
     fun getMovies(category: String): Flow<PagingData<Movies>> {
-        return when(category) {
+        return when (category) {
             "nowPlaying" -> moviesUseCases.getNowPlayingMovies.invoke()
             "topRated" -> moviesUseCases.getTopRatedMovies.invoke()
             "upcoming" -> moviesUseCases.getUpcomingMovies.invoke()
             "popular" -> moviesUseCases.getPopularMovies.invoke()
             "arabic" -> moviesUseCases.getArabicMovies.invoke()
+            "nextYear" -> moviesUseCases.getNextYearMovies.invoke()
             else -> moviesUseCases.getPopularMovies.invoke() // default
         }
     }

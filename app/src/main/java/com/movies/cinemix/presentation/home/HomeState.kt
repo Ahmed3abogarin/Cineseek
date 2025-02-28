@@ -10,5 +10,6 @@ data class HomeState(
     val topRatedMovies: Flow<PagingData<Movies>>? = null,
     val upcomingMovies: Flow<PagingData<Movies>>? = null,
     val trendWeek: Flow<PagingData<Movies>>? = null,
-    val arabicMovies: Flow<PagingData<Movies>>? = null
+    val arabicMovies: Flow<PagingData<Movies>>? = null,
+    val nextYearMovies: Flow<PagingData<Movies>>? = null
 )
