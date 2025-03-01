@@ -274,6 +274,35 @@ fun HomeScreenContent(
                 onClick = { navigateToDetails(it) })
         }
 
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Text(
+                text = "Marvel's Movies",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                "See all",
+                color = Color.White,
+                fontSize = 12.sp,
+                modifier = Modifier.clickable(onClick = {
+                    navigateToAll("marvel")
+
+                })
+            )
+        }
+        state.marvelMovies?.let {
+            MovieList(
+                state.marvelMovies.collectAsLazyPagingItems(),
+                onClick = { navigateToDetails(it) })
+        }
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
@@ -289,7 +318,7 @@ fun HomeScreenContent(
             )
         }
 
-        GenreList(navigateToGenre = {})
+        GenreList(navigateToGenre = {navigateToAll(it)})
 
 
 

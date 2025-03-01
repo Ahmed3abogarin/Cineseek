@@ -42,6 +42,13 @@ interface MoviesApi {
         @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
+    @GET("discover/movie")
+    suspend fun getMarvelMovies(
+        @Query("with_companies") num: Int = 420,
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
+    ): MovieResponse
+
     @GET("search/movie")
     suspend fun getMovie(
         @Query("query") movieName: String,

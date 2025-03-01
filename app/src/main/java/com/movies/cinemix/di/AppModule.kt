@@ -11,6 +11,7 @@ import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.domain.usecases.DeleteMovie
 import com.movies.cinemix.domain.usecases.GetArabicMovies
 import com.movies.cinemix.domain.usecases.GetGenreMovies
+import com.movies.cinemix.domain.usecases.GetMarvelMovies
 import com.movies.cinemix.domain.usecases.GetMovie
 import com.movies.cinemix.domain.usecases.GetMovieCast
 import com.movies.cinemix.domain.usecases.GetMovieKey
@@ -68,14 +69,15 @@ object AppModule {
         getMovies = GetMovies(moviesRepository),
         getMovie = GetMovie(moviesRepository),
         getPersonInfo = GetPersonInfo(moviesRepository),
-        getPersonMovies = GetPersonMovies(moviesRepository)
+        getPersonMovies = GetPersonMovies(moviesRepository),
+        getMarvelMovies = GetMarvelMovies(moviesRepository)
     )
 
     @Provides
     @Singleton
     fun provideMovieRepository(
         api: MoviesApi,
-        moviesDao: MoviesDao
+        moviesDao: MoviesDao,
     ): MoviesRepository = MoviesRepositoryImpl(api, moviesDao)
 
 

@@ -20,6 +20,17 @@ class SeeAllViewModel @Inject constructor(
             "upcoming" -> moviesUseCases.getUpcomingMovies.invoke()
             "popular" -> moviesUseCases.getPopularMovies.invoke()
             "arabic" -> moviesUseCases.getArabicMovies.invoke()
+            "Action" -> moviesUseCases.getGenreMovies.invoke(genreNum = 28)
+            "Adventure" -> moviesUseCases.getGenreMovies.invoke(genreNum = 12)
+            "Family" -> moviesUseCases.getGenreMovies.invoke(genreNum = 10751)
+            "Drama" -> moviesUseCases.getGenreMovies.invoke(genreNum = 18)
+            "Animation" -> moviesUseCases.getGenreMovies.invoke(genreNum = 16)
+            "Comedy" -> moviesUseCases.getGenreMovies.invoke(genreNum = 35)
+            "Romance" -> moviesUseCases.getGenreMovies.invoke(genreNum = 10749)
+            "Crime" -> moviesUseCases.getGenreMovies.invoke(genreNum = 80)
+            "Horror" -> moviesUseCases.getGenreMovies.invoke(genreNum = 27)
+            "War" -> moviesUseCases.getGenreMovies.invoke(genreNum = 10752)
+            "Fantasy" -> moviesUseCases.getGenreMovies.invoke(genreNum = 14)
             else -> moviesUseCases.getPopularMovies.invoke()
         }
     }

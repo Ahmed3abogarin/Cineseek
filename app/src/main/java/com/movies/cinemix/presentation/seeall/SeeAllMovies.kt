@@ -56,47 +56,51 @@ fun SeeAllMovies(
 
     val moviesList = viewModel.getMovies(movieCategory).collectAsLazyPagingItems()
 
-    Column(
-        modifier = Modifier
-            .background(MyColor)
-            .fillMaxSize()
-    ) {
-        Row(modifier = Modifier.fillMaxWidth().shadow(elevation = 3.dp).background(BottomColor)) {
-
-
-            IconButton(
-                onClick = { navigateUp() },
-                Modifier
-                    .size(62.dp)
-                    .padding(start = 16.dp, top = 32.dp)
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.fillMaxSize()
-                )
-
-            }
-        }
-
-
-        LazyVerticalStaggeredGrid(
+    moviesList?.let {
+        Column(
             modifier = Modifier
+                .background(MyColor)
                 .fillMaxSize()
-                .padding(top = 5.dp)
-                .background(
-                    MyColor
-                ),
-            columns = StaggeredGridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(moviesList.itemCount) { page ->
-                moviesList[page]?.let { movie ->
-                    MovieCard2(movie, onClick = { navigateToDetails(moviesList[page]!!) })
+            Row(modifier = Modifier.fillMaxWidth().shadow(elevation = 3.dp).background(BottomColor)) {
+
+
+                IconButton(
+                    onClick = { navigateUp() },
+                    Modifier
+                        .size(62.dp)
+                        .padding(start = 16.dp, top = 32.dp)
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                }
+            }
+
+
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 5.dp)
+                    .background(
+                        MyColor
+                    ),
+                columns = StaggeredGridCells.Fixed(2),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(moviesList.itemCount) { page ->
+                    moviesList[page]?.let { movie ->
+                        MovieCard2(movie, onClick = { navigateToDetails(moviesList[page]!!) })
+                    }
                 }
             }
         }
     }
+
+
 }
 
 @Composable

@@ -29,11 +29,11 @@ import com.movies.cinemix.domain.model.genres
 
 
 @Composable
-fun GenreList(navigateToGenre: () -> Unit) {
+fun GenreList(navigateToGenre: (String) -> Unit) {
     genres
     LazyRow {
         items(genres.size) {
-            GenreCard(genres[it], onClick = { navigateToGenre() })
+            GenreCard(genres[it], onClick = { navigateToGenre(genres[it].genre) })
         }
     }
 }

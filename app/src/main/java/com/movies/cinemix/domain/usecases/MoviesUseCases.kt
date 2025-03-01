@@ -10,6 +10,7 @@ data class MoviesUseCases (
     val getMovieKey: GetMovieKey,
     val getTrendWeek: GetTrendWeek,
     val getGenreMovies: GetGenreMovies,
+    val getMarvelMovies: GetMarvelMovies,
 
     val searchMovie: SearchMovie,
 
