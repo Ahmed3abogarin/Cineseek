@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.GenreList
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.ui.theme.MyColor
@@ -272,6 +273,28 @@ fun HomeScreenContent(
                 state.arabicMovies.collectAsLazyPagingItems(),
                 onClick = { navigateToDetails(it) })
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+        ) {
+            Text(
+                text = "Discover by genre",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
+        GenreList(navigateToGenre = {})
+
+
+
+
+
 
         Spacer(modifier = Modifier.height(110.dp))
     }
