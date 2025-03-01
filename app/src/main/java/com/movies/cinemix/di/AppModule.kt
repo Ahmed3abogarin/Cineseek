@@ -10,6 +10,7 @@ import com.movies.cinemix.data.repository.MoviesRepositoryImpl
 import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.domain.usecases.DeleteMovie
 import com.movies.cinemix.domain.usecases.GetArabicMovies
+import com.movies.cinemix.domain.usecases.GetGenreMovies
 import com.movies.cinemix.domain.usecases.GetMovie
 import com.movies.cinemix.domain.usecases.GetMovieCast
 import com.movies.cinemix.domain.usecases.GetMovieKey
@@ -60,6 +61,7 @@ object AppModule {
         getMovieCast = GetMovieCast(moviesRepository),
         getMovieKey = GetMovieKey(moviesRepository),
         getTrendWeek = GetTrendWeek(moviesRepository),
+        getGenreMovies = GetGenreMovies(moviesRepository),
         searchMovie = SearchMovie(moviesRepository),
         upsertMovie = UpsertMovie(moviesRepository),
         deleteMovie = DeleteMovie(moviesRepository),
