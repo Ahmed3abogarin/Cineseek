@@ -46,7 +46,7 @@ interface MoviesApi {
     suspend fun getMovie(
         @Query("query") movieName: String,
         @Query("page") page: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
 
@@ -66,7 +66,7 @@ interface MoviesApi {
     @GET("person/{person_id}")
     suspend fun getPersonInfo(
         @Path("person_id") personId: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): PersonResponse
 
 
@@ -74,14 +74,22 @@ interface MoviesApi {
     suspend fun getPersonMovies(
         @Query("with_cast") personId: Int,
         @Query("page") page: Int,
-        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
     @GET("discover/movie")
     suspend fun getArabicMovies(
-        @Query ("with_original_language") arabic: String = "ar",
-        @Query ("page") page: Int,
-        @Query ("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156"
+        @Query("with_original_language") arabic: String = "ar",
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
+    ): MovieResponse
+
+
+    @GET("discover/movie")
+    suspend fun getGenreMovies(
+        @Query("with_genres") genreNum: Int,
+        @Query("page") page: Int,
+        @Query("api_key") apiKey: String = "9b574fdbc36ea62e7f01114df3589156",
     ): MovieResponse
 
 }

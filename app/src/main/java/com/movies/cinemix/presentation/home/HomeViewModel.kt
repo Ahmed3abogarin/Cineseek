@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +31,10 @@ class HomeViewModel @Inject constructor(
         val trendWeek = moviesUseCases.getTrendWeek.invoke().cachedIn(viewModelScope)
         val nowPlayingMovies = moviesUseCases.getNowPlayingMovies.invoke().cachedIn(viewModelScope)
         val arabicMovies = moviesUseCases.getArabicMovies.invoke().cachedIn(viewModelScope)
+
+
+        val actionMovies = moviesUseCases.getGenreMovies.invoke(genreNum = 28).cachedIn(viewModelScope)
+        val ss = moviesUseCases.getGenreMovies.invoke(genreNum = 28).cachedIn(viewModelScope)
 
         _state.value = _state.value.copy(nowPlaying = nowPlayingMovies)
         _state.value = _state.value.copy(popularMovies = popularMovies)
