@@ -319,12 +319,6 @@ fun HomeScreenContent(
         }
 
         GenreList(navigateToGenre = {navigateToAll(it)})
-
-
-
-
-
-
         Spacer(modifier = Modifier.height(110.dp))
     }
 }
