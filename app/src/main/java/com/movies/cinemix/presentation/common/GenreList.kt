@@ -46,6 +46,8 @@ fun GenreCard(item: GenreItem, onClick: () -> Unit) {
         Color.Transparent
     ).reversed()
 
+
+
     Box(
         modifier = Modifier
             .height(231.dp)
