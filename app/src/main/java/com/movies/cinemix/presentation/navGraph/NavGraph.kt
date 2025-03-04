@@ -263,11 +263,11 @@ fun navigateToTab(navController: NavController, route: String) {
 }
 
 private fun navigateToAll(navController: NavController, movieCategory: String) {
-    val currentDestination = navController.currentDestination?.route
-    if (currentDestination != Route.SeeAllScreen.route) {  // Prevent duplicate navigation
-        navController.currentBackStackEntry?.savedStateHandle?.set("movieCategory", movieCategory)
-        navController.navigate(Route.SeeAllScreen.route)
+    navController.currentBackStackEntry?.savedStateHandle?.set("movieCategory", movieCategory)
+    navController.navigate(Route.SeeAllScreen.route){
+        restoreState = false
     }
+
 }
 
 // Helper function to navigate to details screen

@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.EmptyScreen
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.seeall.MovieCard2
@@ -44,6 +45,11 @@ fun SearchScreen(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
+        if (state.moviesList == null) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                EmptyScreen()
+            }
+        }
         state.moviesList?.let { movieList ->
             val movies = movieList.collectAsLazyPagingItems()
             Box(
