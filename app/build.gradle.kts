@@ -87,6 +87,9 @@ dependencies {
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
 
+    // Data store
+    implementation("androidx.datastore:datastore-preferences:1.1.3")
+
 
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)

@@ -155,7 +155,7 @@ fun ViewPagerSlider2(images: List<Int>) {
 fun ViewPagerSlider(pagesCount: Int, list: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
     val pagerState = rememberPagerState(
         pageCount = { pagesCount },
-        initialPage = 0
+        initialPage = 1
     )
     val context = LocalContext.current
     val colors = listOf(

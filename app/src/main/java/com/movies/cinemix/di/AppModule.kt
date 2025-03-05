@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.movies.cinemix.data.local.MovieDatabase
 import com.movies.cinemix.data.local.MoviesDao
 import com.movies.cinemix.data.local.MoviesTypeConverter
+import com.movies.cinemix.data.manager.LocalUserImpl
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.repository.MoviesRepositoryImpl
+import com.movies.cinemix.domain.manager.LocalUserManager
 import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.domain.usecases.DeleteMovie
 import com.movies.cinemix.domain.usecases.GetArabicMovies
@@ -26,6 +28,9 @@ import com.movies.cinemix.domain.usecases.GetUpcomingMovies
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import com.movies.cinemix.domain.usecases.SearchMovie
 import com.movies.cinemix.domain.usecases.UpsertMovie
+import com.movies.cinemix.domain.usecases.app_entry.AppEntryUseCases
+import com.movies.cinemix.domain.usecases.app_entry.ReadAppEntry
+import com.movies.cinemix.domain.usecases.app_entry.SaveAppEntry
 import com.movies.cinemix.util.Constants.NOW_PLAYING_URL
 import dagger.Module
 import dagger.Provides
@@ -100,4 +105,19 @@ object AppModule {
     fun provideMoviesDao(
         moviesDatabase: MovieDatabase,
     ): MoviesDao = moviesDatabase.moviesDao
+
+
+    @Provides
+    @Singleton
+    fun provideAppEntryUseCases(
+        localUserManager: LocalUserManager,
+    ): AppEntryUseCases = AppEntryUseCases(
+        readAppEntry = ReadAppEntry(localUserManager),
+        saveAppEntry = SaveAppEntry(localUserManager)
+    )
+
+    @Provides
+    @Singleton
+    fun provideLocalUserManager(application: Application): LocalUserManager =
+        LocalUserImpl(application)
 }

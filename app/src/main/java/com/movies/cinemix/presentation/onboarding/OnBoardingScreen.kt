@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -30,11 +29,12 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.movies.cinemix.R
-import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyRed
 
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    event: (OnBoardingEvent) -> Unit
+) {
     val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.ic_5))
     val progress by animateLottieCompositionAsState(
         composition = composition.value,
@@ -83,7 +83,9 @@ fun OnBoardingScreen() {
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp), onClick = {},
+                    .height(48.dp), onClick = {
+                        event(OnBoardingEvent.SaveAppEntry)
+                },
                 shape = RoundedCornerShape(6.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MyRed)
             ) {
@@ -112,10 +114,3 @@ fun LogoScreen() {
     }
 }
 
-@Preview
-@Composable
-fun IntroPreview() {
-    CinemixTheme {
-        OnBoardingScreen()
-    }
-}
