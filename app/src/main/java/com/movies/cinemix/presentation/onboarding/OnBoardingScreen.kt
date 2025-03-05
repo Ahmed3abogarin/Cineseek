@@ -98,19 +98,3 @@ fun OnBoardingScreen(
     }
 }
 
-@Composable
-fun LogoScreen() {
-    val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.ic_3))
-    val progress = animateLottieCompositionAsState(
-        composition = composition.value,
-        iterations = LottieConstants.IterateForever
-    )
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        LottieAnimation(
-            composition = composition.value,
-            progress = { progress.value }
-        )
-    }
-}
-
