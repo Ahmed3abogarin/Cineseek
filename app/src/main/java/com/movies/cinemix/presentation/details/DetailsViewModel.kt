@@ -1,13 +1,13 @@
 package com.movies.cinemix.presentation.details
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.domain.usecases.MoviesUseCases
+import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,21 +38,34 @@ class DetailsViewModel @Inject constructor(
 
 
     private fun getMovieCast(movieId: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val movies = moviesUseCases.getMovieCast.invoke(movieId = movieId)
-            _state.value = state.value.copy(castList = movies)
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val movies = moviesUseCases.getMovieCast.invoke(movieId = movieId)
+                _state.value = state.value.copy(castList = movies)
+            }
+        }catch (e:Exception){
+            Log.v("ERROR",e.message.toString())
         }
+
 
     }
 
     private fun getMovieKey(movieId: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val movieKey = moviesUseCases.getMovieKey.invoke(movieId = movieId)
-            if (movieKey.results.isNotEmpty()) {
-                _state.value = state.value.copy(movieKey = movieKey.results[0].key)
-            }
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val movieKey = moviesUseCases.getMovieKey.invoke(movieId = movieId)
+                movieKey?.let {
+                    if (movieKey.results.isNotEmpty()) {
+                        _state.value = state.value.copy(movieKey = movieKey.results[0].key)
+                    }
+                }
 
+
+            }
+        }catch (e: Exception){
+            Log.v("ERROR",e.message.toString())
         }
+
     }
 
     fun onEvent(event: DetailsEvent) {
