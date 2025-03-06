@@ -3,6 +3,8 @@ package com.movies.cinemix.presentation.search
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.movies.cinemix.domain.usecases.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -28,7 +30,7 @@ class SearchViewModel @Inject constructor(
     private fun searchMovie() {
         val movies = moviesUseCases.searchMovie(
             movieName = state.value.searchQuery
-        )
+        ).cachedIn(viewModelScope)
         _state.value = _state.value.copy(moviesList = movies)
     }
 
