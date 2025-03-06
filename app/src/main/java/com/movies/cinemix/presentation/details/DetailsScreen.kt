@@ -2,7 +2,6 @@ package com.movies.cinemix.presentation.details
 
 import android.content.Intent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -46,14 +44,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.CastList
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
@@ -67,13 +64,13 @@ fun DetailsScreen(
     event: (DetailsEvent) -> Unit,
     navigateUp: () -> Unit,
     lifecycleOwner: LifecycleOwner,
-    navigateToCastDetails: (Int) -> Unit
+    navigateToCastDetails: (Int) -> Unit,
 
     ) {
     val context = LocalContext.current
     val state = detailsViewModel.state.value
 
-    LaunchedEffect (false){
+    LaunchedEffect(false) {
         event(DetailsEvent.UpdateMovieId(movieId = movie.id))
         event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
 
@@ -188,9 +185,12 @@ fun DetailsScreen(
                         IconButton(
                             onClick = {
                                 Intent(Intent.ACTION_SEND).also {
-                                    it.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=${state.movieKey}")
+                                    it.putExtra(
+                                        Intent.EXTRA_TEXT,
+                                        "https://www.youtube.com/watch?v=${state.movieKey}"
+                                    )
                                     it.type = "text/plain"
-                                    if (it.resolveActivity(context.packageManager) != null){
+                                    if (it.resolveActivity(context.packageManager) != null) {
                                         context.startActivity(it)
                                     }
                                 }
@@ -288,42 +288,10 @@ fun DetailsScreen(
                         )
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        LazyRow(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            items(state.castList.cast) { person ->
-                                Column(modifier = Modifier.width(74.dp).clickable(
-                                    onClick = {
-                                        navigateToCastDetails(person.id)
-                                    }
-                                )) {
-                                    AsyncImage(
-                                        model = ImageRequest.Builder(context)
-                                            .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
-                                            .placeholder(R.drawable.second)
-                                            .error(R.drawable.first)
-                                            .build(),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(74.dp)
-                                            .clip(RoundedCornerShape(50.dp)),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                    Spacer(modifier = Modifier.height(2.dp))
+                        CastList(
+                            cast = state.castList.cast,
+                            navigateToCastDetails = { navigateToCastDetails(it) })
 
-                                    Text(
-                                        text = person.original_name,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        fontSize = 10.sp,
-                                        color = Color.White
-                                    )
-                                }
-
-                            }
-
-                        }
                     }
 
                 }
