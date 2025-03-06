@@ -272,7 +272,7 @@ fun HomeScreenContent(
                 color = Color.White,
                 fontSize = 12.sp,
                 modifier = Modifier.clickable(onClick = {
-                    navigateToAll("topRated")
+                    navigateToAll("arabic")
 
                 })
             )
