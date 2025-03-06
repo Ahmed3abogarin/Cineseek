@@ -1,4 +1,4 @@
-package com.movies.cinemix.domain.usecases
+package com.movies.cinemix.domain.usecases.movies
 
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.repository.MoviesRepository

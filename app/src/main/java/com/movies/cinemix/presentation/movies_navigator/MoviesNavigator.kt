@@ -10,7 +10,6 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -28,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.castdetails.CastScreen
 import com.movies.cinemix.presentation.castdetails.CastViewModel
@@ -124,6 +122,9 @@ fun MoviesNavigatorScreen() {
                             navController = navController,
                             movie = it
                         )
+                    },
+                    navigateToSearch = {
+                        navController.navigate(Route.SearchScreen.route)
                     }
                 )
 
@@ -152,14 +153,9 @@ fun MoviesNavigatorScreen() {
                     )
                 })
             }
-            composable("seeAllScreen/{movie_category}") { backStackEntry ->
-
-                val category = backStackEntry.arguments?.getString("movie_category") ?: "arabic"
+            composable("seeAllScreen/{movie_category}") {
                 val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
-
-
                 SeeAllMovies(
-                    movieCategory = category,
                     viewModel = seeAllViewmodel,
                     navigateToDetails = {
                         navigateToDetails(
@@ -170,7 +166,6 @@ fun MoviesNavigatorScreen() {
                     navigateUp = { navController.navigateUp() }
                 )
             }
-
             composable(Route.DetailsScreen.route) {
                 if (detailsViewModel.sideEffect != null) {
                     Toast.makeText(
@@ -180,7 +175,6 @@ fun MoviesNavigatorScreen() {
                     ).show()
                     detailsViewModel.onEvent(DetailsEvent.RemoveSideEffect)
                 }
-
                 navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")
                     ?.let { movie ->
                         DetailsScreen(
@@ -197,7 +191,6 @@ fun MoviesNavigatorScreen() {
                             }
                         )
                     }
-
             }
             composable(Route.CastDetailsScreen.route) {
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
@@ -265,8 +258,8 @@ fun navigateToTab(navController: NavController, route: String) {
 }
 
 private fun navigateToAll(navController: NavController, movieCategory: String) {
-    navController.navigate("seeAllScreen/$movieCategory"){
-        popUpTo(Route.SeeAllScreen.route){
+    navController.navigate("seeAllScreen/$movieCategory") {
+        popUpTo(Route.SeeAllScreen.route) {
             saveState = true
         }
         restoreState = true
@@ -280,7 +273,9 @@ private fun navigateToDetails(navController: NavController, movie: Movies) {
     navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
     navController.navigate(
         route = Route.DetailsScreen.route
-    )
+    ) {
+        popUpTo(Route.DetailsScreen.route) { inclusive = true }
+    }
 }
 
 private fun navigateToCastDetails(navigator: NavController, personId: Int) {

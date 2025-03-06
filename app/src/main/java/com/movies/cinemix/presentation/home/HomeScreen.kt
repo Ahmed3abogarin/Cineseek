@@ -32,6 +32,7 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.GenreList
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
+import com.movies.cinemix.presentation.common.SliderList
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
@@ -40,12 +41,14 @@ import com.movies.cinemix.ui.theme.MyRed
 fun HomeScreen(
     navigateToAll: (String) -> Unit,
     navigateToDetails: (Movies) -> Unit,
+    navigateToSearch: () -> Unit,
     state: HomeState,
 ) {
     HomeScreenContent(
         state = state,
         navigateToAll = navigateToAll,
         navigateToDetails = navigateToDetails,
+        navigateToSearch = navigateToSearch
     )
 
 }
@@ -55,6 +58,7 @@ fun HomeScreen(
 fun HomeScreenContent(
     state: HomeState,
     navigateToAll: (String) -> Unit,
+    navigateToSearch: () -> Unit,
     navigateToDetails: (Movies) -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -81,7 +85,10 @@ fun HomeScreenContent(
             Spacer(modifier = Modifier.height(10.dp))
             MySearchBar(
                 text = "",
-                onValueChange = {},
+                onClick = { navigateToSearch() },
+                onValueChange = {
+
+                },
                 readOnly = true,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
@@ -115,13 +122,7 @@ fun HomeScreenContent(
 
         state.trendWeek?.let {
             val trendMovies = state.trendWeek.collectAsLazyPagingItems()
-            ViewPagerSlider(
-                pagesCount = trendMovies.itemCount,
-                list = trendMovies,
-                onClick = {
-                    navigateToDetails(it)
-                }
-            )
+            SliderList(movies = trendMovies, onClick = { navigateToDetails(it) })
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -256,10 +257,12 @@ fun HomeScreenContent(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
-            Box(modifier = Modifier
-                .fillMaxHeight()
-                .width(3.dp)
-                .background(MyRed))
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(3.dp)
+                    .background(MyRed)
+            )
 
             Text(
                 text = "Arabic Movies",

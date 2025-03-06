@@ -71,9 +71,9 @@ fun MySearchBar(
             },
             placeholder = {
                 Text(
-                    text = "Search",
+                    text = "Search movies",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = Color.White
                 )
             },
 

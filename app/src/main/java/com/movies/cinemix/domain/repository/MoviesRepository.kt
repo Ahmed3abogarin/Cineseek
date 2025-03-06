@@ -27,9 +27,9 @@ interface MoviesRepository {
 
     fun searchMovie(movieName: String): Flow<PagingData<Movies>>
 
-    suspend fun getMovieCrew(movieId: Int): CastResponse
+    suspend fun getMovieCrew(movieId: Int): CastResponse?
 
-    suspend fun getMovieKey(movieId: Int): MovieKeyResponse
+    suspend fun getMovieKey(movieId: Int): MovieKeyResponse?
 
     // Room DB
     suspend fun upsertMovie(movie: Movies)

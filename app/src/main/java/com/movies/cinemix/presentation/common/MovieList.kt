@@ -1,10 +1,13 @@
 package com.movies.cinemix.presentation.common
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,41 +17,51 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.R
+import com.movies.cinemix.domain.model.Cast
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.seeall.MovieCard2
-import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
+import com.movies.cinemix.ui.theme.MyRed
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.yield
+import kotlin.math.abs
 
 @Composable
 fun MovieList(
@@ -74,67 +87,186 @@ fun MovieList(
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
+    val handlePagingResult = handlePagingResult(movies = movies, num = 3)
+    if (handlePagingResult) {
+        val pagerState = rememberPagerState(
+            pageCount = { movies.itemCount },
+            initialPage = 1
+        )
+        val context = LocalContext.current
+        val colors = listOf(
+            Color.Black,
+            Color.Black.copy(alpha = .7f),
+            Color.Transparent
+        ).reversed()
+
+
+
+
+        LaunchedEffect(Unit) {
+            while (true) {
+                yield()
+                delay(2000)
+                pagerState.animateScrollToPage(
+                    page = (pagerState.currentPage + 1) % (pagerState.pageCount),
+                    animationSpec = tween(600)
+                )
+            }
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+
+            HorizontalPager(
+                state = pagerState,
+                contentPadding = PaddingValues(end = 40.dp, start = 40.dp)
+            ) { page ->
+                val pageOffset =
+                    (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                val fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
+
+
+                Card(modifier = Modifier.graphicsLayer {
+                    lerp(
+                        start = 0.85f,
+                        stop = 1f,
+                        fraction = fraction
+                    ).also { scale ->
+                        scaleX = scale
+                        scaleY = scale
+                    }
+                    alpha = lerp(
+                        start = 0.5f,
+                        stop = 1f,
+                        fraction = fraction
+                    )
+
+                }) {
+                    Box(modifier = Modifier.clickable { onClick(movies[page]!!) }) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data("https://image.tmdb.org/t/p/w500/" + movies[page]!!.backdrop_path)
+                                .build(),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .height(200.dp)
+                                .width(356.dp)
+                                .clip(MaterialTheme.shapes.medium),
+                            contentScale = ContentScale.Crop
+                        )
+                        Row(
+                            modifier = Modifier
+                                .background(brush = Brush.verticalGradient(colors))
+                                .align(Alignment.BottomStart)
+                                .fillMaxWidth()
+                                .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Box(
+                                modifier = Modifier.weight(1f) // Allows Text to take up available space
+                            ) {
+                                Text(
+                                    text = movies[page]!!.title,
+                                    style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                            Button(
+                                onClick = {},
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MyRed
+                                )
+                            ) {
+                                Text(text = "Watch Trailer")
+                            }
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+
+        }
+    }
+}
 
 @Composable
 fun GridMoviesList(
     movies: LazyPagingItems<Movies>,
     navigateToDetails: (Movies) -> Unit,
-    navigateUp: () -> Unit,
 ) {
-    val handlePagingResult = handlePagingResult(movies = movies)
-    if (handlePagingResult){
-        val lazyState = rememberLazyStaggeredGridState()
-        Column(
+    val handlePagingResult = handlePagingResult(movies = movies, num = 2)
+    if (handlePagingResult) {
+
+        LazyVerticalStaggeredGrid(
             modifier = Modifier
-                .background(MyColor)
                 .fillMaxSize()
+                .padding(top = 5.dp)
+                .background(
+                    MyColor
+                ),
+            columns = StaggeredGridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(elevation = 3.dp)
-                    .background(BottomColor)
-            ) {
-
-
-                IconButton(
-                    onClick = { navigateUp() },
-                    Modifier
-                        .size(62.dp)
-                        .padding(start = 16.dp, top = 32.dp)
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.fillMaxSize()
-                    )
-
-                }
-            }
-
-
-
-            LazyVerticalStaggeredGrid(
-                state = lazyState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 5.dp)
-                    .background(
-                        MyColor
-                    ),
-                columns = StaggeredGridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                items(movies.itemCount) { page ->
-                    movies[page]?.let { movie ->
-                        MovieCard2(movie, onClick = { navigateToDetails(movies[page]!!) })
-                    }
+            items(movies.itemCount) { page ->
+                movies[page]?.let { movie ->
+                    MovieCard2(movie, onClick = { navigateToDetails(movies[page]!!) })
                 }
             }
         }
 
-    }
 
+    }
+}
+
+@Composable
+fun CastList(cast: List<Cast>, navigateToCastDetails: (Int) -> Unit) {
+
+    val context = LocalContext.current
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        items(cast) { person ->
+            Column(modifier = Modifier
+                .width(74.dp)
+                .clickable(
+                    onClick = {
+                        navigateToCastDetails(person.id)
+                    }
+                )) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
+                        .placeholder(R.drawable.second)
+                        .error(R.drawable.first)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(74.dp)
+                        .clip(RoundedCornerShape(50.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = person.original_name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 10.sp,
+                    color = Color.White
+                )
+            }
+        }
+    }
 }
 
 
@@ -158,14 +290,11 @@ fun handlePagingResult(
                 }
 
                 2 -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Red),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    GirdEffect()
+                }
+
+                3 -> {
+                    SliderEffect()
                 }
 
             }

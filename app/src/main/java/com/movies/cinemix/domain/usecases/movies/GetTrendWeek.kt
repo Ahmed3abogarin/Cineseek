@@ -1,15 +1,14 @@
-package com.movies.cinemix.domain.usecases
+package com.movies.cinemix.domain.usecases.movies
 
 import androidx.paging.PagingData
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetPopularMovies(
+class GetTrendWeek(
     private val moviesRepository: MoviesRepository
 ) {
-
     operator fun invoke(): Flow<PagingData<Movies>>{
-       return moviesRepository.getPopularMovies()
+        return moviesRepository.getTrendingWeek()
     }
 }

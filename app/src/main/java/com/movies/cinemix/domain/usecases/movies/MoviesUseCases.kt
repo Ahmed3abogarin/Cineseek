@@ -1,4 +1,4 @@
-package com.movies.cinemix.domain.usecases
+package com.movies.cinemix.domain.usecases.movies
 
 data class MoviesUseCases (
     val getNowPlayingMovies: GetNowPlayingMovies,

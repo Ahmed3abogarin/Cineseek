@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,10 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +37,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.GridMoviesList
+import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
@@ -41,7 +45,6 @@ import com.movies.cinemix.ui.theme.MyColor2
 
 @Composable
 fun SeeAllMovies(
-    movieCategory: String,
     viewModel: SeeAllViewModel,
     navigateToDetails: (Movies) -> Unit,
     navigateUp: () -> Unit,
@@ -50,15 +53,38 @@ fun SeeAllMovies(
 
     val state = viewModel.state.value
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MyColor)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(elevation = 3.dp)
+                .background(BottomColor)
+        ) {
+            IconButton(
+                onClick = { navigateUp() },
+                Modifier
+                    .size(62.dp)
+                    .padding(start = 16.dp, top = 32.dp)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
+        state.movies?.let {
+            val movies = state.movies.collectAsLazyPagingItems()
+            GridMoviesList(
+                movies,
+                navigateToDetails = { navigateToDetails(it) },
+            )
 
-    state.movies?.let {
-        val movies = state.movies.collectAsLazyPagingItems()
-        GridMoviesList(
-            movies,
-            navigateToDetails = { navigateToDetails(it) },
-            navigateUp = navigateUp
-        )
-
+        }
     }
 
 
