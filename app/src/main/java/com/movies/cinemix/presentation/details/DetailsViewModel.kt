@@ -38,7 +38,7 @@ class DetailsViewModel @Inject constructor(
 
 
     private fun getMovieCast(movieId: Int) {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val movies = moviesUseCases.getMovieCast.invoke(movieId = movieId)
             _state.value = state.value.copy(castList = movies)
         }
@@ -46,7 +46,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun getMovieKey(movieId: Int) {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val movieKey = moviesUseCases.getMovieKey.invoke(movieId = movieId)
             if (movieKey.results.isNotEmpty()) {
                 _state.value = state.value.copy(movieKey = movieKey.results[0].key)
