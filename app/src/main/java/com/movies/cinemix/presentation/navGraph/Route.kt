@@ -6,7 +6,7 @@ sealed class Route(
     data object HomeScreen : Route(route = "someScreen")
     data object SearchScreen : Route(route = "searchScreen")
     data object FavoriteScreen : Route(route = "favoriteScreen")
-    data object SeeAllScreen : Route(route = "seeAllScreen")
+    data object SeeAllScreen : Route(route = "seeAllScreen/{movie_category}")
     data object DetailsScreen : Route(route = "detailsScreen")
     data object CastDetailsScreen : Route(route = "castDetailsScreen")
     data object MoviesNavigation : Route(route = "moviesNavigation")
