@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.GridMoviesList
 import com.movies.cinemix.ui.theme.BottomColor
@@ -111,6 +112,8 @@ fun MovieCard2(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit
                     AsyncImage(
                         model = ImageRequest.Builder(context)
                             .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                            .placeholder(R.drawable.place_holder)
+                            .error(R.drawable.place_holder)
                             .build(),
                         contentDescription = null,
                         modifier = Modifier

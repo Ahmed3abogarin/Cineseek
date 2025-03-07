@@ -19,12 +19,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,12 +47,13 @@ import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
+import com.movies.cinemix.presentation.common.MovieButton
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
-import com.movies.cinemix.ui.theme.MyRed
 
 @Composable
 fun DetailsScreen(
@@ -112,20 +110,7 @@ fun DetailsScreen(
                 contentScale = ContentScale.FillBounds
             )
 
-            IconButton(
-                onClick = { navigateUp() },
-                Modifier
-                    .size(70.dp)
-                    .align(Alignment.TopStart)
-                    .padding(start = 16.dp, top = 32.dp)
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.fillMaxSize()
-                )
-
-            }
+            BackArrow(navigateUp = navigateUp)
         }
 
 
@@ -298,24 +283,7 @@ fun DetailsScreen(
             }
 
             Row(modifier = Modifier.align(Alignment.BottomCenter)) {
-                Button(
-                    onClick = {
-                        showDialog = true
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MyRed
-                    )
-                ) {
-                    Text(
-                        text = "Watch Trailer",
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            end = 12.dp,
-                            bottom = 4.dp,
-                            top = 4.dp
-                        )
-                    )
-                }
+                MovieButton(onClick = { showDialog = true })
             }
 
         }

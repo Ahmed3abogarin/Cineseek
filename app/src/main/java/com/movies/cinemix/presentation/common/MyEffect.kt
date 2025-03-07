@@ -22,14 +22,16 @@ fun MyEffect() {
 }
 
 @Composable
-fun GirdEffect(){
+fun GirdEffect() {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(20){
-            MovieMyEffect(modifier = Modifier.height(271.dp).width(200.dp))
+        items(20) {
+            MovieMyEffect(modifier = Modifier
+                .height(271.dp)
+                .width(200.dp))
         }
 
     }
@@ -38,10 +40,12 @@ fun GirdEffect(){
 }
 
 @Composable
-fun SliderEffect(){
-    Row {
-        repeat(3){
-            MovieMyEffect(modifier = Modifier.height(200.dp).width(356.dp))
+fun SliderEffect() {
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        repeat(3) {
+            MovieMyEffect(modifier = Modifier
+                .height(200.dp)
+                .width(356.dp))
         }
     }
 }

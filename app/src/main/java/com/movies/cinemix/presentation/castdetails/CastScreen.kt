@@ -10,16 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +36,9 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.MyColor
@@ -74,7 +71,7 @@ fun CastScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .height(300.dp)
+                    .height(308.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
                     .background(MyColor)
@@ -87,6 +84,8 @@ fun CastScreen(
                         .align(Alignment.Center),
                     model = ImageRequest.Builder(context)
                         .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
+                        .placeholder(R.drawable.place_holder)
+                        .error(R.drawable.place_holder)
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
@@ -95,7 +94,7 @@ fun CastScreen(
                 Text(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 4.dp),
+                        .padding(bottom = 2.dp),
                     text = state.personInfo.name,
                     style = MaterialTheme.typography.displaySmall.copy(
                         color = Color.White,
@@ -103,19 +102,10 @@ fun CastScreen(
                     )
                 )
 
-                IconButton(
-                    onClick = { navigateUp() },
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(start = 16.dp, top = 16.dp)
-                        .statusBarsPadding()
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                        tint = Color.White,
-                    )
-                }
+
+                BackArrow(navigateUp = navigateUp, modifier = Modifier.align(Alignment.TopStart))
+
+
             }
             Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
 
@@ -127,7 +117,7 @@ fun CastScreen(
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = person.also_known_as.joinToString(", "),
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.White)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -152,7 +142,10 @@ fun CastScreen(
 
                 Text(
                     text = "Movies by ${person.name}",
-                    style = MaterialTheme.typography.displaySmall.copy(color = Color.White, fontSize = 24.sp)
+                    style = MaterialTheme.typography.displaySmall.copy(
+                        color = Color.White,
+                        fontSize = 24.sp
+                    )
                 )
                 if (state.personMovies != null) {
                     val personMovies = state.personMovies.collectAsLazyPagingItems()
@@ -161,7 +154,7 @@ fun CastScreen(
                         items(personMovies.itemCount) { page ->
                             personMovies[page]?.let { movie ->
                                 Column {
-                                    MovieCard(movie, onClick = { navigateToDetails(movie)})
+                                    MovieCard(movie, onClick = { navigateToDetails(movie) })
 
                                 }
                             }
@@ -192,7 +185,7 @@ fun ExpandableText(
             text = text,
             maxLines = if (isExpanded) Int.MAX_VALUE else maxLines,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
+            style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
             lineHeight = 22.sp,
             modifier = Modifier.animateContentSize() // Smooth expand animation
         )

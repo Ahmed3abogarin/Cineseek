@@ -247,8 +247,8 @@ fun CastList(cast: List<Cast>, navigateToCastDetails: (Int) -> Unit) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
-                        .placeholder(R.drawable.second)
-                        .error(R.drawable.first)
+                        .placeholder(R.drawable.place_holder)
+                        .error(R.drawable.place_holder)
                         .build(),
                     contentDescription = null,
                     modifier = Modifier
@@ -341,6 +341,8 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit)
                     AsyncImage(
                         model = ImageRequest.Builder(context)
                             .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                            .placeholder(R.drawable.place_holder)
+                            .error(R.drawable.place_holder)
                             .build(),
                         contentDescription = null,
                         modifier = Modifier

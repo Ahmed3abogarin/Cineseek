@@ -257,19 +257,22 @@ fun HomeScreenContent(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(3.dp)
-                    .background(MyRed)
-            )
+            Row {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(10.dp)
+                        .background(MyRed)
+                )
 
-            Text(
-                text = "Arabic Movies",
-                color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+                Text(
+                    text = "Arabic Movies",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
             Text(
                 "See all",
                 color = Color.White,

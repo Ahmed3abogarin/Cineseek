@@ -94,6 +94,8 @@ fun FavoriteCard(
             AsyncImage(
                 model = ImageRequest.Builder(context)
                     .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                    .placeholder(R.drawable.place_holder)
+                    .error(R.drawable.place_holder)
                     .build(),
                 contentDescription = null,
                 modifier = Modifier
