@@ -183,7 +183,7 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                                     containerColor = MyRed
                                 )
                             ) {
-                                Text(text = "Watch Trailer")
+                                Text(text = "See more")
                             }
                         }
 

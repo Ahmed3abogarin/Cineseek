@@ -125,19 +125,11 @@ fun FavoriteCard(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_time), contentDescription = null,
-                        modifier = Modifier.padding(bottom = 3.dp)
-                    )
-                    Text(
-                        text = "2h33m", fontSize = 12.sp, color = Color.White,
-                        modifier = Modifier.padding(start = 3.dp, end = 3.dp)
-                    )
                     Icon(
                         Icons.Default.Star, contentDescription = null, tint = Gold,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(20.dp)
                     )
-                    Text(text = "7.6", color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(movie.vote_average), color = Gold, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.height(3.dp))
                 Button(

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -38,7 +39,6 @@ import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.GridMoviesList
-import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
@@ -57,24 +57,22 @@ fun SeeAllMovies(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .background(MyColor)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(elevation = 3.dp)
-                .background(BottomColor)
         ) {
             IconButton(
                 onClick = { navigateUp() },
-                Modifier
-                    .size(62.dp)
-                    .padding(start = 16.dp, top = 32.dp)
+                Modifier.padding(start = 16.dp)
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.size(62.dp)
                 )
             }
         }
