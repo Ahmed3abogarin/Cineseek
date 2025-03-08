@@ -37,9 +37,9 @@ import com.movies.cinemix.presentation.favorite.FavoriteScreen
 import com.movies.cinemix.presentation.favorite.FavoriteViewModel
 import com.movies.cinemix.presentation.home.HomeScreen
 import com.movies.cinemix.presentation.home.HomeViewModel
-import com.movies.cinemix.presentation.navGraph.Route
 import com.movies.cinemix.presentation.movies_navigator.components.BottomItem
 import com.movies.cinemix.presentation.movies_navigator.components.MoviesBottomNav
+import com.movies.cinemix.presentation.navGraph.Route
 import com.movies.cinemix.presentation.search.SearchScreen
 import com.movies.cinemix.presentation.search.SearchViewModel
 import com.movies.cinemix.presentation.seeall.SeeAllMovies
@@ -181,7 +181,13 @@ fun MoviesNavigatorScreen() {
                             movie,
                             detailsViewModel,
                             detailsViewModel::onEvent,
-                            navigateUp = { navController.navigateUp() },
+                            navigateUp = {
+                                navController.navigateUp()
+                                navController.currentBackStackEntry?.savedStateHandle?.remove<Movies>(
+                                    "movie"
+                                )
+
+                            },
                             lifecycleOwner = lifecycleOwner,
                             navigateToCastDetails = {
                                 navigateToCastDetails(
@@ -199,7 +205,10 @@ fun MoviesNavigatorScreen() {
                             personId = personId,
                             state = castViewModel.state.value,
                             event = castViewModel::onEvent,
-                            navigateUp = { navController.navigateUp() },
+                            navigateUp = {
+                                navController.navigateUp()
+                                navController.currentBackStackEntry?.savedStateHandle?.remove<Int>("person_id")
+                            },
                             navigateToDetails = {
                                 navigateToDetails(
                                     navController = navController,
@@ -259,12 +268,7 @@ fun navigateToTab(navController: NavController, route: String) {
 
 private fun navigateToAll(navController: NavController, movieCategory: String) {
     navController.navigate("seeAllScreen/$movieCategory") {
-        popUpTo(Route.SeeAllScreen.route) {
-            saveState = true
-        }
-        restoreState = true
-        launchSingleTop = true
-
+        popUpTo(Route.SeeAllScreen.route)
     }
 }
 
@@ -273,9 +277,7 @@ private fun navigateToDetails(navController: NavController, movie: Movies) {
     navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
     navController.navigate(
         route = Route.DetailsScreen.route
-    ) {
-        popUpTo(Route.DetailsScreen.route) { inclusive = true }
-    }
+    )
 }
 
 private fun navigateToCastDetails(navigator: NavController, personId: Int) {
