@@ -109,45 +109,51 @@ fun CastScreen(
             }
             Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
 
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "Also known as:",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = person.also_known_as.joinToString(", "),
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.White)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Text(
-                    text = "About",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-
-                ExpandableText(text = person.biography)
-//                Text(
-//                    text = person.biography,
-//                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-//                )
-
-                Text(
-                    text = "Born: ${person.birthday} (${person.place_of_birth})",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Text(
-                    text = "Movies by ${person.name}",
-                    style = MaterialTheme.typography.displaySmall.copy(
-                        color = Color.White,
-                        fontSize = 24.sp
+                person.also_known_as?.let {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Also known as:",
+                        style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
                     )
-                )
-                if (state.personMovies != null) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = person.also_known_as.joinToString(", "),
+                        style = MaterialTheme.typography.bodySmall.copy(color = Color.White)
+                    )
+                }
+
+                person.biography?.let {
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        text = "About",
+                        style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    ExpandableText(text = person.biography)
+                }
+
+                person.birthday?.let {
+                    Text(
+                        text = "Born: ${person.birthday} (${person.place_of_birth})",
+                        style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                    )
+                }
+
+
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                state.personMovies?.let {
+                    Text(
+                        text = "Movies by ${person.name}",
+                        style = MaterialTheme.typography.displaySmall.copy(
+                            color = Color.White,
+                            fontSize = 24.sp
+                        )
+                    )
+
                     val personMovies = state.personMovies.collectAsLazyPagingItems()
 
                     LazyRow {
@@ -162,13 +168,9 @@ fun CastScreen(
                         }
                     }
 
-
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(28.dp))
                 }
-
             }
-
-
         }
     }
 }

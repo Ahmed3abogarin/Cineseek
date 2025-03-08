@@ -124,7 +124,10 @@ fun MoviesNavigatorScreen() {
                         )
                     },
                     navigateToSearch = {
-                        navController.navigate(Route.SearchScreen.route)
+                        navigateToTab(
+                            navController = navController,
+                            route = Route.SearchScreen.route
+                        )
                     }
                 )
 

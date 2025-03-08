@@ -2,9 +2,9 @@ package com.movies.cinemix.domain.model
 
 data class PersonResponse(
     val adult: Boolean,
-    val also_known_as: List<String>,
-    val biography: String,
-    val birthday: String,
+    val also_known_as: List<String>?,
+    val biography: String?,
+    val birthday: String?,
     val deathday: String,
     val gender: Int,
     val homepage: Any,

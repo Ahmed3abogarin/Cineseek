@@ -33,8 +33,7 @@ class HomeViewModel @Inject constructor(
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
 
-//        val actionMovies = moviesUseCases.getGenreMovies.invoke(genreNum = 28).cachedIn(viewModelScope)
-//        val ss = moviesUseCases.getGenreMovies.invoke(genreNum = 28).cachedIn(viewModelScope)
+
 
         _state.value = _state.value.copy(nowPlaying = nowPlayingMovies)
         _state.value = _state.value.copy(popularMovies = popularMovies)

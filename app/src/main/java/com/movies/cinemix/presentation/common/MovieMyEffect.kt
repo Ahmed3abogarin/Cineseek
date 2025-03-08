@@ -42,7 +42,7 @@ fun MovieMyEffect(
 
         Box(
             modifier = modifier
-                .height(340.dp)
+                .height(231.dp)
                 .width(160.dp)
                 .clip(MaterialTheme.shapes.medium)
                 .shimmerEffect()

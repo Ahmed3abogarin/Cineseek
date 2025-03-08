@@ -39,23 +39,6 @@ import com.movies.cinemix.ui.theme.MyRed
 
 @Composable
 fun HomeScreen(
-    navigateToAll: (String) -> Unit,
-    navigateToDetails: (Movies) -> Unit,
-    navigateToSearch: () -> Unit,
-    state: HomeState,
-) {
-    HomeScreenContent(
-        state = state,
-        navigateToAll = navigateToAll,
-        navigateToDetails = navigateToDetails,
-        navigateToSearch = navigateToSearch
-    )
-
-}
-
-
-@Composable
-fun HomeScreenContent(
     state: HomeState,
     navigateToAll: (String) -> Unit,
     navigateToSearch: () -> Unit,

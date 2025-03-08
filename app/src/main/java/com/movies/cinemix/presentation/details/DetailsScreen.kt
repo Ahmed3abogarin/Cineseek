@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
@@ -104,6 +105,8 @@ fun DetailsScreen(
             AsyncImage(
                 model = ImageRequest.Builder(context)
                     .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                    .placeholder(R.drawable.place_holder)
+                    .error(R.drawable.place_holder)
                     .build(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
