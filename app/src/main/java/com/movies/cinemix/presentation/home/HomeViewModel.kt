@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,15 +34,18 @@ class HomeViewModel @Inject constructor(
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
 
+        viewModelScope.launch {
+            _state.value = _state.value.copy(nowPlaying = nowPlayingMovies)
+            _state.value = _state.value.copy(popularMovies = popularMovies)
+            _state.value = _state.value.copy(topRatedMovies = topRatedMovies)
+            _state.value = _state.value.copy(upcomingMovies = upcomingMovies)
+            _state.value = _state.value.copy(trendWeek = trendWeek)
+            _state.value = _state.value.copy(arabicMovies = arabicMovies)
+            _state.value = _state.value.copy(marvelMovies = marvelMovies)
+        }
 
 
-        _state.value = _state.value.copy(nowPlaying = nowPlayingMovies)
-        _state.value = _state.value.copy(popularMovies = popularMovies)
-        _state.value = _state.value.copy(topRatedMovies = topRatedMovies)
-        _state.value = _state.value.copy(upcomingMovies = upcomingMovies)
-        _state.value = _state.value.copy(trendWeek = trendWeek)
-        _state.value = _state.value.copy(arabicMovies = arabicMovies)
-        _state.value = _state.value.copy(marvelMovies = marvelMovies)
+
 
     }
 
