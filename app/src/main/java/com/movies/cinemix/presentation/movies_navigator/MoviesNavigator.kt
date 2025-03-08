@@ -38,8 +38,8 @@ import com.movies.cinemix.presentation.favorite.FavoriteViewModel
 import com.movies.cinemix.presentation.home.HomeScreen
 import com.movies.cinemix.presentation.home.HomeViewModel
 import com.movies.cinemix.presentation.navGraph.Route
-import com.movies.cinemix.presentation.news_navigator.BottomItem
-import com.movies.cinemix.presentation.news_navigator.MoviesBottomNav
+import com.movies.cinemix.presentation.movies_navigator.components.BottomItem
+import com.movies.cinemix.presentation.movies_navigator.components.MoviesBottomNav
 import com.movies.cinemix.presentation.search.SearchScreen
 import com.movies.cinemix.presentation.search.SearchViewModel
 import com.movies.cinemix.presentation.seeall.SeeAllMovies

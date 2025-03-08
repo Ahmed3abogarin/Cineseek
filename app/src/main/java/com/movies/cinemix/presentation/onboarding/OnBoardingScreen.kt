@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -29,6 +30,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.movies.cinemix.R
+import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyRed
 
 @Composable
@@ -73,7 +75,7 @@ fun OnBoardingScreen(
 
 
             Text(
-                text = "watch movies, TV shows and more. save them search whatever you like, see the movie details, the cast and their info and more",
+                text = "Dive into the world of movies, save your favorites, Uncover cast details, behind-the-scenes stories, and everything you love, all in one place",
                 color = Color.White,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
@@ -95,6 +97,14 @@ fun OnBoardingScreen(
         }
 
 
+    }
+}
+
+@Preview
+@Composable
+fun OnPReview(){
+    CinemixTheme {
+        OnBoardingScreen(event = {})
     }
 }
 
