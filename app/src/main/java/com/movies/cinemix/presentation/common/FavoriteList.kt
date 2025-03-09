@@ -56,7 +56,7 @@ fun FavoriteList(
             movies[it].let { movie ->
                 val currentMovie = movies[it]
                 Column {
-                    FavoriteCard(movie = movie, onClick = { onClick(currentMovie) })
+                    FavoriteCard(movie = movie, onClick = { onClick(currentMovie) }, navigateToDetails = {onClick(currentMovie)})
 
                 }
                 if (it == movies.size - 1) {
@@ -72,6 +72,7 @@ fun FavoriteList(
 fun FavoriteCard(
     movie: Movies,
     onClick: () -> Unit,
+    navigateToDetails: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -136,7 +137,9 @@ fun FavoriteCard(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.padding(start = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MyRed),
-                    onClick = { }
+                    onClick = {
+                        navigateToDetails()
+                    }
                 ) {
                     Text(
                         text = "Watch Trailer",
@@ -159,12 +162,3 @@ fun FavoriteCard(
 
 
 }
-
-//@Preview
-//@Composable
-//fun FavoriteCardPreView() {
-//    CinemixTheme {
-//        FavoriteCard()
-//    }
-//
-//}

@@ -1,7 +1,6 @@
 package com.movies.cinemix.presentation.common
 
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -87,7 +86,6 @@ fun MovieList(
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 3)
@@ -178,7 +176,9 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                                 )
                             }
                             Button(
-                                onClick = {},
+                                onClick = {
+                                    onClick(movies[page]!!)
+                                },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MyRed
                                 )
