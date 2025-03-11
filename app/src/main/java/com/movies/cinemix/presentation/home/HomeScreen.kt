@@ -4,16 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -34,7 +31,6 @@ import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.common.SliderList
 import com.movies.cinemix.ui.theme.MyColor
-import com.movies.cinemix.ui.theme.MyRed
 
 
 @Composable
@@ -240,22 +236,13 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
-            Row {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(10.dp)
-                        .background(MyRed)
-                )
 
-                Text(
-                    text = "Arabic Movies",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
+            Text(
+                text = "Arabic Movies",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
             Text(
                 "See all",
                 color = Color.White,

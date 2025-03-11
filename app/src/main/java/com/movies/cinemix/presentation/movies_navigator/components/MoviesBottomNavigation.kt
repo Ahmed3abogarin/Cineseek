@@ -27,10 +27,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,10 +51,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.movies.cinemix.ui.theme.BottomColor
+import com.movies.cinemix.ui.theme.CinemixTheme
+import com.movies.cinemix.ui.theme.MyGreen
+import com.movies.cinemix.ui.theme.MyPink
 import kotlinx.coroutines.delay
 
 
@@ -171,14 +180,15 @@ fun MoviesBottomNav(
             ) {
                 Box(
                     modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                         .width(50.dp)
                         .height(50.dp)
                         .drawBehind {
                             val path = Path()
-                            path.moveTo(76f, 0f)
-                            path.lineTo(14f, 0f)
+                            path.moveTo(100f, 0f)
+                            path.lineTo(28f, 0f)
                             path.lineTo(-27f, 193f)
-                            path.lineTo(111f, 193f)
+                            path.lineTo(150f, 193f)
                             path.close()
                             drawPath(
                                 path = path,
@@ -199,6 +209,30 @@ fun MoviesBottomNav(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun BottomPreview(){
+    val bottomItems = remember {
+        mutableStateListOf(
+            BottomItem(
+                icon = Icons.Rounded.Home,
+                color = Color(0xFFFF0000)
+            ),
+            BottomItem(
+                icon = Icons.Rounded.Search,
+                color = MyGreen
+            ),
+            BottomItem(
+                icon = Icons.Rounded.Favorite,
+                color = MyPink
+            )
+        )
+    }
+    CinemixTheme {
+        MoviesBottomNav(onItemClicked = {}, bottomItems = bottomItems, selectedIndex = 0)
     }
 }
 

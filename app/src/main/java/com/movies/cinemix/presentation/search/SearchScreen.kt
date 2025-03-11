@@ -42,7 +42,7 @@ fun SearchScreen(
 
         if (state.moviesList == null) {
             Box(modifier = Modifier.fillMaxSize()) {
-                EmptyScreen()
+                EmptyScreen(prompt = "Looking for a movie? just search")
             }
         }
         state.moviesList?.let { movieList ->
