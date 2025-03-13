@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -158,7 +159,6 @@ fun MoviesBottomNav(
                     indicatorOffset
                 },
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
@@ -180,15 +180,14 @@ fun MoviesBottomNav(
             ) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
                         .width(50.dp)
                         .height(50.dp)
                         .drawBehind {
                             val path = Path()
-                            path.moveTo(100f, 0f)
-                            path.lineTo(28f, 0f)
-                            path.lineTo(-27f, 193f)
-                            path.lineTo(150f, 193f)
+                            path.moveTo(size.width + 10, 0f)
+                            path.lineTo(size.width - (size.width - 60), 0f)
+                            path.lineTo(size.height - 150, 195f)
+                            path.lineTo(size.height + 60, 195f)
                             path.close()
                             drawPath(
                                 path = path,
@@ -204,7 +203,6 @@ fun MoviesBottomNav(
                                     )
                                 ),
                             )
-//
                         }
                 )
             }
@@ -212,7 +210,7 @@ fun MoviesBottomNav(
     }
 }
 
-@Preview
+@Preview(device = Devices.PIXEL_7_PRO, showBackground = true)
 @Composable
 fun BottomPreview(){
     val bottomItems = remember {

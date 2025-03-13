@@ -28,15 +28,6 @@ class DetailsViewModel @Inject constructor(
         private set // this mean it can not be changed out side this fucking class
 
 
-    fun openDialog() {
-        _state.value = _state.value.copy(showDialog = true)
-    }
-
-    fun closeDialog() {
-        _state.value = _state.value.copy(showDialog = false)
-    }
-
-
     private fun getMovieCast(movieId: Int) {
         try {
             CoroutineScope(Dispatchers.IO).launch {
@@ -100,13 +91,18 @@ class DetailsViewModel @Inject constructor(
                 }
             }
 
+            is DetailsEvent.CheckTrailerStatus -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    sideEffect = "Trailer unavailable"
+                }
+            }
+
             is DetailsEvent.RemoveSideEffect -> {
                 sideEffect = null
 
             }
         }
     }
-
     private fun deleteMovie(movie: Movies) {
         CoroutineScope(Dispatchers.IO).launch {
             moviesUseCases.deleteMovie(movie)

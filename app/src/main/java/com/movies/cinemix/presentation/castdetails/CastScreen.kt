@@ -40,6 +40,7 @@ import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.MovieCard
+import com.movies.cinemix.presentation.common.parallaxLayoutModifier
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.MyColor
 
@@ -53,6 +54,7 @@ fun CastScreen(
 ) {
 
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(false) {
         event(CastEvent.UpdatePersonId(personId = personId))
@@ -65,9 +67,7 @@ fun CastScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BottomColor)
-                .verticalScroll(
-                    rememberScrollState()
-                ),
+                .verticalScroll(scrollState),
         ) {
             Box(
                 modifier = Modifier
@@ -75,6 +75,7 @@ fun CastScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
                     .background(MyColor)
+                    .parallaxLayoutModifier(scrollState = scrollState, rate = 2)
             ) {
                 AsyncImage(
                     modifier = Modifier

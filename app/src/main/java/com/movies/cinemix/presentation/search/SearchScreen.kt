@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.presentation.common.EmptyScreen
+import com.movies.cinemix.presentation.common.EmptySearch
 import com.movies.cinemix.presentation.common.GridMoviesList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.ui.theme.MyColor
@@ -42,7 +42,7 @@ fun SearchScreen(
 
         if (state.moviesList == null) {
             Box(modifier = Modifier.fillMaxSize()) {
-                EmptyScreen(prompt = "Looking for a movie? just search")
+                EmptySearch()
             }
         }
         state.moviesList?.let { movieList ->

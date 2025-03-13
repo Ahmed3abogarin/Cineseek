@@ -268,7 +268,7 @@ fun HomeScreen(
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
             Text(
-                text = "Marvel's Movies",
+                text = "Marvel Movies",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold

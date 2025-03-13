@@ -3,7 +3,6 @@ package com.movies.cinemix.presentation.common
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -31,7 +29,7 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 @Composable
-fun EmptyScreen(error: LoadState.Error? = null, prompt: String? = null) {
+fun EmptyScreen(error: LoadState.Error? = null) {
 
     var message by remember {
         mutableStateOf(parseErrorMessage(error = error))
@@ -41,15 +39,12 @@ fun EmptyScreen(error: LoadState.Error? = null, prompt: String? = null) {
         mutableIntStateOf(R.drawable.ic_network_error)
     }
 
-    if (error == null && prompt == null) {
+    if (error == null) {
         message = "Movies added to favorites will appear here"
         icon = R.drawable.saved_movies
     }
 
-    if (prompt != null) {
-        message = prompt
-        icon = R.drawable.search_movies
-    }
+
 
     var startAnimation by remember {
         mutableStateOf(false)
@@ -67,6 +62,27 @@ fun EmptyScreen(error: LoadState.Error? = null, prompt: String? = null) {
     EmptyContent(alphaAnim = alphaAnimation, message = message, iconId = icon)
 
 }
+
+@Composable
+fun EmptySearch(){
+    var startAnimation by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(key1 = true) {
+        startAnimation = true
+    }
+
+    val alphaAnimation by animateFloatAsState(
+        targetValue = if (startAnimation) 0.3f else 0f,
+        animationSpec = tween(durationMillis = 1500)
+    )
+
+    EmptyContent(alphaAnim = alphaAnimation,
+        message = "Looking for a movie? just search",
+        iconId = R.drawable.search_movies)
+}
+
+
 
 @Composable
 fun EmptyContent(alphaAnim: Float, message: String, iconId: Int) {

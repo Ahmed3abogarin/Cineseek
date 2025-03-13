@@ -55,6 +55,7 @@ import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
+import java.util.Locale
 
 @Composable
 fun DetailsScreen(
@@ -244,7 +245,7 @@ fun DetailsScreen(
                         )
 
                         Text(
-                            text = "IMDB ${"%.1f".format(movie.vote_average)}",
+                            text = "IMDB ${"%.1f".format(Locale.US,movie.vote_average)}",
                             style = MaterialTheme.typography.bodyLarge.copy(color = Gold)
                         )
                     }
@@ -286,7 +287,12 @@ fun DetailsScreen(
             }
 
             Row(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MovieButton(onClick = { showDialog = true })
+                MovieButton(onClick = {
+                    if(state.movieKey == null){
+                        event(DetailsEvent.CheckTrailerStatus)
+                    }
+                    showDialog = true
+                })
             }
 
         }

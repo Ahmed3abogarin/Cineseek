@@ -40,6 +40,7 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyRed
+import java.util.Locale
 
 
 @Composable
@@ -130,7 +131,7 @@ fun FavoriteCard(
                         Icons.Default.Star, contentDescription = null, tint = Gold,
                         modifier = Modifier.size(20.dp)
                     )
-                    Text(text = "%.1f".format(movie.vote_average), color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.height(3.dp))
                 Button(
