@@ -81,7 +81,6 @@ class DetailsViewModel @Inject constructor(
 
             is DetailsEvent.SaveDeleteMovie -> {
                 CoroutineScope(Dispatchers.IO).launch {
-                    // search in the DB if the movie by id in the database so delelte it otherwise the variable eqaul to null means it is not been saved
                     val movie = moviesUseCases.getMovie(movieId = event.movie.id)
                     if (movie == null) { // I think this to check if it in the db
                         upsertMovie(event.movie)
