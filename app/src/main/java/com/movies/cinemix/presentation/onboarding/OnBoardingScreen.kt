@@ -77,7 +77,7 @@ fun OnBoardingScreen(
             Text(
                 text = "Dive into the world of movies, save your favorites, Uncover cast details, behind-the-scenes stories, and everything you love, all in one place",
                 color = Color.White,
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(24.dp))

@@ -40,6 +40,7 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyRed
+import java.util.Locale
 
 
 @Composable
@@ -56,7 +57,7 @@ fun FavoriteList(
             movies[it].let { movie ->
                 val currentMovie = movies[it]
                 Column {
-                    FavoriteCard(movie = movie, onClick = { onClick(currentMovie) })
+                    FavoriteCard(movie = movie, onClick = { onClick(currentMovie) }, navigateToDetails = {onClick(currentMovie)})
 
                 }
                 if (it == movies.size - 1) {
@@ -72,6 +73,7 @@ fun FavoriteList(
 fun FavoriteCard(
     movie: Movies,
     onClick: () -> Unit,
+    navigateToDetails: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -129,14 +131,16 @@ fun FavoriteCard(
                         Icons.Default.Star, contentDescription = null, tint = Gold,
                         modifier = Modifier.size(20.dp)
                     )
-                    Text(text = "%.1f".format(movie.vote_average), color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.height(3.dp))
                 Button(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.padding(start = 4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MyRed),
-                    onClick = { }
+                    onClick = {
+                        navigateToDetails()
+                    }
                 ) {
                     Text(
                         text = "Watch Trailer",
@@ -159,12 +163,3 @@ fun FavoriteCard(
 
 
 }
-
-//@Preview
-//@Composable
-//fun FavoriteCardPreView() {
-//    CinemixTheme {
-//        FavoriteCard()
-//    }
-//
-//}

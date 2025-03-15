@@ -21,9 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.GenreItem
 import com.movies.cinemix.domain.model.genres
 
@@ -84,16 +82,4 @@ fun GenreCard(item: GenreItem, onClick: () -> Unit) {
 
     }
 
-}
-
-@Preview
-@Composable
-fun GenreCardPreview() {
-    GenreCard(
-        item = GenreItem(
-            image = R.drawable.crime,
-            genre = "Action"
-        ),
-        onClick = {}
-    )
 }

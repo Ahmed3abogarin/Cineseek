@@ -1,9 +1,10 @@
 package com.movies.cinemix.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.movies.cinemix.domain.usecases.app_entry.AppEntryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,11 +22,11 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     private fun saveAppEntry() {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             useCases.saveAppEntry()
         }
-
     }
 
-
 }
+
+

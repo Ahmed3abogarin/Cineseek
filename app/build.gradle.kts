@@ -13,10 +13,10 @@ android {
 
     defaultConfig {
         applicationId = "com.movies.cinemix"
-        minSdk = 31
+        minSdk = 28
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,35 +60,35 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("com.google.dagger:hilt-android:2.55")
-    kapt("com.google.dagger:hilt-android-compiler:2.55")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation (libs.accompanist.systemuicontroller)
 
-    implementation ("androidx.compose.foundation:foundation:1.6.0-alpha02")
+    implementation (libs.androidx.foundation)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation (libs.core)
 
     //Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.coil.compose)
 
     // paging
-    implementation("androidx.paging:paging-runtime:3.3.5")
-    implementation ("androidx.paging:paging-compose:3.3.5")
+    implementation(libs.androidx.paging.runtime)
+    implementation (libs.androidx.paging.compose.v336)
 
-    implementation ("com.airbnb.android:lottie-compose:6.6.2")
+    implementation (libs.lottie.compose)
 
 
     // splash api
-    implementation ("androidx.core:core-splashscreen:1.0.1")
+    implementation (libs.androidx.core.splashscreen)
 
 
     // Data store
-    implementation("androidx.datastore:datastore-preferences:1.1.3")
+    implementation(libs.androidx.datastore.preferences)
 
 
     implementation(libs.androidx.room.runtime)

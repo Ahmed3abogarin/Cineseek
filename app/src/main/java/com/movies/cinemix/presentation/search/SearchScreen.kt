@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.presentation.common.EmptyScreen
+import com.movies.cinemix.presentation.common.EmptySearch
 import com.movies.cinemix.presentation.common.GridMoviesList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.ui.theme.MyColor
@@ -42,37 +42,12 @@ fun SearchScreen(
 
         if (state.moviesList == null) {
             Box(modifier = Modifier.fillMaxSize()) {
-                EmptyScreen()
+                EmptySearch()
             }
         }
         state.moviesList?.let { movieList ->
             val movies = movieList.collectAsLazyPagingItems()
             GridMoviesList(movies = movies, navigateToDetails = navigateToDetails)
-
-
-//            Box(
-//                modifier = Modifier
-//                    .background(Color.Magenta)
-//                    .fillMaxSize()
-//            ) {
-//                LazyVerticalStaggeredGrid(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .background(
-//                            MyColor
-//                        ),
-//                    columns = StaggeredGridCells.Fixed(2),
-//                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-//                ) {
-//                    items(movies.itemCount) { page ->
-//                        movies[page]?.let { movie ->
-//                            MovieCard2(movie, onClick = { navigateToDetails(movies[page]!!) })
-//                        }
-//                    }
-//                }
-//            }
-
-
         }
 
     }

@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
@@ -54,6 +55,7 @@ import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
+import java.util.Locale
 
 @Composable
 fun DetailsScreen(
@@ -104,6 +106,8 @@ fun DetailsScreen(
             AsyncImage(
                 model = ImageRequest.Builder(context)
                     .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                    .placeholder(R.drawable.place_holder)
+                    .error(R.drawable.place_holder)
                     .build(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
@@ -241,7 +245,7 @@ fun DetailsScreen(
                         )
 
                         Text(
-                            text = "IMDB ${"%.1f".format(movie.vote_average)}",
+                            text = "IMDB ${"%.1f".format(Locale.US,movie.vote_average)}",
                             style = MaterialTheme.typography.bodyLarge.copy(color = Gold)
                         )
                     }
@@ -283,7 +287,12 @@ fun DetailsScreen(
             }
 
             Row(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MovieButton(onClick = { showDialog = true })
+                MovieButton(onClick = {
+                    if(state.movieKey == null){
+                        event(DetailsEvent.CheckTrailerStatus)
+                    }
+                    showDialog = true
+                })
             }
 
         }

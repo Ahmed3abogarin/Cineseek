@@ -1,7 +1,6 @@
 package com.movies.cinemix.presentation.common
 
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,13 +53,13 @@ import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Cast
 import com.movies.cinemix.domain.model.Movies
-import com.movies.cinemix.presentation.seeall.MovieCard2
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
+import java.util.Locale
 import kotlin.math.abs
 
 @Composable
@@ -87,7 +86,6 @@ fun MovieList(
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 3)
@@ -178,7 +176,9 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                                 )
                             }
                             Button(
-                                onClick = {},
+                                onClick = {
+                                    onClick(movies[page]!!)
+                                },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MyRed
                                 )
@@ -186,15 +186,9 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                                 Text(text = "See more")
                             }
                         }
-
                     }
-
                 }
-
-
             }
-
-
         }
     }
 }
@@ -206,7 +200,6 @@ fun GridMoviesList(
 ) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 2)
     if (handlePagingResult) {
-
         LazyVerticalStaggeredGrid(
             modifier = Modifier
                 .fillMaxSize()
@@ -308,7 +301,7 @@ fun handlePagingResult(
         }
 
         movies.itemCount == 0 -> {
-            EmptyScreen()
+            EmptyScreen(prompt = "Nothing found")
             false
         }
 
@@ -368,7 +361,7 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit)
                             .size(18.dp)
                             .padding(top = 6.dp)
                     )
-                    Text(text = "%.1f".format(movie.vote_average), color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
                 }
             }
         }
@@ -389,8 +382,78 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit)
                 overflow = TextOverflow.Ellipsis
             )
         }
-
-
     }
+}
 
+@Composable
+fun MovieCard2(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val context = LocalContext.current
+
+    Column(modifier = Modifier
+        .background(MyColor)
+        .clickable { onClick() }) {
+
+        Box {
+            Card(
+                modifier = modifier
+                    .height(271.dp)
+                    .width(200.dp),
+                shape = RoundedCornerShape(10.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Column(modifier = Modifier.background(MyColor2)) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                            .placeholder(R.drawable.place_holder)
+                            .error(R.drawable.place_holder)
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(271.dp)
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+            }
+            Box(
+                Modifier
+                    .padding(top = 10.dp, start = 10.dp)
+                    .align(Alignment.TopStart)
+                    .shadow(2.dp, shape = RoundedCornerShape(30.dp))
+                    .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
+            ) {
+                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                    Icon(
+                        Icons.Rounded.Star,
+                        contentDescription = null,
+                        tint = Gold,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .padding(top = 6.dp)
+                    )
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
+                }
+            }
+        }
+
+
+
+        Box(
+            modifier = Modifier
+                .width(200.dp)
+                .padding(start = 5.dp, top = 3.dp)
+        ) {
+            Text(
+                modifier = Modifier.padding(3.dp),
+                text = movie.title,
+                style = MaterialTheme.typography.titleSmall,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+    }
 }
