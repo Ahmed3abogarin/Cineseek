@@ -184,10 +184,18 @@ fun MoviesBottomNav(
                         .height(50.dp)
                         .drawBehind {
                             val path = Path()
-                            path.moveTo(size.width + 10, 0f)
-                            path.lineTo(size.width - (size.width - 60), 0f)
-                            path.lineTo(size.height - 150, 195f)
-                            path.lineTo(size.height + 60, 195f)
+                            val triangleWidth = size.width * 0.8f //relative triangle width
+                            val triangleHeight = size.height * 1.5f //relative triangle height
+
+                            path.moveTo(size.width * 1.1f, 0f) //relative x move
+                            path.lineTo(size.width - triangleWidth, 0f)
+                            path.lineTo(size.height - triangleHeight * 0.8f, triangleHeight)
+                            path.lineTo(size.height + triangleWidth * 0.5f, triangleHeight)
+
+//                            path.moveTo(size.width + 10, 0f)
+//                            path.lineTo(size.width - (size.width - 60), 0f)
+//                            path.lineTo(size.height - 150,  195f)
+//                            path.lineTo(size.height + 60, 195f)
                             path.close()
                             drawPath(
                                 path = path,

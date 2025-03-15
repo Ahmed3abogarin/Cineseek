@@ -48,31 +48,6 @@ fun SearchScreen(
         state.moviesList?.let { movieList ->
             val movies = movieList.collectAsLazyPagingItems()
             GridMoviesList(movies = movies, navigateToDetails = navigateToDetails)
-
-
-//            Box(
-//                modifier = Modifier
-//                    .background(Color.Magenta)
-//                    .fillMaxSize()
-//            ) {
-//                LazyVerticalStaggeredGrid(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .background(
-//                            MyColor
-//                        ),
-//                    columns = StaggeredGridCells.Fixed(2),
-//                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-//                ) {
-//                    items(movies.itemCount) { page ->
-//                        movies[page]?.let { movie ->
-//                            MovieCard2(movie, onClick = { navigateToDetails(movies[page]!!) })
-//                        }
-//                    }
-//                }
-//            }
-
-
         }
 
     }

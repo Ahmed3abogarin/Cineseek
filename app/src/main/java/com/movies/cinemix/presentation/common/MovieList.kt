@@ -186,15 +186,9 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                                 Text(text = "See more")
                             }
                         }
-
                     }
-
                 }
-
-
             }
-
-
         }
     }
 }
@@ -206,7 +200,6 @@ fun GridMoviesList(
 ) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 2)
     if (handlePagingResult) {
-
         LazyVerticalStaggeredGrid(
             modifier = Modifier
                 .fillMaxSize()
@@ -308,7 +301,7 @@ fun handlePagingResult(
         }
 
         movies.itemCount == 0 -> {
-            EmptyScreen()
+            EmptyScreen(prompt = "Nothing found")
             false
         }
 

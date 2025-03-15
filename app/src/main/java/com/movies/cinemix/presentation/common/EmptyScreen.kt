@@ -29,7 +29,7 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 @Composable
-fun EmptyScreen(error: LoadState.Error? = null) {
+fun EmptyScreen(error: LoadState.Error? = null, prompt: String? = null) {
 
     var message by remember {
         mutableStateOf(parseErrorMessage(error = error))
@@ -42,6 +42,11 @@ fun EmptyScreen(error: LoadState.Error? = null) {
     if (error == null) {
         message = "Movies added to favorites will appear here"
         icon = R.drawable.saved_movies
+    }
+
+    if (prompt != null){
+        message = prompt
+        icon = R.drawable.ic_network_error
     }
 
 
