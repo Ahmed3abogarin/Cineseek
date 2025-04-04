@@ -161,7 +161,6 @@ fun DetailsScreen(
                         IconButton(onClick = {
                             event(DetailsEvent.SaveDeleteMovie(movie))
                         }) {
-//                            painter = painterResource(if (state.savedStatus)R.drawable.saved_filled else R.drawable.bookmark)
                             Icon(
                                 if (state.savedStatus) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                 contentDescription = null,
