@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +20,11 @@ android {
         versionCode = 3
         versionName = "1.2"
 
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String","API_KEY",properties.getProperty("apiKey"))
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,6 +36,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures{
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -81,6 +91,10 @@ dependencies {
     implementation (libs.androidx.paging.compose.v336)
 
     implementation (libs.lottie.compose)
+
+    // animation
+    implementation(libs.androidx.animation)
+    implementation(libs.androidx.navigation.compose)
 
 
     // splash api

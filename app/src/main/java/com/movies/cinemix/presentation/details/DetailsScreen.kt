@@ -1,6 +1,15 @@
 package com.movies.cinemix.presentation.details
 
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,6 +64,7 @@ import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
+import kotlinx.coroutines.delay
 import java.util.Locale
 
 @Composable
@@ -85,217 +95,238 @@ fun DetailsScreen(
         })
     }
 
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        // Delay to let the animation be noticeable
+        delay(300)
+        isVisible = true
+    }
 
 
 
+//    AnimatedVisibility(
+//        modifier = Modifier
+//            .fillMaxSize(),
+//        visible = isVisible,
+//        enter = scaleIn() + expandVertically(expandFrom = Alignment.CenterVertically),
+//        // By Default, `scaleOut` uses the center as its pivot point. When used with an
+//        // ExitTransition that shrinks towards the center, the content will be shrinking both
+//        // in terms of scale and layout size towards the center.
+//        exit = scaleOut() + shrinkVertically(shrinkTowards = Alignment.CenterVertically)
+//    ) {
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MyColor)
-    ) {
         Box(
             modifier = Modifier
-                .shadow(
-                    elevation = 1.dp,
-                    shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
+                .fillMaxSize()
+                .background(MyColor)
+        ) {
+            Box(
+                modifier = Modifier
+                    .shadow(
+                        elevation = 1.dp,
+                        shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
+                    )
+                    .fillMaxWidth()
+                    .fillMaxHeight(.65f)
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                        .placeholder(R.drawable.place_holder)
+                        .error(R.drawable.place_holder)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds
                 )
-                .fillMaxWidth()
-                .fillMaxHeight(.65f)
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
-                    .placeholder(R.drawable.place_holder)
-                    .error(R.drawable.place_holder)
-                    .build(),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
 
-            BackArrow(navigateUp = navigateUp)
-        }
+                BackArrow(navigateUp = navigateUp)
+            }
 
 
 
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center)
-                .padding(top = 190.dp)
-        ) {
-
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(520.dp)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .background(Color.Black.copy(alpha = .68f))
-
-
+                    .align(Alignment.Center)
+                    .padding(top = 190.dp)
             ) {
 
                 Column(
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                        .fillMaxWidth()
+                        .height(520.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .background(Color.Black.copy(alpha = .68f))
+
 
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(70.dp)
-                            .padding(end = 12.dp, top = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = movie.title,
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        )
-                        IconButton(onClick = {
-                            event(DetailsEvent.SaveDeleteMovie(movie))
-                        }) {
-                            Icon(
-                                if (state.savedStatus) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .size(42.dp)
-                                    .padding(end = 5.dp, bottom = 7.dp)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                Intent(Intent.ACTION_SEND).also {
-                                    it.putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        "https://www.youtube.com/watch?v=${state.movieKey}"
-                                    )
-                                    it.type = "text/plain"
-                                    if (it.resolveActivity(context.packageManager) != null) {
-                                        context.startActivity(it)
-                                    }
-                                }
-                            }
-                        ) {
-                            Icon(
-                                Icons.Filled.Share, contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .size(42.dp)
-                                    .padding(end = 5.dp, bottom = 7.dp)
-                            )
-                        }
-
-                    }
-
-
-//                    Spacer(modifier = Modifier.height(10.dp))
-                    if (state.genres.isNotEmpty()) {
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                6.dp,
-                                Alignment.CenterHorizontally
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items(state.genres) { genre ->
-
-                                Text(
-                                    text = genre,
-                                    fontSize = 14.sp,
-                                    color = Color.White,
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(30.dp)
-                                        )
-                                        .background(BottomColor)
-                                        .padding(start = 8.dp, end = 8.dp)
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(0.8.dp)
-                            .background(
-                                Color.White
-                            )
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = movie.release_date,
-                            style = MaterialTheme.typography.bodyLarge.copy(Color.White)
-                        )
-
-                        Text(
-                            text = "IMDB ${"%.1f".format(Locale.US,movie.vote_average)}",
-                            style = MaterialTheme.typography.bodyLarge.copy(color = Gold)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-
-
-                    Text("Summery", style = MaterialTheme.typography.titleMedium.copy(Color.White))
-
-                    Spacer(modifier = Modifier.height(5.dp))
 
                     Column(
                         modifier = Modifier
-                            .height(115.dp)
-                            .verticalScroll(rememberScrollState())
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+
                     ) {
-                        Text(
-                            text = movie.overview,
-                            textAlign = TextAlign.Justify,
-                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-                        )
-                    }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(70.dp)
+                                .padding(end = 12.dp, top = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(1f),
+                                text = movie.title,
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                            IconButton(onClick = {
+                                event(DetailsEvent.SaveDeleteMovie(movie))
+                            }) {
+                                Icon(
+                                    if (state.savedStatus) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .padding(end = 5.dp, bottom = 7.dp)
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    Intent(Intent.ACTION_SEND).also {
+                                        it.putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            "https://www.youtube.com/watch?v=${state.movieKey}"
+                                        )
+                                        it.type = "text/plain"
+                                        if (it.resolveActivity(context.packageManager) != null) {
+                                            context.startActivity(it)
+                                        }
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Filled.Share, contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .padding(end = 5.dp, bottom = 7.dp)
+                                )
+                            }
+
+                        }
 
 
-                    Spacer(modifier = Modifier.height(10.dp))
-                    if (state.castList != null) {
-                        Text(
-                            text = "Cast",
-                            style = MaterialTheme.typography.titleMedium.copy(Color.White)
-                        )
+//                    Spacer(modifier = Modifier.height(10.dp))
+                        if (state.genres.isNotEmpty()) {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    6.dp,
+                                    Alignment.CenterHorizontally
+                                ),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                items(state.genres) { genre ->
+
+                                    Text(
+                                        text = genre,
+                                        fontSize = 14.sp,
+                                        color = Color.White,
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(30.dp)
+                                            )
+                                            .background(BottomColor)
+                                            .padding(start = 8.dp, end = 8.dp)
+                                    )
+                                }
+                            }
+                        }
+
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        CastList(
-                            cast = state.castList.cast,
-                            navigateToCastDetails = { navigateToCastDetails(it) })
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(0.8.dp)
+                                .background(
+                                    Color.White
+                                )
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = movie.release_date,
+                                style = MaterialTheme.typography.bodyLarge.copy(Color.White)
+                            )
+
+                            Text(
+                                text = "IMDB ${"%.1f".format(Locale.US, movie.vote_average)}",
+                                style = MaterialTheme.typography.bodyLarge.copy(color = Gold)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+
+
+                        Text(
+                            "Summery",
+                            style = MaterialTheme.typography.titleMedium.copy(Color.White)
+                        )
+
+                        Spacer(modifier = Modifier.height(5.dp))
+
+                        Column(
+                            modifier = Modifier
+                                .height(115.dp)
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Text(
+                                text = movie.overview,
+                                textAlign = TextAlign.Justify,
+                                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                            )
+                        }
+
+
+                        Spacer(modifier = Modifier.height(10.dp))
+                        if (state.castList != null) {
+                            Text(
+                                text = "Cast",
+                                style = MaterialTheme.typography.titleMedium.copy(Color.White)
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            CastList(
+                                cast = state.castList.cast,
+                                navigateToCastDetails = { navigateToCastDetails(it) })
+
+                        }
 
                     }
-
                 }
-            }
 
-            Row(modifier = Modifier.align(Alignment.BottomCenter)) {
-                MovieButton(onClick = {
-                    if(state.movieKey == null){
-                        event(DetailsEvent.CheckTrailerStatus)
-                    }
-                    showDialog = true
-                })
-            }
+                Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    MovieButton(onClick = {
+                        if (state.movieKey == null) {
+                            event(DetailsEvent.CheckTrailerStatus)
+                        }
+                        showDialog = true
+                    })
+                }
 
+            }
         }
 
 
-    }
+//    }
 }

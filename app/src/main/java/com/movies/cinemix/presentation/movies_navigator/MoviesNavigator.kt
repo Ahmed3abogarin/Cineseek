@@ -1,6 +1,12 @@
 package com.movies.cinemix.presentation.movies_navigator
 
 import android.widget.Toast
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -169,7 +175,26 @@ fun MoviesNavigatorScreen() {
                     navigateUp = { navController.navigateUp() }
                 )
             }
-            composable(Route.DetailsScreen.route) {
+            composable(
+                Route.DetailsScreen.route,
+                popEnterTransition = {
+                    scaleIn() + expandVertically(
+                        expandFrom = Alignment.CenterVertically,
+                        animationSpec = tween(1000)
+                    )
+                },
+                enterTransition = {
+                    scaleIn() + expandVertically(
+                        expandFrom = Alignment.CenterVertically,
+                        animationSpec = tween(1000)
+                    )
+                },
+                popExitTransition = {
+                    scaleOut() + shrinkVertically(
+                        shrinkTowards = Alignment.CenterVertically,
+                        animationSpec = tween(1000)
+                    )
+                }) {
                 if (detailsViewModel.sideEffect != null) {
                     Toast.makeText(
                         LocalContext.current,
