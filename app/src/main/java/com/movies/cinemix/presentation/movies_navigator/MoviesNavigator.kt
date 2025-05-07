@@ -1,15 +1,17 @@
 package com.movies.cinemix.presentation.movies_navigator
 
 import android.widget.Toast
-import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
@@ -189,11 +191,11 @@ fun MoviesNavigatorScreen() {
                         animationSpec = tween(1000)
                     )
                 },
-                popExitTransition = {
-                    scaleOut() + shrinkVertically(
-                        shrinkTowards = Alignment.CenterVertically,
-                        animationSpec = tween(1000)
-                    )
+                exitTransition = {
+                    slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
+                        // Overwrites the ending position of the slide-out to 200 (pixels) to the right
+                        200
+                    } + fadeOut()
                 }) {
                 if (detailsViewModel.sideEffect != null) {
                     Toast.makeText(
@@ -226,7 +228,20 @@ fun MoviesNavigatorScreen() {
                         )
                     }
             }
-            composable(Route.CastDetailsScreen.route) {
+            composable(
+                Route.CastDetailsScreen.route,
+                popExitTransition = {
+                    slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
+                        // Overwrites the ending position of the slide-out to 200 (pixels) to the right
+                        200
+                    } + fadeOut()
+                },
+                exitTransition = {
+                    slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
+                        // Overwrites the ending position of the slide-out to 200 (pixels) to the right
+                        1000
+                    } + fadeOut()
+                }) {
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
                     ?.let { personId ->
                         CastScreen(
@@ -252,6 +267,7 @@ fun MoviesNavigatorScreen() {
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
                 .padding(bottom = 25.dp)
         ) {
             if (isBottomBarVisible) {

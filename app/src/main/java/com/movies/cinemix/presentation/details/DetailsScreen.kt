@@ -83,9 +83,9 @@ fun DetailsScreen(
     LaunchedEffect(false) {
         event(DetailsEvent.UpdateMovieId(movieId = movie.id))
         event(DetailsEvent.UpdateMovieGenre(genres = movie.genre_ids))
-
+        event(DetailsEvent.CheckSaveStatus(movie.id))
     }
-    event(DetailsEvent.CheckSaveStatus(movie.id))
+
     var showDialog by remember { mutableStateOf(false) }
 
 
@@ -175,7 +175,8 @@ fun DetailsScreen(
                                 .fillMaxWidth()
                                 .height(70.dp)
                                 .padding(end = 12.dp, top = 12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 modifier = Modifier.weight(1f),
@@ -185,16 +186,17 @@ fun DetailsScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                             )
-                            IconButton(onClick = {
+                            IconButton(
+                                modifier = Modifier
+                                    .padding(end = 5.dp, bottom = 7.dp)
+                                    .size(42.dp),
+                                onClick = {
                                 event(DetailsEvent.SaveDeleteMovie(movie))
                             }) {
                                 Icon(
                                     if (state.savedStatus) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                                     contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier
-                                        .size(42.dp)
-                                        .padding(end = 5.dp, bottom = 7.dp)
+                                    tint = Color.White
                                 )
                             }
                             IconButton(

@@ -20,6 +20,7 @@ class SearchViewModel @Inject constructor(
         when (event){
             is SearchEvent.UpdateSearchQuery -> {
                 _state.value = _state.value.copy(searchQuery = event.searchQuery)
+                searchMovie()
             }
             is SearchEvent.SearchMovie -> {
                 searchMovie()
@@ -28,10 +29,13 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchMovie() {
-        val movies = moviesUseCases.searchMovie(
-            movieName = state.value.searchQuery
-        ).cachedIn(viewModelScope)
-        _state.value = _state.value.copy(moviesList = movies)
+        if (state.value.searchQuery != " "){
+            val movies = moviesUseCases.searchMovie(
+                movieName = state.value.searchQuery
+            ).cachedIn(viewModelScope)
+            _state.value = _state.value.copy(moviesList = movies)
+        }
+
     }
 
 }

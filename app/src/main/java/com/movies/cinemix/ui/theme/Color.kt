@@ -8,9 +8,13 @@ val Pink40 = Color(0xFF7D5260)
 
 
 val MyColor2 = Color(0xFF313542)
+val BorderColor = Color(0xFF2B3455)
+val BoxColor = Color(0xFF121930)
 val MyColor = Color(0xFF0f172a)
 val BottomColor = Color(0xFF1e293b)
 val Gold = Color(0xFFFFD700)
+
+val MyPurple = Color(0XFFA38FEF)
 
 val MyPink = Color(0xFFff1554)
 val MyGreen = Color(0xFF00AA44)

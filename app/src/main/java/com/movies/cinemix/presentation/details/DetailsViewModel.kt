@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,7 +72,7 @@ class DetailsViewModel @Inject constructor(
             is DetailsEvent.SaveDeleteMovie -> {
                 CoroutineScope(Dispatchers.IO).launch {
                     val movie = moviesUseCases.getMovie(movieId = event.movie.id)
-                    if (movie == null) { // I think this to check if it in the db
+                    if (movie == null) {
                         upsertMovie(event.movie)
                     } else {
                         deleteMovie(event.movie)
@@ -82,12 +81,8 @@ class DetailsViewModel @Inject constructor(
             }
 
             is DetailsEvent.CheckSaveStatus -> {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val isSaved = moviesUseCases.getMovie(movieId = event.movieId) != null
-                    withContext(Dispatchers.Main) {
-                        _state.value = _state.value.copy(savedStatus = isSaved)
-                    }
-                }
+                check(event.movieId)
+
             }
 
             is DetailsEvent.CheckTrailerStatus -> {
@@ -102,10 +97,20 @@ class DetailsViewModel @Inject constructor(
             }
         }
     }
+
+    private fun check(movieId: Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            val isSaved = moviesUseCases.getMovie(movieId = movieId) != null
+
+                _state.value = _state.value.copy(savedStatus = isSaved)
+        }
+    }
     private fun deleteMovie(movie: Movies) {
         CoroutineScope(Dispatchers.IO).launch {
             moviesUseCases.deleteMovie(movie)
             sideEffect = "Movie deleted :("
+            check(movie.id)
+
         }
 
     }
@@ -114,6 +119,7 @@ class DetailsViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             moviesUseCases.upsertMovie(movie)
             sideEffect = "Movie Saved"
+            check(movie.id)
 
         }
     }

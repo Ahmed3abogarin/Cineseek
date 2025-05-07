@@ -4,13 +4,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -31,6 +35,7 @@ import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.common.SliderList
 import com.movies.cinemix.ui.theme.MyColor
+import com.movies.cinemix.ui.theme.MyRed
 
 
 @Composable
@@ -175,12 +180,18 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
         ) {
-            Text(
-                text = "Upcoming movies",
-                color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            Row (verticalAlignment = Alignment.CenterVertically){
+
+                Box(modifier = Modifier.height(20.dp).width(8.dp).background(MyRed))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Upcoming movies",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
             Text(
                 text = "See all",
                 color = Color.White,
@@ -304,7 +315,7 @@ fun HomeScreen(
         }
 
         GenreList(navigateToGenre = { navigateToAll(it) })
-        Spacer(modifier = Modifier.height(110.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding().height(110.dp) )
     }
 }
 
