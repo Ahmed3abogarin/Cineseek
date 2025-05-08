@@ -14,14 +14,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +42,8 @@ import com.movies.cinemix.presentation.common.GenreList
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.common.SliderList
+import com.movies.cinemix.ui.theme.BottomColor
+import com.movies.cinemix.ui.theme.BoxColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
@@ -52,33 +62,44 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .background(MyColor)
-            .padding(top = 20.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+//        Spacer(modifier = Modifier.height(20.dp))
 
         // I added this column to not repeat the padding for the text and the search bar
-        Column(
-            modifier = Modifier
-                .padding(start = 4.dp, end = 4.dp, top = 24.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(10.dp))
-            MySearchBar(
-                text = "",
-                onClick = { navigateToSearch() },
-                onValueChange = {
-
-                },
-                readOnly = true,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-            ) {
+//        Column(
+//            modifier = Modifier
+//                .padding(start = 4.dp, end = 4.dp, top = 24.dp)
+//                .fillMaxWidth(),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Spacer(modifier = Modifier.height(10.dp))
+//            MySearchBar(
+//                text = "",
+//                onClick = { navigateToSearch() },
+//                onValueChange = {
+//
+//                },
+//                readOnly = true,
+//                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+//            ) {
+//            }
+//
+//        }
+        Row(modifier = Modifier.fillMaxWidth().background(BottomColor).statusBarsPadding().padding(top=20.dp),verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
+            IconButton(onClick = {}) {
+                Icon(Icons.Default.Menu, contentDescription = "", tint = Color.White)
+            }
+            Image(painter = painterResource(R.drawable.app_logo), contentDescription = "App logo")
+            IconButton(onClick = {}) {
+                Icon(Icons.Default.Search, contentDescription = "", tint = Color.White)
             }
 
         }
+        HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = Color.White, thickness = 0.2.dp)
+
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(
@@ -90,8 +111,8 @@ fun HomeScreen(
             Text(
                 text = "Trending this week ",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
             Image(
                 painter = painterResource(R.drawable.fire2), contentDescription = null,
@@ -114,13 +135,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding( start = 10.dp, end = 10.dp)
         ) {
             Text(
                 text = "Now playing",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
             Text(
                 "See all",
@@ -144,13 +165,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             Text(
                 text = "What's Popular",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
             Text(
                 "See all",
@@ -178,7 +199,7 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             Row (verticalAlignment = Alignment.CenterVertically){
 
@@ -187,8 +208,8 @@ fun HomeScreen(
                 Text(
                     text = "Upcoming movies",
                     color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
                 )
             }
 
@@ -216,13 +237,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             Text(
                 text = "Top rated",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
             Text(
                 "See all",
@@ -245,14 +266,14 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
 
             Text(
                 text = "Arabic Movies",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
             Text(
                 "See all",
@@ -276,13 +297,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             Text(
                 text = "Marvel Movies",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
             Text(
                 "See all",
@@ -304,13 +325,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             Text(
                 text = "Discover by genre",
                 color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W100
             )
         }
 

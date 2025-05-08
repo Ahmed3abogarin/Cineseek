@@ -78,7 +78,7 @@ fun MoviesBottomNav(
     val indicatorOffset by animateIntOffsetAsState(
         targetValue = IntOffset(
             bottomItems[selectedIndex].offset.x.toInt() + (bottomItems[selectedIndex].size.width / 4) - (bottomItems.count() * 2) + (-2),
-            15
+            15 // space from top of the bottom navigation
         ), animationSpec = tween(400)
     )
     val indicatorColor by animateColorAsState(

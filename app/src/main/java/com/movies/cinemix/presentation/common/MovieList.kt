@@ -376,7 +376,7 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit)
             Text(
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,
-                style = MaterialTheme.typography.titleSmall,
+                fontSize = 12.sp,
                 color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

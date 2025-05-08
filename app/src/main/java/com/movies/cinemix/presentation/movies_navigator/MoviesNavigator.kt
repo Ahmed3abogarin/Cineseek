@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -138,7 +139,6 @@ fun MoviesNavigatorScreen() {
                         )
                     }
                 )
-
             }
             composable(Route.SearchScreen.route) {
                 val viewmodel: SearchViewModel = hiltViewModel()
@@ -179,23 +179,17 @@ fun MoviesNavigatorScreen() {
             }
             composable(
                 Route.DetailsScreen.route,
-                popEnterTransition = {
-                    scaleIn() + expandVertically(
-                        expandFrom = Alignment.CenterVertically,
-                        animationSpec = tween(1000)
-                    )
-                },
+//                popEnterTransition = {
+//                    scaleIn() + expandVertically(
+//                        expandFrom = Alignment.CenterVertically,
+//                        animationSpec = tween(1000)
+//                    )
+//                },
                 enterTransition = {
                     scaleIn() + expandVertically(
                         expandFrom = Alignment.CenterVertically,
                         animationSpec = tween(1000)
                     )
-                },
-                exitTransition = {
-                    slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
-                        // Overwrites the ending position of the slide-out to 200 (pixels) to the right
-                        200
-                    } + fadeOut()
                 }) {
                 if (detailsViewModel.sideEffect != null) {
                     Toast.makeText(
@@ -212,7 +206,7 @@ fun MoviesNavigatorScreen() {
                             detailsViewModel,
                             detailsViewModel::onEvent,
                             navigateUp = {
-                                navController.navigateUp()
+                                navController.popBackStack()
                                 navController.currentBackStackEntry?.savedStateHandle?.remove<Movies>(
                                     "movie"
                                 )
@@ -228,20 +222,7 @@ fun MoviesNavigatorScreen() {
                         )
                     }
             }
-            composable(
-                Route.CastDetailsScreen.route,
-                popExitTransition = {
-                    slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
-                        // Overwrites the ending position of the slide-out to 200 (pixels) to the right
-                        200
-                    } + fadeOut()
-                },
-                exitTransition = {
-                    slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
-                        // Overwrites the ending position of the slide-out to 200 (pixels) to the right
-                        1000
-                    } + fadeOut()
-                }) {
+            composable(Route.CastDetailsScreen.route) {
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
                     ?.let { personId ->
                         CastScreen(
@@ -319,9 +300,7 @@ private fun navigateToAll(navController: NavController, movieCategory: String) {
 // Helper function to navigate to details screen
 private fun navigateToDetails(navController: NavController, movie: Movies) {
     navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
-    navController.navigate(
-        route = Route.DetailsScreen.route
-    )
+    navController.navigate(route = Route.DetailsScreen.route)
 }
 
 private fun navigateToCastDetails(navigator: NavController, personId: Int) {
