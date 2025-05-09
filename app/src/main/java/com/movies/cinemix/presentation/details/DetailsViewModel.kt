@@ -5,12 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.SingleMovie
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val moviesUseCases: MoviesUseCases,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(DetailsState())
@@ -29,12 +30,32 @@ class DetailsViewModel @Inject constructor(
         private set // this mean it can not be changed out side this fucking class
 
 
-    private fun getMovieCast(movieId: Int) {
+    init {
+        savedStateHandle.get<String>("movie_id")?.let {
+            getMovieById(it.toInt())
+            getMovieKey(it.toInt())
+        }
+    }
+
+    private fun getMovieById(id: Int) {
+        viewModelScope.launch {
+            val movie = moviesUseCases.getMovieById(id)
+            _state.value = _state.value.copy(movie = movie)
+            getMovieCast(id)
+            addMovieToLast(movie.id)
+        }
+
+    }
+
+    private suspend fun addMovieToLast(movieId: Int) {
+        moviesUseCases.upsertLastMovie(movieId )
+    }
+
+    private suspend fun getMovieCast(movieId: Int) {
         try {
-            viewModelScope.launch(Dispatchers.IO) {
-                val movies = moviesUseCases.getMovieCast.invoke(movieId = movieId)
-                _state.value = state.value.copy(castList = movies)
-            }
+            val movies = moviesUseCases.getMovieCast.invoke(movieId = movieId)
+            _state.value = state.value.copy(castList = movies)
+
         } catch (e: Exception) {
             Log.v("ERROR", e.message.toString())
         }
@@ -51,8 +72,6 @@ class DetailsViewModel @Inject constructor(
                         _state.value = state.value.copy(movieKey = movieKey.results[0].key)
                     }
                 }
-
-
             }
         } catch (e: Exception) {
             Log.v("ERROR", e.message.toString())
@@ -62,14 +81,6 @@ class DetailsViewModel @Inject constructor(
 
     fun onEvent(event: DetailsEvent) {
         when (event) {
-            is DetailsEvent.UpdateMovieId -> {
-                getMovieCast(event.movieId)
-                getMovieKey(event.movieId)
-            }
-
-            is DetailsEvent.UpdateMovieGenre -> {
-                getMovieGenre(event.genres)
-            }
 
             is DetailsEvent.SaveDeleteMovie -> {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -82,13 +93,18 @@ class DetailsViewModel @Inject constructor(
                 }
             }
 
+            is DetailsEvent.AddLastMovie -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    moviesUseCases.upsertLastMovie(event.movieId)
+                }
+            }
+
             is DetailsEvent.CheckSaveStatus -> {
                 check(event.movieId)
-
             }
 
             is DetailsEvent.CheckTrailerStatus -> {
-                CoroutineScope(Dispatchers.IO).launch {
+                viewModelScope.launch {
                     sideEffect = "Trailer unavailable"
                 }
             }
@@ -103,23 +119,22 @@ class DetailsViewModel @Inject constructor(
     private fun check(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val isSaved = moviesUseCases.getMovie(movieId = movieId) != null
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 _state.value = _state.value.copy(savedStatus = isSaved)
             }
         }
     }
 
-    private fun deleteMovie(movie: Movies) {
+    private fun deleteMovie(movie: SingleMovie) {
         viewModelScope.launch(Dispatchers.IO) {
             moviesUseCases.deleteMovie(movie)
             sideEffect = "Movie deleted :("
             check(movie.id)
-
         }
 
     }
 
-    private fun upsertMovie(movie: Movies) {
+    private fun upsertMovie(movie: SingleMovie) {
         viewModelScope.launch(Dispatchers.IO) {
             moviesUseCases.upsertMovie(movie)
             sideEffect = "Movie Saved"
@@ -127,34 +142,4 @@ class DetailsViewModel @Inject constructor(
 
         }
     }
-
-    private fun getMovieGenre(genreIds: List<Int>) {
-        val genreMap = mapOf(
-            28 to "Action",
-            12 to "Adventure",
-            16 to "Animation",
-            35 to "Comedy",
-            80 to "Crime",
-            99 to "Documentary",
-            18 to "Drama",
-            10751 to "Family",
-            14 to "Fantasy",
-            36 to "History",
-            27 to "Horror",
-            10402 to "Music",
-            9648 to "Mystery",
-            10749 to "Romance",
-            878 to "Science Fiction",
-            10770 to "TV Movie",
-            53 to "Thriller",
-            10752 to "War",
-            37 to "Western"
-        )
-
-        val genres: List<String> = genreIds.mapNotNull { genreMap[it] }
-        _state.value = _state.value.copy(genres = genres)
-
-    }
-
-
 }

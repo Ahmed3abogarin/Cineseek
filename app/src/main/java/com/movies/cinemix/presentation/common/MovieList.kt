@@ -51,6 +51,7 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
+import com.movies.cinemix.SingleMovie
 import com.movies.cinemix.domain.model.Cast
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.ui.theme.Gold
@@ -65,7 +66,7 @@ import kotlin.math.abs
 @Composable
 fun MovieList(
     moviesList: LazyPagingItems<Movies>,
-    onClick: (Movies) -> Unit,
+    onClick: (Int) -> Unit,
 ) {
     val handlePagingResult = handlePagingResult(movies = moviesList)
     val visibleMovies = minOf(20, moviesList.itemCount)
@@ -75,7 +76,7 @@ fun MovieList(
                 moviesList[it]?.let { movie ->
                     val currentMovie = moviesList[it]
                     Column {
-                        MovieCard(movie, onClick = { onClick(currentMovie!!) })
+                        MovieCard(movie, onClick = { onClick(currentMovie!!.id) })
 
                     }
                 }
@@ -87,7 +88,7 @@ fun MovieList(
 }
 
 @Composable
-fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
+fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Int) -> Unit) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 3)
     if (handlePagingResult) {
         val pagerState = rememberPagerState(
@@ -144,7 +145,7 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                     )
 
                 }) {
-                    Box(modifier = Modifier.clickable { onClick(movies[page]!!) }) {
+                    Box(modifier = Modifier.clickable { onClick(movies[page]!!.id) }) {
                         AsyncImage(
                             model = ImageRequest.Builder(context)
                                 .data("https://image.tmdb.org/t/p/w500/" + movies[page]!!.backdrop_path)
@@ -177,7 +178,7 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Movies) -> Unit) {
                             }
                             Button(
                                 onClick = {
-                                    onClick(movies[page]!!)
+                                    onClick(movies[page]!!.id)
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MyRed
@@ -316,6 +317,77 @@ fun handlePagingResult(
 
 @Composable
 fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val context = LocalContext.current
+
+    Column(modifier = Modifier.clickable { onClick() }) {
+        Box {
+
+            Card(
+                modifier = modifier
+                    .height(231.dp)
+                    .width(160.dp)
+                    .padding(3.dp),
+                shape = RoundedCornerShape(10.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Column(modifier = Modifier.background(MyColor2)) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                            .placeholder(R.drawable.place_holder)
+                            .error(R.drawable.place_holder)
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(231.dp)
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+            }
+            Box(
+                Modifier
+                    .padding(top = 10.dp, start = 10.dp)
+                    .align(Alignment.TopStart)
+                    .shadow(2.dp, shape = RoundedCornerShape(30.dp))
+                    .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
+            ) {
+                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                    Icon(
+                        Icons.Rounded.Star,
+                        contentDescription = null,
+                        tint = Gold,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .padding(top = 6.dp)
+                    )
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
+                }
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(7.dp))
+        Box(
+            modifier = Modifier
+                .width(140.dp)
+                .padding(start = 5.dp)
+        ) {
+            Text(
+                modifier = Modifier.padding(3.dp),
+                text = movie.title,
+                fontSize = 12.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+fun LastMovieCard(movie: SingleMovie, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
     Column(modifier = Modifier.clickable { onClick() }) {

@@ -26,7 +26,7 @@ import com.movies.cinemix.ui.theme.MyColor
 @Composable
 fun SeeAllMovies(
     viewModel: SeeAllViewModel,
-    navigateToDetails: (Movies) -> Unit,
+    navigateToDetails: (Int) -> Unit,
     navigateUp: () -> Unit,
 ) {
 
@@ -59,7 +59,7 @@ fun SeeAllMovies(
             val movies = state.movies.collectAsLazyPagingItems()
             GridMoviesList(
                 movies,
-                navigateToDetails = { navigateToDetails(it) },
+                navigateToDetails = { navigateToDetails(it.id) },
             )
 
         }

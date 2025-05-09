@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -16,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -29,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,11 +39,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.GenreList
+import com.movies.cinemix.presentation.common.LastMovieCard
+import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.presentation.common.MovieList
-import com.movies.cinemix.presentation.common.MySearchBar
 import com.movies.cinemix.presentation.common.SliderList
 import com.movies.cinemix.ui.theme.BottomColor
-import com.movies.cinemix.ui.theme.BoxColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 
@@ -53,7 +53,7 @@ fun HomeScreen(
     state: HomeState,
     navigateToAll: (String) -> Unit,
     navigateToSearch: () -> Unit,
-    navigateToDetails: (Movies) -> Unit,
+    navigateToDetails: (Int) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -88,7 +88,15 @@ fun HomeScreen(
 //            }
 //
 //        }
-        Row(modifier = Modifier.fillMaxWidth().background(BottomColor).statusBarsPadding().padding(top=20.dp),verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(BottomColor)
+                .statusBarsPadding()
+                .padding(top = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween
+        ) {
             IconButton(onClick = {}) {
                 Icon(Icons.Default.Menu, contentDescription = "", tint = Color.White)
             }
@@ -98,7 +106,11 @@ fun HomeScreen(
             }
 
         }
-        HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = Color.White, thickness = 0.2.dp)
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.White,
+            thickness = 0.2.dp
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -129,13 +141,45 @@ fun HomeScreen(
             val trendMovies = state.trendWeek.collectAsLazyPagingItems()
             SliderList(movies = trendMovies, onClick = { navigateToDetails(it) })
         }
+        state.lastMovies?.let {
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp)
+            ) {
+                Text(
+                    text = "Last viewed",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+                Text(
+                    "See all",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    modifier = Modifier.clickable(onClick = {
+                        navigateToAll("nowPlaying")
+                    })
+                )
+            }
+
+            LazyRow {
+                items(it) { movie ->
+                    LastMovieCard(movie) {  }
+                }
+            }
+        }
+
 
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             Text(
                 text = "Now playing",
@@ -201,9 +245,12 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
-            Row (verticalAlignment = Alignment.CenterVertically){
+            Row(verticalAlignment = Alignment.CenterVertically) {
 
-                Box(modifier = Modifier.height(20.dp).width(8.dp).background(MyRed))
+                Box(modifier = Modifier
+                    .height(20.dp)
+                    .width(8.dp)
+                    .background(MyRed))
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Upcoming movies",
@@ -336,7 +383,9 @@ fun HomeScreen(
         }
 
         GenreList(navigateToGenre = { navigateToAll(it) })
-        Spacer(modifier = Modifier.navigationBarsPadding().height(110.dp) )
+        Spacer(modifier = Modifier
+            .navigationBarsPadding()
+            .height(110.dp))
     }
 }
 

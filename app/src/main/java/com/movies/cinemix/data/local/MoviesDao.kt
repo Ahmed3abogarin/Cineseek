@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.SingleMovie
 import kotlinx.coroutines.flow.Flow
 
 
@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
 interface MoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(movie: Movies)
+    suspend fun upsert(movie: SingleMovie)
 
     @Delete
-    fun delete(movie: Movies)
+    fun delete(movie: SingleMovie)
 
-    @Query("SELECT * FROM Movies")
-    fun getMovies(): Flow<List<Movies>>
+    @Query("SELECT * FROM SingleMovie")
+    fun getMovies(): Flow<List<SingleMovie>>
 
-    @Query("SELECT * FROM Movies WHERE id =:movieId")
-    fun getMovie(movieId: Int): Movies?
+    @Query("SELECT * FROM SingleMovie WHERE id =:movieId")
+    fun getMovie(movieId: Int): SingleMovie?
 }

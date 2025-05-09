@@ -1,13 +1,13 @@
 package com.movies.cinemix.presentation.details
 
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.SingleMovie
 
 sealed class DetailsEvent {
-    data class UpdateMovieId(val movieId: Int) : DetailsEvent()
-    data class UpdateMovieGenre(val genres: List<Int>) : DetailsEvent()
 
-    data class SaveDeleteMovie(val movie: Movies) : DetailsEvent()
+    data class SaveDeleteMovie(val movie: SingleMovie) : DetailsEvent()
     data object RemoveSideEffect : DetailsEvent()
+
+    data class AddLastMovie(val movieId: Int): DetailsEvent()
 
     data class CheckSaveStatus(val movieId: Int) : DetailsEvent()
     data object CheckTrailerStatus : DetailsEvent()

@@ -66,7 +66,7 @@ fun CastScreen(
     event: (CastEvent) -> Unit,
     state: CastState,
     navigateUp: () -> Unit,
-    navigateToDetails: (Movies) -> Unit,
+    navigateToDetails: (Int) -> Unit,
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -328,7 +328,7 @@ fun CastScreen(
                         LazyRow {
                             items(personMovies.itemCount) { index ->
                                 personMovies[index]?.let { movie ->
-                                    MovieCard(movie) { navigateToDetails(movie) }
+                                    MovieCard(movie) { navigateToDetails(movie.id) }
                                 }
                             }
                         }

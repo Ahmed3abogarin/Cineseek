@@ -1,6 +1,7 @@
 package com.movies.cinemix.presentation.home
 
 import androidx.paging.PagingData
+import com.movies.cinemix.SingleMovie
 import com.movies.cinemix.domain.model.Movies
 import kotlinx.coroutines.flow.Flow
 
@@ -12,4 +13,6 @@ data class HomeState(
     val marvelMovies: Flow<PagingData<Movies>>? = null,
     val trendWeek: Flow<PagingData<Movies>>? = null,
     val arabicMovies: Flow<PagingData<Movies>>? = null,
+
+    val lastMovies: List<SingleMovie>? = null,
 )

@@ -1,5 +1,9 @@
 package com.movies.cinemix.domain.usecases.movies
 
+import com.movies.cinemix.domain.usecases.GetLastMovies
+import com.movies.cinemix.domain.usecases.GetMovieById
+import com.movies.cinemix.domain.usecases.UpsertLastMovie
+
 data class MoviesUseCases (
     val getNowPlayingMovies: GetNowPlayingMovies,
     val getPopularMovies: GetPopularMovies,
@@ -20,5 +24,10 @@ data class MoviesUseCases (
     val getMovie: GetMovie,
 
     val getPersonInfo: GetPersonInfo,
-    val getPersonMovies: GetPersonMovies
+    val getPersonMovies: GetPersonMovies,
+
+    val upsertLastMovie: UpsertLastMovie,
+    val getLastMovies: GetLastMovies,
+
+    val getMovieById: GetMovieById
 )

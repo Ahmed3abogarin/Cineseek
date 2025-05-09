@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.EmptySearch
 import com.movies.cinemix.presentation.common.GridMoviesList
 import com.movies.cinemix.presentation.common.MySearchBar
@@ -22,7 +21,7 @@ import com.movies.cinemix.ui.theme.MyColor
 fun SearchScreen(
     state: SearchState,
     event: (SearchEvent) -> Unit,
-    navigateToDetails: (Movies) -> Unit,
+    navigateToDetails: (Int) -> Unit,
 ) {
 
     Column(
@@ -47,7 +46,7 @@ fun SearchScreen(
         }
         state.moviesList?.let { movieList ->
             val movies = movieList.collectAsLazyPagingItems()
-            GridMoviesList(movies = movies, navigateToDetails = navigateToDetails)
+            GridMoviesList(movies = movies, navigateToDetails = {navigateToDetails(it.id)})
         }
 
     }

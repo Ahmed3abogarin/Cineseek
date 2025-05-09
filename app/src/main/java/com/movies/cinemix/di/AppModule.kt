@@ -2,6 +2,7 @@ package com.movies.cinemix.di
 
 import android.app.Application
 import androidx.room.Room
+import com.movies.cinemix.data.local.LastMoviesDao
 import com.movies.cinemix.data.local.MovieDatabase
 import com.movies.cinemix.data.local.MoviesDao
 import com.movies.cinemix.data.local.MoviesTypeConverter
@@ -10,6 +11,9 @@ import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.repository.MoviesRepositoryImpl
 import com.movies.cinemix.domain.manager.LocalUserManager
 import com.movies.cinemix.domain.repository.MoviesRepository
+import com.movies.cinemix.domain.usecases.GetLastMovies
+import com.movies.cinemix.domain.usecases.GetMovieById
+import com.movies.cinemix.domain.usecases.UpsertLastMovie
 import com.movies.cinemix.domain.usecases.movies.DeleteMovie
 import com.movies.cinemix.domain.usecases.movies.GetArabicMovies
 import com.movies.cinemix.domain.usecases.movies.GetGenreMovies
@@ -75,7 +79,10 @@ object AppModule {
         getMovie = GetMovie(moviesRepository),
         getPersonInfo = GetPersonInfo(moviesRepository),
         getPersonMovies = GetPersonMovies(moviesRepository),
-        getMarvelMovies = GetMarvelMovies(moviesRepository)
+        getMarvelMovies = GetMarvelMovies(moviesRepository),
+        getLastMovies = GetLastMovies(moviesRepository),
+        upsertLastMovie = UpsertLastMovie(moviesRepository),
+        getMovieById = GetMovieById(moviesRepository)
     )
 
     @Provides
@@ -83,7 +90,8 @@ object AppModule {
     fun provideMovieRepository(
         api: MoviesApi,
         moviesDao: MoviesDao,
-    ): MoviesRepository = MoviesRepositoryImpl(api, moviesDao)
+        lastMoviesDao: LastMoviesDao
+    ): MoviesRepository = MoviesRepositoryImpl(api, moviesDao,lastMoviesDao)
 
 
     @Provides
@@ -105,6 +113,12 @@ object AppModule {
     fun provideMoviesDao(
         moviesDatabase: MovieDatabase,
     ): MoviesDao = moviesDatabase.moviesDao
+
+    @Provides
+    @Singleton
+    fun provideLastMoviesDao(
+        moviesDatabase: MovieDatabase,
+    ): LastMoviesDao = moviesDatabase.lastMoviesDao
 
 
     @Provides

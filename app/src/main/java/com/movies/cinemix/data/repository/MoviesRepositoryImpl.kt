@@ -4,10 +4,13 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.movies.cinemix.SingleMovie
+import com.movies.cinemix.data.local.LastMoviesDao
 import com.movies.cinemix.data.local.MoviesDao
 import com.movies.cinemix.data.remote.MoviesApi
 import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
+import com.movies.cinemix.domain.model.LastMovies
 import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
@@ -17,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
     private val moviesDao: MoviesDao,
+    private val lastMoviesDao: LastMoviesDao
 ) : MoviesRepository {
     override fun getNowPlayingMovies(): Flow<PagingData<Movies>> {
         return Pager(
@@ -25,8 +29,6 @@ class MoviesRepositoryImpl(
                 MoviesPaging { page -> moviesApi.getNowPlayingMovies(page) }
             }
         ).flow
-
-
     }
 
     override fun getPopularMovies(): Flow<PagingData<Movies>> {
@@ -111,19 +113,19 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun upsertMovie(movie: Movies) {
+    override suspend fun upsertMovie(movie: SingleMovie) {
         moviesDao.upsert(movie)
     }
 
-    override suspend fun deleteMovie(movie: Movies) {
+    override suspend fun deleteMovie(movie: SingleMovie) {
         moviesDao.delete(movie)
     }
 
-    override fun getMovies(): Flow<List<Movies>> {
+    override fun getMovies(): Flow<List<SingleMovie>> {
         return moviesDao.getMovies()
     }
 
-    override fun getMovie(movieId: Int): Movies? {
+    override fun getMovie(movieId: Int): SingleMovie? {
         return moviesDao.getMovie(movieId)
     }
 
@@ -147,5 +149,17 @@ class MoviesRepositoryImpl(
                 MoviesPaging { page -> moviesApi.getArabicMovies(page = page) }
             }
         ).flow
+    }
+
+    override suspend fun upsertLastMovie(movieId: Int) {
+        lastMoviesDao.upsertMovie(LastMovies(movieId))
+    }
+
+    override fun getLastMovies(): Flow<List<Int>> {
+        return lastMoviesDao.getLastMovies()
+    }
+
+    override suspend fun getMovieById(movieId: Int): SingleMovie {
+        return moviesApi.getMovieById(movieId)
     }
 }

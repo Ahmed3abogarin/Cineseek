@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.EmptyScreen
 import com.movies.cinemix.presentation.common.FavoriteList
 import com.movies.cinemix.ui.theme.MyColor
@@ -21,7 +20,7 @@ import com.movies.cinemix.ui.theme.MyColor
 @Composable
 fun FavoriteScreen(
     state: FavoriteState,
-    onClick: (Movies) -> Unit,
+    onClick: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier

@@ -1,7 +1,7 @@
 package com.movies.cinemix.presentation.favorite
 
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.SingleMovie
 
 data class FavoriteState(
-    val favoriteMovies: List<Movies> = emptyList()
+    val favoriteMovies: List<SingleMovie> = emptyList()
 )

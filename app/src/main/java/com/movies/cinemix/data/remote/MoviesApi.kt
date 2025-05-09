@@ -1,6 +1,7 @@
 package com.movies.cinemix.data.remote
 
 import com.movies.cinemix.BuildConfig
+import com.movies.cinemix.SingleMovie
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.MovieResponse
@@ -99,5 +100,12 @@ interface MoviesApi {
         @Query("page") page: Int,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
     ): MovieResponse
+
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieById(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY
+    ): SingleMovie
 
 }

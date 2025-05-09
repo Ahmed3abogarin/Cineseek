@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.SingleMovie
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyRed
@@ -46,8 +46,8 @@ import java.util.Locale
 
 @Composable
 fun FavoriteList(
-    movies: List<Movies>,
-    onClick: (Movies) -> Unit,
+    movies: List<SingleMovie>,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -58,7 +58,7 @@ fun FavoriteList(
             movies[it].let { movie ->
                 val currentMovie = movies[it]
                 Column {
-                    FavoriteCard(movie = movie, onClick = { onClick(currentMovie) }, navigateToDetails = {onClick(currentMovie)})
+                    FavoriteCard(movie = movie, onClick = { onClick(currentMovie.id) }, navigateToDetails = {onClick(currentMovie.id)})
 
                 }
             }
@@ -72,7 +72,7 @@ fun FavoriteList(
 
 @Composable
 fun FavoriteCard(
-    movie: Movies,
+    movie: SingleMovie,
     onClick: () -> Unit,
     navigateToDetails: () -> Unit,
 ) {

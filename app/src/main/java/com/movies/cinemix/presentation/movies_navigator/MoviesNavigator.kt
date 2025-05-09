@@ -1,14 +1,14 @@
 package com.movies.cinemix.presentation.movies_navigator
 
 import android.widget.Toast
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +36,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.castdetails.CastScreen
 import com.movies.cinemix.presentation.castdetails.CastViewModel
 import com.movies.cinemix.presentation.details.DetailsEvent
@@ -58,8 +57,7 @@ import com.movies.cinemix.ui.theme.MyPink
 
 @Composable
 fun MoviesNavigatorScreen() {
-    val detailsViewModel: DetailsViewModel = hiltViewModel()
-    val homeViewmodel: HomeViewModel = hiltViewModel()
+
     val castViewModel: CastViewModel = hiltViewModel()
 
 
@@ -113,9 +111,12 @@ fun MoviesNavigatorScreen() {
     ) {
         NavHost(
             navController,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
             startDestination = Route.HomeScreen.route,
         ) {
             composable(Route.HomeScreen.route) {
+                val homeViewmodel: HomeViewModel = hiltViewModel()
                 val state = homeViewmodel.state.value
 
                 HomeScreen(
@@ -129,7 +130,7 @@ fun MoviesNavigatorScreen() {
                     navigateToDetails = {
                         navigateToDetails(
                             navController = navController,
-                            movie = it
+                            movieId = it
                         )
                     },
                     navigateToSearch = {
@@ -149,7 +150,7 @@ fun MoviesNavigatorScreen() {
                     navigateToDetails = {
                         navigateToDetails(
                             navController = navController,
-                            movie = it
+                            movieId = it
                         )
                     }
                 )
@@ -160,7 +161,7 @@ fun MoviesNavigatorScreen() {
                 FavoriteScreen(state, onClick = {
                     navigateToDetails(
                         navController = navController,
-                        movie = it
+                        movieId = it
                     )
                 })
             }
@@ -171,26 +172,46 @@ fun MoviesNavigatorScreen() {
                     navigateToDetails = {
                         navigateToDetails(
                             navController = navController,
-                            movie = it
+                            movieId = it
                         )
                     },
                     navigateUp = { navController.navigateUp() }
                 )
             }
             composable(
-                Route.DetailsScreen.route,
+                "${Route.DetailsScreen.route}/{movie_id}",
 //                popEnterTransition = {
 //                    scaleIn() + expandVertically(
 //                        expandFrom = Alignment.CenterVertically,
 //                        animationSpec = tween(1000)
 //                    )
 //                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { x -> -x }, // Back-enter from left
+                        animationSpec = tween(durationMillis = 600)
+                    )
+                },
+                popExitTransition = {
+                    scaleOut() + shrinkVertically(
+                        shrinkTowards = Alignment.Top,
+                        animationSpec = tween(1000)
+                    )
+                },
+                exitTransition = {
+                    scaleOut() + shrinkVertically(
+                      shrinkTowards = Alignment.Top,
+                        animationSpec = tween(1000)
+                    )
+                },
                 enterTransition = {
                     scaleIn() + expandVertically(
                         expandFrom = Alignment.CenterVertically,
                         animationSpec = tween(1000)
                     )
                 }) {
+                val detailsViewModel: DetailsViewModel = hiltViewModel()
+
                 if (detailsViewModel.sideEffect != null) {
                     Toast.makeText(
                         LocalContext.current,
@@ -199,28 +220,23 @@ fun MoviesNavigatorScreen() {
                     ).show()
                     detailsViewModel.onEvent(DetailsEvent.RemoveSideEffect)
                 }
-                navController.previousBackStackEntry?.savedStateHandle?.get<Movies>("movie")
-                    ?.let { movie ->
-                        DetailsScreen(
-                            movie,
-                            detailsViewModel,
-                            detailsViewModel::onEvent,
-                            navigateUp = {
-                                navController.popBackStack()
-                                navController.currentBackStackEntry?.savedStateHandle?.remove<Movies>(
-                                    "movie"
-                                )
 
-                            },
-                            lifecycleOwner = lifecycleOwner,
-                            navigateToCastDetails = {
-                                navigateToCastDetails(
-                                    navigator = navController,
-                                    personId = it
-                                )
-                            }
+                DetailsScreen(
+                    state = detailsViewModel.state.value,
+                    event = detailsViewModel::onEvent,
+                    navigateUp = {
+                        navController.navigateUp()
+
+                    },
+                    lifecycleOwner = lifecycleOwner,
+                    navigateToCastDetails = {
+                        navigateToCastDetails(
+                            navigator = navController,
+                            personId = it
                         )
                     }
+                )
+
             }
             composable(Route.CastDetailsScreen.route) {
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("person_id")
@@ -236,7 +252,7 @@ fun MoviesNavigatorScreen() {
                             navigateToDetails = {
                                 navigateToDetails(
                                     navController = navController,
-                                    movie = it
+                                    movieId = it
                                 )
                             }
                         )
@@ -298,9 +314,8 @@ private fun navigateToAll(navController: NavController, movieCategory: String) {
 }
 
 // Helper function to navigate to details screen
-private fun navigateToDetails(navController: NavController, movie: Movies) {
-    navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
-    navController.navigate(route = Route.DetailsScreen.route)
+private fun navigateToDetails(navController: NavController, movieId: Int) {
+    navController.navigate(route = "${Route.DetailsScreen.route}/$movieId")
 }
 
 private fun navigateToCastDetails(navigator: NavController, personId: Int) {
