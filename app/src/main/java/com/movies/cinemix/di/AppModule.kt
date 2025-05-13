@@ -13,6 +13,7 @@ import com.movies.cinemix.domain.manager.LocalUserManager
 import com.movies.cinemix.domain.repository.MoviesRepository
 import com.movies.cinemix.domain.usecases.GetLastMovies
 import com.movies.cinemix.domain.usecases.GetMovieById
+import com.movies.cinemix.domain.usecases.GetRandomMovie
 import com.movies.cinemix.domain.usecases.UpsertLastMovie
 import com.movies.cinemix.domain.usecases.movies.DeleteMovie
 import com.movies.cinemix.domain.usecases.movies.GetArabicMovies
@@ -82,7 +83,8 @@ object AppModule {
         getMarvelMovies = GetMarvelMovies(moviesRepository),
         getLastMovies = GetLastMovies(moviesRepository),
         upsertLastMovie = UpsertLastMovie(moviesRepository),
-        getMovieById = GetMovieById(moviesRepository)
+        getMovieById = GetMovieById(moviesRepository),
+        getRandomMovie = GetRandomMovie(moviesRepository)
     )
 
     @Provides
@@ -104,7 +106,7 @@ object AppModule {
             klass = MovieDatabase::class.java,
             name = "movies_db" // gotta move to constant
         ).addTypeConverter(MoviesTypeConverter())
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(false)
             .build()
     }
 

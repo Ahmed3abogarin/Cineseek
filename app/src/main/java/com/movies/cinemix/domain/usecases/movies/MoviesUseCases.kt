@@ -2,6 +2,7 @@ package com.movies.cinemix.domain.usecases.movies
 
 import com.movies.cinemix.domain.usecases.GetLastMovies
 import com.movies.cinemix.domain.usecases.GetMovieById
+import com.movies.cinemix.domain.usecases.GetRandomMovie
 import com.movies.cinemix.domain.usecases.UpsertLastMovie
 
 data class MoviesUseCases (
@@ -29,5 +30,7 @@ data class MoviesUseCases (
     val upsertLastMovie: UpsertLastMovie,
     val getLastMovies: GetLastMovies,
 
-    val getMovieById: GetMovieById
+    val getMovieById: GetMovieById,
+
+    val getRandomMovie: GetRandomMovie
 )

@@ -13,4 +13,7 @@ sealed class Route(
     data object MoviesNavigatorScreen: Route(route = "moviesNavigationScreen")
     data object AppStartNavigation : Route(route = "appStartNavigation")
     data object OnBoardingScreen: Route(route = "onBoardingScreen")
+
+    data object RandomMovieScreen: Route(route = "randomMovieScreen")
+    data object MoviePickerScreen: Route(route = "moviePickerScreen")
 }

@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.movies.cinemix.SingleMovie
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.MovieKeyResponse
+import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
 import kotlinx.coroutines.flow.Flow
@@ -51,5 +52,6 @@ interface MoviesRepository {
 
     suspend fun getMovieById(movieId: Int): SingleMovie
 
+    suspend fun getRandomMovie(page: Int):MovieResponse?
 
 }

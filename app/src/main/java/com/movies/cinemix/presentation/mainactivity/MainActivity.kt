@@ -9,6 +9,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.movies.cinemix.presentation.MoviePickerScreen
+import com.movies.cinemix.presentation.PickerViewModel
 import com.movies.cinemix.presentation.navGraph.NavGraph
 import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
@@ -32,12 +35,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             CinemixTheme {
                 val startDestination = viewmodel.startDestination
+                val viewmodel: PickerViewModel = hiltViewModel()
+                MoviePickerScreen(viewmodel.state.value,viewmodel)
                 Box(modifier = Modifier.background(MyColor)) {
                     NavGraph(startDestination = startDestination)
                 }
-
-
-
             }
         }
     }

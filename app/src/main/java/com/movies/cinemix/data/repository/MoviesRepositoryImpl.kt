@@ -12,6 +12,7 @@ import com.movies.cinemix.data.remote.MoviesPaging
 import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.LastMovies
 import com.movies.cinemix.domain.model.MovieKeyResponse
+import com.movies.cinemix.domain.model.MovieResponse
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.Flow
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
     private val moviesDao: MoviesDao,
-    private val lastMoviesDao: LastMoviesDao
+    private val lastMoviesDao: LastMoviesDao,
 ) : MoviesRepository {
     override fun getNowPlayingMovies(): Flow<PagingData<Movies>> {
         return Pager(
@@ -161,5 +162,14 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieById(movieId: Int): SingleMovie {
         return moviesApi.getMovieById(movieId)
+    }
+
+    override suspend fun getRandomMovie(page: Int): MovieResponse? {
+        return try {
+            return moviesApi.getRandomMovie(page = page)
+        }catch (e:Exception){
+            Log.v("TTOO","The error: ${e.message}")
+            null
+        }
     }
 }

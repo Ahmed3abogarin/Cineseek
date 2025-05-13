@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,6 +37,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.movies.cinemix.presentation.MoviePickerScreen
+import com.movies.cinemix.presentation.PickerViewModel
+import com.movies.cinemix.presentation.RandomMovieScreen
 import com.movies.cinemix.presentation.castdetails.CastScreen
 import com.movies.cinemix.presentation.castdetails.CastViewModel
 import com.movies.cinemix.presentation.details.DetailsEvent
@@ -70,6 +74,10 @@ fun MoviesNavigatorScreen() {
                 color = Color(0xFFFF0000)
             ),
             BottomItem(
+                icon = Icons.Rounded.Star,
+                color = Color(0xFFFF0000)
+            ),
+            BottomItem(
                 icon = Icons.Rounded.Search,
                 color = MyGreen
             ),
@@ -89,9 +97,11 @@ fun MoviesNavigatorScreen() {
     selectedItem = remember(key1 = backstackState) {
         when (backstackState?.destination?.route) {
             Route.HomeScreen.route -> 0
-            Route.SearchScreen.route -> 1
-            Route.FavoriteScreen.route -> 2
-            else -> 0
+            Route.RandomMovieScreen.route -> 1
+            Route.MoviePickerScreen.route -> 1
+            Route.SearchScreen.route -> 2
+            Route.FavoriteScreen.route -> 3
+            else -> selectedItem
         }
 
     }
@@ -101,7 +111,9 @@ fun MoviesNavigatorScreen() {
     val isBottomBarVisible = remember(key1 = backstackState) {
         backstackState?.destination?.route == Route.HomeScreen.route ||
                 backstackState?.destination?.route == Route.SearchScreen.route ||
-                backstackState?.destination?.route == Route.FavoriteScreen.route
+                backstackState?.destination?.route == Route.FavoriteScreen.route ||
+                backstackState?.destination?.route == Route.RandomMovieScreen.route ||
+                backstackState?.destination?.route == Route.MoviePickerScreen.route
     }
 
 
@@ -113,7 +125,7 @@ fun MoviesNavigatorScreen() {
             navController,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
-            startDestination = Route.HomeScreen.route,
+            startDestination = Route.RandomMovieScreen.route,
         ) {
             composable(Route.HomeScreen.route) {
                 val homeViewmodel: HomeViewModel = hiltViewModel()
@@ -200,7 +212,7 @@ fun MoviesNavigatorScreen() {
                 },
                 exitTransition = {
                     scaleOut() + shrinkVertically(
-                      shrinkTowards = Alignment.Top,
+                        shrinkTowards = Alignment.Top,
                         animationSpec = tween(1000)
                     )
                 },
@@ -259,13 +271,25 @@ fun MoviesNavigatorScreen() {
                     }
             }
 
+            composable(Route.MoviePickerScreen.route) {
+                val viewmodel: PickerViewModel = hiltViewModel()
+                MoviePickerScreen(viewmodel.state.value, viewmodel)
+
+            }
+
+            composable(Route.RandomMovieScreen.route) {
+                RandomMovieScreen {
+                    navController.navigate(Route.MoviePickerScreen.route)
+                }
+            }
+
         }
 
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
-                .padding(bottom = 25.dp)
+                .padding(bottom = 22.dp)
         ) {
             if (isBottomBarVisible) {
                 MoviesBottomNav(
@@ -279,11 +303,16 @@ fun MoviesNavigatorScreen() {
                             )
 
                             1 -> navigateToTab(
+                                navController,
+                                route = Route.RandomMovieScreen.route
+                            )
+
+                            2 -> navigateToTab(
                                 navController = navController,
                                 route = Route.SearchScreen.route
                             )
 
-                            2 -> navigateToTab(
+                            3 -> navigateToTab(
                                 navController = navController,
                                 route = Route.FavoriteScreen.route
                             )
