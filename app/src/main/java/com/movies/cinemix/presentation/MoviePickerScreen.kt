@@ -1,6 +1,9 @@
 package com.movies.cinemix.presentation
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -13,6 +16,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -34,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -64,6 +70,8 @@ import com.movies.cinemix.ui.theme.BorderColor
 import com.movies.cinemix.ui.theme.BoxColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
@@ -71,6 +79,8 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
     var isPlaying by remember { mutableStateOf(true) }
 
     var rotated by remember { mutableStateOf(false) }
+
+    var flipTxt by remember { mutableStateOf("flip the card") }
 
     val roater by animateFloatAsState(
         targetValue = if (rotated) 180f else 0f,
@@ -120,14 +130,13 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
             RandomMoviesLoading()
         }
         isPlaying = false
-
-        AnimatedVisibility(
-            visible = !showLoading,
-            enter = fadeIn() + scaleIn(tween(2000)),
-            exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
-        ) {
-            movie?.let {
-                val imageRequest = remember(it.poster_path) {
+        movie?.let {
+            AnimatedVisibility(
+                visible = !showLoading,
+                enter = fadeIn() + scaleIn(tween(300)),
+                exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
+            ) {
+                val imageRequest = remember {
                     ImageRequest.Builder(context)
                         .data("https://image.tmdb.org/t/p/w500/${it.poster_path}")
                         .build()
@@ -136,12 +145,10 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
 
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "flip the card", color = Color.White, fontSize = 22.sp)
+                    Text(text = flipTxt, color = Color.White, fontSize = 22.sp)
                     Spacer(modifier = Modifier.height(16.dp))
                     Card(
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(229.dp)
                             .graphicsLayer {
                                 rotationY = roater
                                 cameraDistance = 8 * density
@@ -149,7 +156,6 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
                             .clickable { rotated = !rotated },
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                        elevation = CardDefaults.cardElevation(6.dp)
                     ) {
                         if (!rotated) {
                             Image(
@@ -166,7 +172,8 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
 
 
                         } else {
-                            MoviePoster(imagePainter, it.title, roater)
+                            flipTxt = ""
+                            MoviePoster(imagePainter, it, roater)
                         }
 
                     }
@@ -190,7 +197,6 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = BoxColor),
                 border = BorderStroke(width = 1.dp, color = BorderColor),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
                 onClick = {
                     rotated = false
                     viewModel.getRandomMovies()
@@ -209,26 +215,86 @@ fun MoviePickerScreen(movie: Movies?, viewModel: PickerViewModel) {
 }
 
 @Composable
-fun MoviePoster(image: AsyncImagePainter, title: String, roater: Float) {
-    Column {
+fun MoviePoster(image: AsyncImagePainter, movie: Movies, roater: Float) {
+    var showOverview by remember { mutableStateOf(false) }
+    val coroutine = rememberCoroutineScope()
 
-        Image(
-            painter = image,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(229.dp, 300.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .graphicsLayer {
-                    rotationY = roater
+
+    val targetWidth = if (showOverview) 171.dp else 229.dp
+    val targetHeight = if (showOverview) 242.dp else 300.dp
+
+    val scaleW by animateDpAsState(targetValue = targetWidth, animationSpec = tween(500))
+    val scaleH by animateDpAsState(targetValue = targetHeight, animationSpec = tween(500))
+
+    LaunchedEffect(false) {
+        coroutine.launch {
+            showOverview = false
+            delay(1500)
+            showOverview = true
+        }
+
+    }
+
+    Column(modifier = Modifier.graphicsLayer {
+        rotationY = roater
+    }, horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Row(
+            modifier = Modifier.animateContentSize(
+                animationSpec = tween(
+                    500,
+                    easing = LinearOutSlowInEasing
+                )
+            )
+        ) {
+            Image(
+                painter = image,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(scaleW, scaleH)
+                    .clip(RoundedCornerShape(16.dp))
+                    .graphicsLayer {
+                        rotationY = roater
+                    }
+
+            )
+            if (showOverview) {
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(
+                        text = "overview",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = movie.overview,
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        maxLines = 5,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
+            }
+        }
 
-        )
+
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = "Today's movie is", color = Color.White, fontSize = 14.sp)
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(text = title, color = MyRed, fontSize = 26.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier
+                .height(12.dp)
+        )
+        Text(text = movie.title, color = MyRed, fontSize = 34.sp, fontWeight = FontWeight.SemiBold)
+        Spacer(
+            modifier = Modifier
+                .height(12.dp)
+
+        )
     }
 
 }

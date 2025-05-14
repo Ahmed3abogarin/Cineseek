@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class PickerViewModel @Inject constructor(
     private val _state = mutableStateOf<Movies?>(null)
     val state = _state
     fun getRandomMovies(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.value = null
             delay(5000)
             val page = (1..500).random()

@@ -78,8 +78,9 @@ fun MoviesBottomNav(
     val indicatorOffset by animateIntOffsetAsState(
         targetValue = IntOffset(
             bottomItems[selectedIndex].offset.x.toInt() + (bottomItems[selectedIndex].size.width / 4) - (bottomItems.count() * 2) + (-2),
-            15 // space from top of the bottom navigation
-        ), animationSpec = tween(400)
+            15
+        ),
+        animationSpec = tween(400)
     )
     val indicatorColor by animateColorAsState(
         targetValue = bottomItems[selectedIndex].color,
@@ -187,7 +188,7 @@ fun MoviesBottomNav(
                             val triangleWidth = size.width * 0.8f //relative triangle width
                             val triangleHeight = size.height * 1.5f //relative triangle height
 
-                            path.moveTo(size.width * 1.1f, 0f) //relative x move
+                            path.moveTo(size.width - 2f, 0f) //relative x move
                             path.lineTo(size.width - triangleWidth, 0f)
                             path.lineTo(size.height - triangleHeight * 0.8f, triangleHeight)
                             path.lineTo(size.height + triangleWidth * 0.5f, triangleHeight)
