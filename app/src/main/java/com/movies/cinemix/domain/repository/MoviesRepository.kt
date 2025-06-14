@@ -48,7 +48,7 @@ interface MoviesRepository {
     fun getArabicMovies(): Flow<PagingData<Movies>>
 
     suspend fun upsertLastMovie(movieId: Int)
-    fun getLastMovies() : Flow<List<Int>>
+    suspend fun getLastMovies() : List<SingleMovie>
 
     suspend fun getMovieById(movieId: Int): SingleMovie
 

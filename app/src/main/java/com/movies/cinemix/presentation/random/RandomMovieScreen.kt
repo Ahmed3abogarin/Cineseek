@@ -1,4 +1,4 @@
-package com.movies.cinemix.presentation
+package com.movies.cinemix.presentation.random
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,10 +35,14 @@ fun RandomMovieScreen(navigateToMoviePicker: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .background(MyColor),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.padding(top = 56.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = "Random\nMovie Picker",
                 fontSize = 38.sp,

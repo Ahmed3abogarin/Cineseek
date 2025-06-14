@@ -16,4 +16,6 @@ sealed class Route(
 
     data object RandomMovieScreen: Route(route = "randomMovieScreen")
     data object MoviePickerScreen: Route(route = "moviePickerScreen")
+
+    data object FullScreen: Route(route = "fullScreen")
 }

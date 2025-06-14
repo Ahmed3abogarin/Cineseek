@@ -37,10 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.R
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.GenreList
 import com.movies.cinemix.presentation.common.LastMovieCard
-import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.SliderList
 import com.movies.cinemix.ui.theme.BottomColor
@@ -66,28 +64,6 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-//        Spacer(modifier = Modifier.height(20.dp))
-
-        // I added this column to not repeat the padding for the text and the search bar
-//        Column(
-//            modifier = Modifier
-//                .padding(start = 4.dp, end = 4.dp, top = 24.dp)
-//                .fillMaxWidth(),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Spacer(modifier = Modifier.height(10.dp))
-//            MySearchBar(
-//                text = "",
-//                onClick = { navigateToSearch() },
-//                onValueChange = {
-//
-//                },
-//                readOnly = true,
-//                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-//            ) {
-//            }
-//
-//        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +77,7 @@ fun HomeScreen(
                 Icon(Icons.Default.Menu, contentDescription = "", tint = Color.White)
             }
             Image(painter = painterResource(R.drawable.app_logo), contentDescription = "App logo")
-            IconButton(onClick = {}) {
+            IconButton(onClick = { navigateToSearch() }) {
                 Icon(Icons.Default.Search, contentDescription = "", tint = Color.White)
             }
 
@@ -120,17 +96,26 @@ fun HomeScreen(
                 .align(Alignment.Start)
                 .padding(start = 10.dp)
         ) {
-            Text(
-                text = "Trending this week ",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Trending this week ",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+            }
+
             Image(
                 painter = painterResource(R.drawable.fire2), contentDescription = null,
                 modifier = Modifier
-                    .size(28.dp)
-
+                    .size(24.dp)
             )
         }
 
@@ -150,12 +135,22 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp)
             ) {
-                Text(
-                    text = "Last viewed",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .height(20.dp)
+                            .width(4.dp)
+                            .background(MyRed)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "Last viewed",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.W100
+                    )
+                }
+
                 Text(
                     "See all",
                     color = Color.White,
@@ -168,7 +163,7 @@ fun HomeScreen(
 
             LazyRow {
                 items(it) { movie ->
-                    LastMovieCard(movie) {  }
+                    LastMovieCard(movie) { }
                 }
             }
         }
@@ -181,12 +176,22 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
-            Text(
-                text = "Now playing",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Now playing",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+            }
+
             Text(
                 "See all",
                 color = Color.White,
@@ -211,12 +216,23 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
-            Text(
-                text = "What's Popular",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "What's Popular",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+
+            }
+
             Text(
                 "See all",
                 color = Color.White,
@@ -231,7 +247,8 @@ fun HomeScreen(
         state.popularMovies?.let {
             MovieList(
                 moviesList = state.popularMovies.collectAsLazyPagingItems(),
-                onClick = { navigateToDetails(it) })
+                onClick = { navigateToDetails(it) }
+            )
         }
 
 
@@ -247,10 +264,12 @@ fun HomeScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
-                Box(modifier = Modifier
-                    .height(20.dp)
-                    .width(8.dp)
-                    .background(MyRed))
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Upcoming movies",
@@ -286,12 +305,22 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
-            Text(
-                text = "Top rated",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Top rated",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+            }
+
             Text(
                 "See all",
                 color = Color.White,
@@ -305,7 +334,8 @@ fun HomeScreen(
         state.topRatedMovies?.let {
             MovieList(
                 state.topRatedMovies.collectAsLazyPagingItems(),
-                onClick = { navigateToDetails(it) })
+                onClick = { navigateToDetails(it) }
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -315,13 +345,23 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Arabic Movies",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+            }
 
-            Text(
-                text = "Arabic Movies",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
-            )
+
             Text(
                 "See all",
                 color = Color.White,
@@ -346,12 +386,22 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
-            Text(
-                text = "Marvel Movies",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(4.dp)
+                        .background(MyRed)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Marvel Movies",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W100
+                )
+            }
+
             Text(
                 "See all",
                 color = Color.White,
@@ -365,15 +415,21 @@ fun HomeScreen(
         state.marvelMovies?.let {
             MovieList(
                 state.marvelMovies.collectAsLazyPagingItems(),
-                onClick = { navigateToDetails(it) })
+                onClick = { navigateToDetails(it) }
+            )
         }
         Spacer(modifier = Modifier.height(20.dp))
         Row(
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp)
+                .padding(start = 10.dp)
         ) {
+            Box(
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(4.dp)
+                    .background(MyRed)
+            )
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "Discover by genre",
                 color = Color.White,
@@ -383,9 +439,11 @@ fun HomeScreen(
         }
 
         GenreList(navigateToGenre = { navigateToAll(it) })
-        Spacer(modifier = Modifier
-            .navigationBarsPadding()
-            .height(110.dp))
+        Spacer(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .height(110.dp)
+        )
     }
 }
 

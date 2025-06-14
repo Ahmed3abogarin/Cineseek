@@ -6,8 +6,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,7 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -37,9 +36,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.movies.cinemix.presentation.MoviePickerScreen
-import com.movies.cinemix.presentation.PickerViewModel
-import com.movies.cinemix.presentation.RandomMovieScreen
+import com.movies.cinemix.R
+import com.movies.cinemix.presentation.FullScreenScreen
 import com.movies.cinemix.presentation.castdetails.CastScreen
 import com.movies.cinemix.presentation.castdetails.CastViewModel
 import com.movies.cinemix.presentation.details.DetailsEvent
@@ -52,6 +50,9 @@ import com.movies.cinemix.presentation.home.HomeViewModel
 import com.movies.cinemix.presentation.movies_navigator.components.BottomItem
 import com.movies.cinemix.presentation.movies_navigator.components.MoviesBottomNav
 import com.movies.cinemix.presentation.navGraph.Route
+import com.movies.cinemix.presentation.random.MoviePickerScreen
+import com.movies.cinemix.presentation.random.PickerViewModel
+import com.movies.cinemix.presentation.random.RandomMovieScreen
 import com.movies.cinemix.presentation.search.SearchScreen
 import com.movies.cinemix.presentation.search.SearchViewModel
 import com.movies.cinemix.presentation.seeall.SeeAllMovies
@@ -65,6 +66,7 @@ fun MoviesNavigatorScreen() {
     val castViewModel: CastViewModel = hiltViewModel()
 
 
+    val icRandom = ImageVector.vectorResource(R.drawable.ic_random)
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val bottomItems = remember {
@@ -74,7 +76,7 @@ fun MoviesNavigatorScreen() {
                 color = Color(0xFFFF0000)
             ),
             BottomItem(
-                icon = Icons.Rounded.Star,
+                icon = icRandom,
                 color = Color(0xFFFF0000)
             ),
             BottomItem(
@@ -112,8 +114,7 @@ fun MoviesNavigatorScreen() {
         backstackState?.destination?.route == Route.HomeScreen.route ||
                 backstackState?.destination?.route == Route.SearchScreen.route ||
                 backstackState?.destination?.route == Route.FavoriteScreen.route ||
-                backstackState?.destination?.route == Route.RandomMovieScreen.route ||
-                backstackState?.destination?.route == Route.MoviePickerScreen.route
+                backstackState?.destination?.route == Route.RandomMovieScreen.route
     }
 
 
@@ -204,18 +205,6 @@ fun MoviesNavigatorScreen() {
                         animationSpec = tween(durationMillis = 600)
                     )
                 },
-                popExitTransition = {
-                    scaleOut() + shrinkVertically(
-                        shrinkTowards = Alignment.Top,
-                        animationSpec = tween(1000)
-                    )
-                },
-                exitTransition = {
-                    scaleOut() + shrinkVertically(
-                        shrinkTowards = Alignment.Top,
-                        animationSpec = tween(1000)
-                    )
-                },
                 enterTransition = {
                     scaleIn() + expandVertically(
                         expandFrom = Alignment.CenterVertically,
@@ -237,7 +226,7 @@ fun MoviesNavigatorScreen() {
                     state = detailsViewModel.state.value,
                     event = detailsViewModel::onEvent,
                     navigateUp = {
-                        navController.navigateUp()
+                        navController.popBackStack()
 
                     },
                     lifecycleOwner = lifecycleOwner,
@@ -246,6 +235,10 @@ fun MoviesNavigatorScreen() {
                             navigator = navController,
                             personId = it
                         )
+                    },
+                    navigateToFull = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("movie_id", it)
+                        navController.navigate(route = Route.FullScreen.route)
                     }
                 )
 
@@ -273,14 +266,22 @@ fun MoviesNavigatorScreen() {
 
             composable(Route.MoviePickerScreen.route) {
                 val viewmodel: PickerViewModel = hiltViewModel()
-                MoviePickerScreen(viewmodel.state.value, viewmodel)
-
+                MoviePickerScreen(
+                    viewmodel.state.value,
+                    viewmodel,
+                    navigateToDetails = { movieId -> navigateToDetails(navController, movieId) })
             }
 
             composable(Route.RandomMovieScreen.route) {
                 RandomMovieScreen {
                     navController.navigate(Route.MoviePickerScreen.route)
                 }
+            }
+            composable(Route.FullScreen.route) {
+                navController.previousBackStackEntry?.savedStateHandle?.get<String>("movie_id")
+                    ?.let {
+                        FullScreenScreen(it)
+                    }
             }
 
         }

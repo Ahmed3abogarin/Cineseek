@@ -81,7 +81,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    // YT player
     implementation (libs.core)
+    implementation (libs.custom.ui)
 
     //Coil
     implementation(libs.coil.compose)

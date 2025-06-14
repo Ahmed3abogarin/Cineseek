@@ -74,10 +74,9 @@ fun MoviesBottomNav(
     val indicatorWidth = (configuration.screenWidthDp / bottomItems.count()) / 2
 
 
-
     val indicatorOffset by animateIntOffsetAsState(
         targetValue = IntOffset(
-            bottomItems[selectedIndex].offset.x.toInt() + (bottomItems[selectedIndex].size.width / 4) - (bottomItems.count() * 2) + (-2),
+            bottomItems[selectedIndex].offset.x.toInt() + (bottomItems[selectedIndex].size.width / 4) - (bottomItems.count() * 2) ,
             15
         ),
         animationSpec = tween(400)
@@ -160,6 +159,7 @@ fun MoviesBottomNav(
                     indicatorOffset
                 },
             verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
                 modifier = Modifier
@@ -181,6 +181,7 @@ fun MoviesBottomNav(
             ) {
                 Box(
                     modifier = Modifier
+                        .background(Color.Yellow)
                         .width(50.dp)
                         .height(50.dp)
                         .drawBehind {
@@ -188,8 +189,8 @@ fun MoviesBottomNav(
                             val triangleWidth = size.width * 0.8f //relative triangle width
                             val triangleHeight = size.height * 1.5f //relative triangle height
 
-                            path.moveTo(size.width - 2f, 0f) //relative x move
-                            path.lineTo(size.width - triangleWidth, 0f)
+                            path.moveTo(size.width - 15f, 0f) //relative x move
+                            path.lineTo(size.width  + 15f , 0f)
                             path.lineTo(size.height - triangleHeight * 0.8f, triangleHeight)
                             path.lineTo(size.height + triangleWidth * 0.5f, triangleHeight)
 
@@ -221,7 +222,7 @@ fun MoviesBottomNav(
 
 @Preview(device = Devices.PIXEL_7_PRO, showBackground = true)
 @Composable
-fun BottomPreview(){
+fun BottomPreview() {
     val bottomItems = remember {
         mutableStateListOf(
             BottomItem(

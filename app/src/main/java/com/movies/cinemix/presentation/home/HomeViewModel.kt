@@ -6,13 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.movies.cinemix.SingleMovie
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,6 +34,15 @@ class HomeViewModel @Inject constructor(
         val arabicMovies = moviesUseCases.getArabicMovies.invoke().cachedIn(viewModelScope)
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.v("TTOO","get last iiss called")
+
+            val list = moviesUseCases.getLastMovies()
+            Log.v("TTOO","List size is: ${list.size}")
+            _state.value = _state.value.copy(lastMovies = list)
+        }
+
+
 
 
 
@@ -53,11 +58,6 @@ class HomeViewModel @Inject constructor(
 //                    _state.value = _state.value.copy(lastMovies = moviesList.asReversed())
 //                }
 //        }
-
-
-
-
-
 
         viewModelScope.launch {
             _state.value = _state.value.copy(nowPlaying = nowPlayingMovies)

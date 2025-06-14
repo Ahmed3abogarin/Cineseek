@@ -17,6 +17,7 @@ import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
@@ -156,9 +157,21 @@ class MoviesRepositoryImpl(
         lastMoviesDao.upsertMovie(LastMovies(movieId))
     }
 
-    override fun getLastMovies(): Flow<List<Int>> {
-        return lastMoviesDao.getLastMovies()
+    override suspend fun getLastMovies(): List<SingleMovie> {
+        Log.v("TTOO", "from impl called")
+        val movies = mutableListOf<SingleMovie>()
+
+        val listOfMovieIds = lastMoviesDao.getLastMovies().first()  // collect only the first emission
+        listOfMovieIds.forEach { movieId ->
+            getMovieById(movieId)?.let { movie ->
+                movies.add(movie)
+            }
+        }
+
+        Log.v("TTOO", "List size is: ${movies.size}")
+        return movies
     }
+
 
     override suspend fun getMovieById(movieId: Int): SingleMovie {
         return moviesApi.getMovieById(movieId)
@@ -167,8 +180,8 @@ class MoviesRepositoryImpl(
     override suspend fun getRandomMovie(page: Int): MovieResponse? {
         return try {
             return moviesApi.getRandomMovie(page = page)
-        }catch (e:Exception){
-            Log.v("TTOO","The error: ${e.message}")
+        } catch (e: Exception) {
+            Log.v("TTOO", "The error: ${e.message}")
             null
         }
     }
