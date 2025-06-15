@@ -67,7 +67,6 @@ fun MoviesNavigatorScreen() {
 
 
     val icRandom = ImageVector.vectorResource(R.drawable.ic_random)
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     val bottomItems = remember {
         mutableStateListOf(
@@ -229,7 +228,6 @@ fun MoviesNavigatorScreen() {
                         navController.popBackStack()
 
                     },
-                    lifecycleOwner = lifecycleOwner,
                     navigateToCastDetails = {
                         navigateToCastDetails(
                             navigator = navController,

@@ -1,8 +1,11 @@
 package com.movies.cinemix.presentation.common
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Star
@@ -31,14 +33,11 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.SideEffect
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -54,16 +52,18 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun YoutubePlayerO(
+fun YoutubePlayer(
     videoId: String,
-    lifecycleOwner: LifecycleOwner,
+    currentSecond: Float,
     onDismiss: () -> Unit,
+    updateSecond: (Float) -> Unit,
     navigateToFull: () -> Unit
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     BasicAlertDialog(
         onDismissRequest = { onDismiss() },
         modifier = Modifier.height(250.dp)
@@ -76,6 +76,7 @@ fun YoutubePlayerO(
                         enableAutomaticInitialization = false // Set to false if using custom listener
                         val options = IFramePlayerOptions.Builder()
                             .controls(0) // Hide default controls
+                            .rel(0)
                             .build()
 
                         initialize(object : AbstractYouTubePlayerListener() {
@@ -83,25 +84,26 @@ fun YoutubePlayerO(
                                 val customUiController =
                                     DefaultPlayerUiController(this@apply, youTubePlayer)
                                 customUiController.showFullscreenButton(true) // Optional
+                                customUiController.setFullscreenButtonClickListener{
+                                    navigateToFull()
+                                }
                                 setCustomPlayerUi(customUiController.rootView)
-                                youTubePlayer.loadVideo(videoId, 0f)
+                                youTubePlayer.loadVideo(videoId, currentSecond)
                             }
+
+
+                            override fun onCurrentSecond(
+                                youTubePlayer: YouTubePlayer,
+                                second: Float
+                            ) {
+                                super.onCurrentSecond(youTubePlayer, second)
+                                updateSecond(second)
+
+                            }
+
 
                         }, options)
                     }
-                    youTubePlayerView.addFullscreenListener(object : FullscreenListener{
-                        override fun onEnterFullscreen(
-                            fullscreenView: View,
-                            exitFullscreen: () -> Unit,
-                        ) {
-
-                        }
-
-                        override fun onExitFullscreen() {
-
-                        }
-
-                    })
 
                     // Add lifecycle observer after view is created
                     lifecycleOwner.lifecycle.addObserver(youTubePlayerView)
@@ -109,87 +111,58 @@ fun YoutubePlayerO(
                     youTubePlayerView
                 }
             )
-            IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = {navigateToFull()}) {
-                Icon(Icons.Default.Star, contentDescription = "", tint = Color.White)
-            }
         }
     }
 }
+
 @Composable
-fun YoutubePlayer(videoId: String, onBack: () -> Unit) {
+fun FullscreenYoutubePlayer(
+    videoId: String,
+    currentSecond: Float,
+    onBackPress: () -> Unit
+) {
+    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+    BackHandler { onBackPress() }
     val lifecycleOwner = LocalLifecycleOwner.current
-    var playbackPosition by rememberSaveable { mutableFloatStateOf(0f) }
+    val orientation = LocalConfiguration.current.orientation
+    AndroidView(
+        factory = { ctx ->
+            val youTubePlayerView = YouTubePlayerView(ctx).apply {
+                val options = IFramePlayerOptions.Builder().controls(1).build()
+                enableAutomaticInitialization = false
 
-    val configuration = LocalConfiguration.current
+                lifecycleOwner.lifecycle.addObserver(this)
 
-    val orientation = remember { mutableIntStateOf(configuration.orientation) }
+                initialize(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.loadVideo(videoId, currentSecond)
+                    }
+                }, options)
 
-    LaunchedEffect(configuration) {
-        orientation.intValue = configuration.orientation
-    }
-
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-    val window = (LocalView.current.context as ComponentActivity).window
-    SideEffect {
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            hide(WindowInsetsCompat.Type.statusBars())
-            hide(WindowInsetsCompat.Type.navigationBars())
-        }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            WindowCompat.getInsetsController(window, window.decorView).apply {
-                show(WindowInsetsCompat.Type.statusBars())
-                show(WindowInsetsCompat.Type.navigationBars())
             }
-        }
-    }
-
-    Box(
-        contentAlignment = Alignment.Center,
+            youTubePlayerView
+        },
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
-    ) {
-        AndroidView(
-            modifier = Modifier
-                .then(if (isLandscape) Modifier.fillMaxHeight() else Modifier.fillMaxWidth())
-                .aspectRatio(16f / 9f)
-                .align(Alignment.Center),
-            factory = { context ->
-                YouTubePlayerView(context).apply {
-                    lifecycleOwner.lifecycle.addObserver(this)
+            .aspectRatio(16f/9f)
+    )
+}
 
-                    addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.loadVideo(videoId, playbackPosition)
-                        }
 
-                        override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-                            playbackPosition = second
-                        }
-                    })
-                }
+@Composable
+fun LockScreenOrientation(orientation: Int) {
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+    DisposableEffect(Unit) {
+        val originalOrientation = activity?.requestedOrientation
+        activity?.requestedOrientation = orientation
+
+        onDispose {
+            // Restore original orientation when composable is removed
+            originalOrientation?.let {
+                activity.requestedOrientation = it
             }
-        )
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 16.dp, end = 16.dp)
-                .background(Color.White.copy(alpha = 0.1f), shape = CircleShape)
-                .clickable { onBack() }
-                .size(40.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Close,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
         }
     }
 }

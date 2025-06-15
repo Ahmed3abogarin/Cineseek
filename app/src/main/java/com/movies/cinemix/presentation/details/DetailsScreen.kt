@@ -31,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,16 +40,17 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
+import com.movies.cinemix.presentation.common.FullscreenYoutubePlayer
 import com.movies.cinemix.presentation.common.MovieButton
 import com.movies.cinemix.presentation.common.YoutubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
@@ -62,27 +64,27 @@ fun DetailsScreen(
     state: DetailsState,
     event: (DetailsEvent) -> Unit,
     navigateUp: () -> Unit,
-    lifecycleOwner: LifecycleOwner,
     navigateToCastDetails: (Int) -> Unit,
     navigateToFull: (String) -> Unit
 ) {
 
     val context = LocalContext.current
 
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var isFullScreen by rememberSaveable { mutableStateOf(false) }
+    var currentSecond by rememberSaveable { mutableStateOf(0f) }
 
 
-    if (showDialog && state.movieKey != null) {
-        YoutubePlayer(state.movieKey.toString(), onBack = { showDialog = false })
 
 
-        var isVisible by remember { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
-            // Delay to let the animation be noticeable
-            delay(300)
-            isVisible = true
-        }
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        // Delay to let the animation be noticeable
+        delay(300)
+        isVisible = true
+    }
 
 
 //    AnimatedVisibility(
@@ -96,8 +98,10 @@ fun DetailsScreen(
 //        exit = scaleOut() + shrinkVertically(shrinkTowards = Alignment.CenterVertically)
 //    ) {
 
-        state.movie?.let {
-            val movie = it
+    state.movie?.let {
+        val movie = it
+        Box(modifier = Modifier.fillMaxSize()) {
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -311,6 +315,33 @@ fun DetailsScreen(
 
                 }
             }
+
+            if (state.movieKey != null) {
+                if (showDialog) {
+                    YoutubePlayer(
+                        state.movieKey.toString(),
+                        currentSecond,
+                        onDismiss = { showDialog = false },
+                        updateSecond = { currentSecond = it },
+                        navigateToFull = { showDialog = false
+                            isFullScreen = true })
+                } else if (isFullScreen){
+                    FullscreenYoutubePlayer(
+                        videoId = state.movieKey.toString(),
+                        currentSecond = currentSecond,
+                        onBackPress = { isFullScreen = false
+                        showDialog = true})
+
+
+
+                }
+
+
+            }
+
         }
     }
+
+
 }
+
