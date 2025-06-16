@@ -124,7 +124,6 @@ fun FullscreenYoutubePlayer(
     LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
     BackHandler { onBackPress() }
     val lifecycleOwner = LocalLifecycleOwner.current
-    val orientation = LocalConfiguration.current.orientation
     AndroidView(
         factory = { ctx ->
             val youTubePlayerView = YouTubePlayerView(ctx).apply {

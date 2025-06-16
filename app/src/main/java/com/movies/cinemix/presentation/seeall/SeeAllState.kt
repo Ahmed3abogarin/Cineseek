@@ -5,5 +5,6 @@ import com.movies.cinemix.domain.model.Movies
 import kotlinx.coroutines.flow.Flow
 
 data class SeeAllState(
+    val category: String? = null,
     val movies: Flow<PagingData<Movies>>? = null
 )
