@@ -52,7 +52,6 @@ import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
 import com.movies.cinemix.presentation.common.MovieButton
 import com.movies.cinemix.presentation.common.SharedYoutubePlayerScreen
-import com.movies.cinemix.presentation.common.YoutubePlayerHolder
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
@@ -65,7 +64,6 @@ fun DetailsScreen(
     event: (DetailsEvent) -> Unit,
     navigateUp: () -> Unit,
     navigateToCastDetails: (Int) -> Unit,
-    navigateToFull: (String) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -316,7 +314,7 @@ fun DetailsScreen(
             }
 
             if (showDialog && state.movieKey != null) {
-                YoutubePlayerHolder(
+                SharedYoutubePlayerScreen(
                     videoId = state.movieKey,
                     currentSecond = currentSecond,
                     isFullscreen = isFullScreen,

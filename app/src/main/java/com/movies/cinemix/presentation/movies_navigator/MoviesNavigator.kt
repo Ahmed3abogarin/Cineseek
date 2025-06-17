@@ -233,10 +233,6 @@ fun MoviesNavigatorScreen() {
                             navigator = navController,
                             personId = it
                         )
-                    },
-                    navigateToFull = {
-                        navController.currentBackStackEntry?.savedStateHandle?.set("movie_id", it)
-                        navController.navigate(route = Route.FullScreen.route)
                     }
                 )
 
