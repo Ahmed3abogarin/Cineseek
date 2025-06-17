@@ -116,7 +116,7 @@ fun YoutubePlayer(
 }
 
 @Composable
-fun SharedYoutubePlayerScreen(
+fun SharedYoutubePlayerScreenO(
     videoId: String,
     currentSecond: Float,
     isFullscreen: Boolean,
@@ -168,7 +168,7 @@ fun SharedYoutubePlayerScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color.Transparent)
             .let {
                 if (!isFullscreen) it.height(250.dp) else it
             }
@@ -185,6 +185,91 @@ fun SharedYoutubePlayerScreen(
     }
 }
 
+@Composable
+fun YoutubePlayerHolder(
+    videoId: String,
+    currentSecond: Float,
+    isFullscreen: Boolean,
+    onDismiss: () -> Unit,
+    onBackPress: () -> Unit,
+    updateSecond: (Float) -> Unit,
+    toggleFullscreen: () -> Unit,
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Remember the player view so it survives recompositions & fullscreen toggles
+    val youTubePlayerView = remember {
+        YouTubePlayerView(context).apply {
+            enableAutomaticInitialization = false
+            val options = IFramePlayerOptions.Builder()
+                .controls(1)
+                .rel(0)
+                .build()
+
+            initialize(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(videoId, currentSecond)
+                    val customUiController =
+                        DefaultPlayerUiController(this@apply, youTubePlayer)
+                    customUiController.setFullscreenButtonClickListener {
+                        toggleFullscreen()
+                    }
+                    setCustomPlayerUi(customUiController.rootView)
+                }
+
+                override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                    updateSecond(second)
+                }
+            }, options)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        lifecycleOwner.lifecycle.addObserver(youTubePlayerView)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(youTubePlayerView)
+        }
+    }
+
+    SharedYoutubePlayerScreen(
+        youTubePlayerView = youTubePlayerView,
+        isFullscreen = isFullscreen,
+        onDismiss = onDismiss,
+        onBackPress = onBackPress
+    )
+}
+@Composable
+fun SharedYoutubePlayerScreen(
+    youTubePlayerView: YouTubePlayerView,
+    isFullscreen: Boolean,
+    onDismiss: () -> Unit,
+    onBackPress: () -> Unit,
+) {
+    if (isFullscreen) {
+        LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+        BackHandler(onBack = onBackPress)
+    }
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Color.Transparent)
+            .let {
+                if (!isFullscreen) it.height(250.dp) else it
+            }
+    ) {
+        AndroidView(factory = { youTubePlayerView }, modifier = Modifier.fillMaxSize())
+        if (!isFullscreen) {
+            IconButton(
+                onClick = onDismiss,
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+            }
+        }
+    }
+}
 
 
 @Composable
