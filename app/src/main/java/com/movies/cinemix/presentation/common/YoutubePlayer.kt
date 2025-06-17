@@ -116,36 +116,75 @@ fun YoutubePlayer(
 }
 
 @Composable
-fun FullscreenYoutubePlayer(
+fun SharedYoutubePlayerScreen(
     videoId: String,
     currentSecond: Float,
-    onBackPress: () -> Unit
+    isFullscreen: Boolean,
+    onDismiss: () -> Unit,
+    onBackPress: () -> Unit,
+    updateSecond: (Float) -> Unit,
+    toggleFullscreen: () -> Unit
 ) {
-    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-    BackHandler { onBackPress() }
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    AndroidView(
-        factory = { ctx ->
-            val youTubePlayerView = YouTubePlayerView(ctx).apply {
-                val options = IFramePlayerOptions.Builder().controls(1).build()
-                enableAutomaticInitialization = false
+    val youTubePlayerView = remember {
+        YouTubePlayerView(context).apply {
+            enableAutomaticInitialization = false
+            val options = IFramePlayerOptions.Builder()
+                .controls(1)
+                .rel(0)
+                .build()
 
-                lifecycleOwner.lifecycle.addObserver(this)
-
-                initialize(object : AbstractYouTubePlayerListener() {
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.loadVideo(videoId, currentSecond)
+            initialize(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(videoId, currentSecond)
+                    val customUiController =
+                        DefaultPlayerUiController(this@apply, youTubePlayer)
+                    customUiController.setFullscreenButtonClickListener {
+                        toggleFullscreen()
                     }
-                }, options)
+                    setCustomPlayerUi(customUiController.rootView)
+                }
 
-            }
-            youTubePlayerView
-        },
-        modifier = Modifier
+                override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                    updateSecond(second)
+                }
+            }, options)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        lifecycleOwner.lifecycle.addObserver(youTubePlayerView)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(youTubePlayerView)
+        }
+    }
+
+    if (isFullscreen) {
+        LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+        BackHandler(onBack = onBackPress)
+    }
+
+    Box(
+        Modifier
             .fillMaxSize()
-            .aspectRatio(16f/9f)
-    )
+            .background(Color.Black)
+            .let {
+                if (!isFullscreen) it.height(250.dp) else it
+            }
+    ) {
+        AndroidView(factory = { youTubePlayerView }, modifier = Modifier.fillMaxSize())
+        if (!isFullscreen) {
+            IconButton(
+                onClick = onDismiss,
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+            }
+        }
+    }
 }
+
 
 
 @Composable

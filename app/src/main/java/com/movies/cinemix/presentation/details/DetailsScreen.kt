@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -40,7 +41,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,9 +50,8 @@ import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
-import com.movies.cinemix.presentation.common.FullscreenYoutubePlayer
 import com.movies.cinemix.presentation.common.MovieButton
-import com.movies.cinemix.presentation.common.YoutubePlayer
+import com.movies.cinemix.presentation.common.SharedYoutubePlayerScreen
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
@@ -72,7 +71,7 @@ fun DetailsScreen(
 
     var showDialog by rememberSaveable { mutableStateOf(false) }
     var isFullScreen by rememberSaveable { mutableStateOf(false) }
-    var currentSecond by rememberSaveable { mutableStateOf(0f) }
+    var currentSecond by rememberSaveable { mutableFloatStateOf(0f) }
 
 
 
@@ -100,7 +99,6 @@ fun DetailsScreen(
 
     state.movie?.let {
         val movie = it
-        Box(modifier = Modifier.fillMaxSize()) {
 
             Box(
                 modifier = Modifier
@@ -316,32 +314,21 @@ fun DetailsScreen(
                 }
             }
 
-            if (state.movieKey != null) {
-                if (showDialog) {
-                    YoutubePlayer(
-                        state.movieKey.toString(),
-                        currentSecond,
-                        onDismiss = { showDialog = false },
-                        updateSecond = { currentSecond = it },
-                        navigateToFull = { showDialog = false
-                            isFullScreen = true })
-                } else if (isFullScreen){
-                    FullscreenYoutubePlayer(
-                        videoId = state.movieKey.toString(),
-                        currentSecond = currentSecond,
-                        onBackPress = { isFullScreen = false
-                        showDialog = true})
-
-
-
-                }
+            if (showDialog && state.movieKey != null) {
+                SharedYoutubePlayerScreen(
+                    videoId = state.movieKey,
+                    currentSecond = currentSecond,
+                    isFullscreen = isFullScreen,
+                    onDismiss = { showDialog = false},
+                    onBackPress = { isFullScreen = false },
+                    updateSecond = { newSec -> currentSecond = newSec },
+                    toggleFullscreen = { isFullScreen = !isFullScreen  }
+                )
 
 
             }
 
-        }
+
     }
-
-
 }
 
