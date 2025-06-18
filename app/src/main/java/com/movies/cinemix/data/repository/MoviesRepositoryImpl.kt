@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.movies.cinemix.SingleMovie
+import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.data.local.LastMoviesDao
 import com.movies.cinemix.data.local.MoviesDao
 import com.movies.cinemix.data.remote.MoviesApi
@@ -13,7 +13,7 @@ import com.movies.cinemix.domain.model.CastResponse
 import com.movies.cinemix.domain.model.LastMovies
 import com.movies.cinemix.domain.model.MovieKeyResponse
 import com.movies.cinemix.domain.model.MovieResponse
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +24,7 @@ class MoviesRepositoryImpl(
     private val moviesDao: MoviesDao,
     private val lastMoviesDao: LastMoviesDao,
 ) : MoviesRepository {
-    override fun getNowPlayingMovies(): Flow<PagingData<Movies>> {
+    override fun getNowPlayingMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -33,7 +33,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getPopularMovies(): Flow<PagingData<Movies>> {
+    override fun getPopularMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -42,7 +42,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getTopRatedMovies(): Flow<PagingData<Movies>> {
+    override fun getTopRatedMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -51,7 +51,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getUpcomingMovies(): Flow<PagingData<Movies>> {
+    override fun getUpcomingMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -60,7 +60,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getTrendingWeek(): Flow<PagingData<Movies>> {
+    override fun getTrendingWeek(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -69,7 +69,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getGenreMovies(genreNum: Int): Flow<PagingData<Movies>> {
+    override fun getGenreMovies(genreNum: Int): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -78,7 +78,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getMarvelsMovies(): Flow<PagingData<Movies>> {
+    override fun getMarvelsMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -87,7 +87,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun searchMovie(movieName: String): Flow<PagingData<Movies>> {
+    override fun searchMovie(movieName: String): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -115,19 +115,19 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun upsertMovie(movie: SingleMovie) {
+    override suspend fun upsertMovie(movie: MovieDetails) {
         moviesDao.upsert(movie)
     }
 
-    override suspend fun deleteMovie(movie: SingleMovie) {
+    override suspend fun deleteMovie(movie: MovieDetails) {
         moviesDao.delete(movie)
     }
 
-    override fun getMovies(): Flow<List<SingleMovie>> {
+    override fun getMovies(): Flow<List<MovieDetails>> {
         return moviesDao.getMovies()
     }
 
-    override fun getMovie(movieId: Int): SingleMovie? {
+    override fun getMovie(movieId: Int): MovieDetails? {
         return moviesDao.getMovie(movieId)
     }
 
@@ -135,7 +135,7 @@ class MoviesRepositoryImpl(
         return moviesApi.getPersonInfo(personId)
     }
 
-    override fun getPersonMovies(personId: Int): Flow<PagingData<Movies>> {
+    override fun getPersonMovies(personId: Int): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -144,7 +144,7 @@ class MoviesRepositoryImpl(
         ).flow
     }
 
-    override fun getArabicMovies(): Flow<PagingData<Movies>> {
+    override fun getArabicMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(10),
             pagingSourceFactory = {
@@ -157,9 +157,9 @@ class MoviesRepositoryImpl(
         lastMoviesDao.upsertMovie(LastMovies(movieId))
     }
 
-    override suspend fun getLastMovies(): List<SingleMovie> {
+    override suspend fun getLastMovies(): List<MovieDetails> {
         Log.v("TTOO", "from impl called")
-        val movies = mutableListOf<SingleMovie>()
+        val movies = mutableListOf<MovieDetails>()
 
         val listOfMovieIds = lastMoviesDao.getLastMovies().first()  // collect only the first emission
         listOfMovieIds.forEach { movieId ->
@@ -173,7 +173,7 @@ class MoviesRepositoryImpl(
     }
 
 
-    override suspend fun getMovieById(movieId: Int): SingleMovie {
+    override suspend fun getMovieById(movieId: Int): MovieDetails {
         return moviesApi.getMovieById(movieId)
     }
 

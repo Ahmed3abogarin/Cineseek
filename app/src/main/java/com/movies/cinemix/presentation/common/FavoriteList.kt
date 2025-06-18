@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
-import com.movies.cinemix.SingleMovie
+import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyRed
@@ -46,7 +46,7 @@ import java.util.Locale
 
 @Composable
 fun FavoriteList(
-    movies: List<SingleMovie>,
+    movies: List<MovieDetails>,
     onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -72,7 +72,7 @@ fun FavoriteList(
 
 @Composable
 fun FavoriteCard(
-    movie: SingleMovie,
+    movie: MovieDetails,
     onClick: () -> Unit,
     navigateToDetails: () -> Unit,
 ) {

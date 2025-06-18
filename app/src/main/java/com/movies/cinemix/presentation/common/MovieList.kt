@@ -51,9 +51,9 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
-import com.movies.cinemix.SingleMovie
+import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.domain.model.Cast
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
@@ -65,7 +65,7 @@ import kotlin.math.abs
 
 @Composable
 fun MovieList(
-    moviesList: LazyPagingItems<Movies>,
+    moviesList: LazyPagingItems<Movie>,
     onClick: (Int) -> Unit,
 ) {
     val handlePagingResult = handlePagingResult(movies = moviesList)
@@ -88,7 +88,7 @@ fun MovieList(
 }
 
 @Composable
-fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Int) -> Unit) {
+fun SliderList(movies: LazyPagingItems<Movie>, onClick: (Int) -> Unit) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 3)
     if (handlePagingResult) {
         val pagerState = rememberPagerState(
@@ -196,8 +196,8 @@ fun SliderList(movies: LazyPagingItems<Movies>, onClick: (Int) -> Unit) {
 
 @Composable
 fun GridMoviesList(
-    movies: LazyPagingItems<Movies>,
-    navigateToDetails: (Movies) -> Unit,
+    movies: LazyPagingItems<Movie>,
+    navigateToDetails: (Movie) -> Unit,
 ) {
     val handlePagingResult = handlePagingResult(movies = movies, num = 2)
     if (handlePagingResult) {
@@ -266,7 +266,7 @@ fun CastList(cast: List<Cast>, navigateToCastDetails: (Int) -> Unit) {
 
 @Composable
 fun handlePagingResult(
-    movies: LazyPagingItems<Movies>,
+    movies: LazyPagingItems<Movie>,
     num: Int = 1,
 ): Boolean {
     val loadState = movies.loadState
@@ -316,7 +316,7 @@ fun handlePagingResult(
 }
 
 @Composable
-fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun MovieCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
     Column(modifier = Modifier.clickable { onClick() }) {
@@ -387,7 +387,7 @@ fun MovieCard(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit)
 }
 
 @Composable
-fun LastMovieCard(movie: SingleMovie, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
     Column(modifier = Modifier.clickable { onClick() }) {
@@ -458,7 +458,7 @@ fun LastMovieCard(movie: SingleMovie, modifier: Modifier = Modifier, onClick: ()
 }
 
 @Composable
-fun MovieCard2(movie: Movies, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
     Column(modifier = Modifier

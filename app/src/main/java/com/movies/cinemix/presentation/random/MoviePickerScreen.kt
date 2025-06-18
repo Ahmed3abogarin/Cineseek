@@ -1,6 +1,5 @@
 package com.movies.cinemix.presentation.random
 
-import android.graphics.Paint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
@@ -17,7 +16,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,16 +51,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -77,24 +67,18 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.movies.cinemix.R
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.Movie
+import com.movies.cinemix.presentation.random.components.CircularRating
+import com.movies.cinemix.presentation.random.components.RandomMoviesLoading
 import com.movies.cinemix.ui.theme.BorderColor
-import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
-import com.movies.cinemix.ui.theme.MyGreen
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.delay
-import java.util.Locale
 
 @Composable
 fun MoviePickerScreen(
-    movie: Movies?,
+    movie: Movie?,
     viewModel: PickerViewModel,
     navigateToDetails: (Int) -> Unit,
 ) {
@@ -125,7 +109,7 @@ fun MoviePickerScreen(
     ) {
         val showLoading = movie == null
 
-        val angle =  if (showLoading) {
+        val angle = if (showLoading) {
             val infiniteTransition = rememberInfiniteTransition(label = "rotation")
             infiniteTransition.animateFloat(
                 initialValue = 0f,
@@ -148,18 +132,22 @@ fun MoviePickerScreen(
             enter = fadeIn(tween(300)) + scaleIn(tween(300)),
             exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
         ) {
-                IconButton(modifier = Modifier.align(Alignment.TopStart).padding(start = 14.dp, top = 14.dp),onClick = {}) {
-                    Icon(Icons.Default.Close, contentDescription = null)
-                }
-                Text(
-                    text = "Random\nMovie Picker",
-                    fontSize = 38.sp,
-                    color = Color.White,
-                    letterSpacing = TextUnit(0.1f, TextUnitType.Em),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold,
-                    lineHeight = TextUnit(1.3f, TextUnitType.Em)
-                )
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 14.dp, top = 14.dp),
+                onClick = {}) {
+                Icon(Icons.Default.Close, contentDescription = null)
+            }
+            Text(
+                text = "Random\nMovie Picker",
+                fontSize = 38.sp,
+                color = Color.White,
+                letterSpacing = TextUnit(0.1f, TextUnitType.Em),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold,
+                lineHeight = TextUnit(1.3f, TextUnitType.Em)
+            )
 
         }
 
@@ -251,7 +239,11 @@ fun MoviePickerScreen(
                     tint = Color.White
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Pick another", fontSize = 22.sp,modifier = Modifier.padding(horizontal = 22.dp, vertical = 4.dp),)
+                Text(
+                    text = "Pick another",
+                    fontSize = 22.sp,
+                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 4.dp)
+                )
             }
         }
 
@@ -261,7 +253,7 @@ fun MoviePickerScreen(
 @Composable
 fun MoviePoster(
     image: AsyncImagePainter,
-    movie: Movies,
+    movie: Movie,
     roater: Float,
     onClick: () -> Unit,
 ) {
@@ -273,10 +265,6 @@ fun MoviePoster(
 
     val scaleW by animateDpAsState(targetValue = targetWidth, animationSpec = tween(500))
     val scaleH by animateDpAsState(targetValue = targetHeight, animationSpec = tween(500))
-
-
-
-
 
 
     LaunchedEffect(roater) {
@@ -330,7 +318,7 @@ fun MoviePoster(
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(text = movie.release_date, fontSize = 13.sp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(6.dp))
-                    CircularProgress(initialValue = movie.vote_average.toFloat())
+                    CircularRating(initialValue = movie.vote_average.toFloat())
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = "Language: ${movie.original_language}",
@@ -355,95 +343,6 @@ fun MoviePoster(
     }
 }
 
-@Composable
-fun RandomMoviesLoading() {
-    val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.random_loading))
-    val progress by animateLottieCompositionAsState(
-        composition = composition.value,
-        iterations = LottieConstants.IterateForever
-    )
-
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        LottieAnimation(
-            composition = composition.value,
-            progress = { progress }
-        )
-    }
-
-}
-
-@Composable
-fun CircularProgress(
-    initialValue: Float,
-    primaryColor: Color = Gold,
-    secondaryColor: Color = MyGreen,
-) {
-
-    val animateValue by animateFloatAsState(
-        targetValue = initialValue,
-        animationSpec = tween(5000, easing = LinearOutSlowInEasing)
-    )
-
-
-    Box {
-        Canvas(
-            modifier = Modifier
-                .size(90f.dp)
-        ) {
-            // background effect
-            drawCircle(
-                brush = Brush.radialGradient(
-                    listOf(
-                        primaryColor.copy(0.45f),
-                        secondaryColor.copy(0.15f)
-                    )
-                ),
-                radius = 70f,
-                center = center
-            )
-            val percentage = (animateValue / 10.0f) * 100f
-
-            // the progress
-            drawArc(
-                color = primaryColor,
-                startAngle = 90f,
-                sweepAngle = percentage * 3.6f,
-                style = Stroke(
-                    width = 7f,
-                    cap = StrokeCap.Round
-                ),
-                useCenter = false,
-                size = Size(
-                    width = 140f,
-                    height = 140f
-                ),
-
-                topLeft = Offset(
-                    (size.width - 140f) / 2f,
-                    (size.height - 140f) / 2f
-                )
-            )
-
-
-            drawContext.canvas.nativeCanvas.apply {
-                drawIntoCanvas {
-                    drawText(
-                        "${"%.1f".format(Locale.US, animateValue)} %",
-                        center.x,
-                        center.y + 16.dp.toPx() / 3f,
-                        Paint().apply {
-                            textSize = 16.sp.toPx()
-                            textAlign = Paint.Align.CENTER
-                            color = Color.White.toArgb()
-                            isFakeBoldText = true
-                        }
-                    )
-                }
-            }
-
-        }
-    }
-}
 
 @Preview
 @Composable

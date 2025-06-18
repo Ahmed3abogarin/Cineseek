@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movies.cinemix.SingleMovie
+import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -125,7 +125,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun deleteMovie(movie: SingleMovie) {
+    private fun deleteMovie(movie: MovieDetails) {
         viewModelScope.launch(Dispatchers.IO) {
             moviesUseCases.deleteMovie(movie)
             sideEffect = "Movie deleted :("
@@ -134,7 +134,7 @@ class DetailsViewModel @Inject constructor(
 
     }
 
-    private fun upsertMovie(movie: SingleMovie) {
+    private fun upsertMovie(movie: MovieDetails) {
         viewModelScope.launch(Dispatchers.IO) {
             moviesUseCases.upsertMovie(movie)
             sideEffect = "Movie Saved"

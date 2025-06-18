@@ -4,7 +4,7 @@ import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.movies.cinemix.Genre
+import com.movies.cinemix.domain.model.Genre
 
 
 @ProvidedTypeConverter

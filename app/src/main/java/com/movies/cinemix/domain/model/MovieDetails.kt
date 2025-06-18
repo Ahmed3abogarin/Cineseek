@@ -1,11 +1,11 @@
-package com.movies.cinemix
+package com.movies.cinemix.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
 @Entity
-data class SingleMovie(
+data class MovieDetails(
 //    val adult: Boolean,
     val backdrop_path: String,
 //    val belongs_to_collection: Any,

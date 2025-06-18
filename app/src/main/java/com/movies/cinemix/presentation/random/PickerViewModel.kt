@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ class PickerViewModel @Inject constructor(
     private val moviesUseCases: MoviesUseCases,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<Movies?>(null)
+    private val _state = mutableStateOf<Movie?>(null)
     val state = _state
 
     private val _key = mutableStateOf<String?>(null)

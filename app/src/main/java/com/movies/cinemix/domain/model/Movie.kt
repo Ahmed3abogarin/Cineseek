@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity
-data class Movies(
+data class Movie(
     val movieNum: Int,
     val adult: Boolean,
     val backdrop_path: String,

@@ -51,13 +51,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
-import com.movies.cinemix.domain.model.Movies
 import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.presentation.common.parallaxLayoutModifier
 import com.movies.cinemix.ui.theme.BorderColor
 import com.movies.cinemix.ui.theme.BoxColor
 import com.movies.cinemix.ui.theme.MyPurple
-import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.delay
 
 @Composable

@@ -1,18 +1,18 @@
 package com.movies.cinemix.presentation.home
 
 import androidx.paging.PagingData
-import com.movies.cinemix.SingleMovie
-import com.movies.cinemix.domain.model.Movies
+import com.movies.cinemix.domain.model.MovieDetails
+import com.movies.cinemix.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
 
 data class HomeState(
-    val nowPlaying: Flow<PagingData<Movies>>? = null,
-    val popularMovies: Flow<PagingData<Movies>>? = null,
-    val topRatedMovies: Flow<PagingData<Movies>>? = null,
-    val upcomingMovies: Flow<PagingData<Movies>>? = null,
-    val marvelMovies: Flow<PagingData<Movies>>? = null,
-    val trendWeek: Flow<PagingData<Movies>>? = null,
-    val arabicMovies: Flow<PagingData<Movies>>? = null,
+    val nowPlaying: Flow<PagingData<Movie>>? = null,
+    val popularMovies: Flow<PagingData<Movie>>? = null,
+    val topRatedMovies: Flow<PagingData<Movie>>? = null,
+    val upcomingMovies: Flow<PagingData<Movie>>? = null,
+    val marvelMovies: Flow<PagingData<Movie>>? = null,
+    val trendWeek: Flow<PagingData<Movie>>? = null,
+    val arabicMovies: Flow<PagingData<Movie>>? = null,
 
-    val lastMovies: List<SingleMovie>? = null,
+    val lastMovies: List<MovieDetails>? = null,
 )

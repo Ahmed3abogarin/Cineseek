@@ -30,14 +30,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.movies.cinemix.R
-import com.movies.cinemix.presentation.FullScreenScreen
 import com.movies.cinemix.presentation.castdetails.CastScreen
 import com.movies.cinemix.presentation.castdetails.CastViewModel
 import com.movies.cinemix.presentation.details.DetailsEvent
@@ -271,13 +269,6 @@ fun MoviesNavigatorScreen() {
                     navController.navigate(Route.MoviePickerScreen.route)
                 }
             }
-            composable(Route.FullScreen.route) {
-                navController.previousBackStackEntry?.savedStateHandle?.get<String>("movie_id")
-                    ?.let {
-                        FullScreenScreen(it)
-                    }
-            }
-
         }
 
         Column(
