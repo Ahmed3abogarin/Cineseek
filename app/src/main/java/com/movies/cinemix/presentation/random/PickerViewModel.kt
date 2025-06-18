@@ -1,6 +1,5 @@
 package com.movies.cinemix.presentation.random
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,12 +20,8 @@ class PickerViewModel @Inject constructor(
     private val _state = mutableStateOf<Movie?>(null)
     val state = _state
 
-    private val _key = mutableStateOf<String?>(null)
-    val key = _key
-    fun getRandomMovies() {
-        Log.v("TAGY", "Get Random is getting called ")
+    fun getRandomMovie() {
         viewModelScope.launch(Dispatchers.IO) {
-
             _state.value = null
             val page = (1..500).random()
             val list = moviesUseCases.getRandomMovie(page)?.results
@@ -35,20 +30,6 @@ class PickerViewModel @Inject constructor(
                 delay(5000)
                 _state.value = list?.random()
 
-            }
-        }
-    }
-
-    fun getMovieKey() {
-        viewModelScope.launch {
-            state.value?.let {
-                val id = moviesUseCases.getMovieKey(it.id)
-                id?.let {
-                    if (it.results.isNotEmpty()){
-                        _key.value = it.results.first().key
-                    }
-
-                }
             }
         }
     }

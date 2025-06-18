@@ -95,7 +95,7 @@ fun MoviePickerScreen(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.getRandomMovies()
+        viewModel.getRandomMovie()
     }
 
 
@@ -229,7 +229,7 @@ fun MoviePickerScreen(
                 border = BorderStroke(width = 1.dp, color = BorderColor),
                 onClick = {
                     rotated = false
-                    viewModel.getRandomMovies()
+                    viewModel.getRandomMovie()
                 }
             ) {
                 Icon(
