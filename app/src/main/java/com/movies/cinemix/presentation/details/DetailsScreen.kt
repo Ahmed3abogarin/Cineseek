@@ -51,7 +51,7 @@ import com.movies.cinemix.R
 import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
 import com.movies.cinemix.presentation.common.MovieButton
-import com.movies.cinemix.presentation.common.SharedYoutubePlayerScreen
+import com.movies.cinemix.presentation.common.MovieYouTubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
@@ -98,7 +98,6 @@ fun DetailsScreen(
 
     state.movie?.let {
         val movie = it
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -311,21 +310,25 @@ fun DetailsScreen(
                     }
 
                 }
+
+                if (showDialog && state.movieKey != null) {
+                    MovieYouTubePlayer(
+                        videoId = state.movieKey,
+                        currentSecond = currentSecond,
+                        isFullscreen = isFullScreen,
+                        onDismiss = { showDialog = false},
+                        onBackPress = { isFullScreen = false },
+                        updateSecond = { newSec -> currentSecond = newSec },
+                        toggleFullscreen = { isFullScreen = !isFullScreen  }
+                    )
+
+
+                }
+
+
             }
 
-            if (showDialog && state.movieKey != null) {
-                SharedYoutubePlayerScreen(
-                    videoId = state.movieKey,
-                    currentSecond = currentSecond,
-                    isFullscreen = isFullScreen,
-                    onDismiss = { showDialog = false},
-                    onBackPress = { isFullScreen = false },
-                    updateSecond = { newSec -> currentSecond = newSec },
-                    toggleFullscreen = { isFullScreen = !isFullScreen  }
-                )
 
-
-            }
 
 
     }
