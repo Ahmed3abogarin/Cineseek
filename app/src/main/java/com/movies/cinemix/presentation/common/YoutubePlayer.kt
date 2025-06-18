@@ -2,26 +2,22 @@ package com.movies.cinemix.presentation.common
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
-import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -54,10 +50,8 @@ fun MovieYouTubePlayer(
         YouTubePlayerView(context).apply {
             lifecycleOwner.lifecycle.addObserver(this)
             enableAutomaticInitialization = false
-
             initialize(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-
                     val customUiController =
                         DefaultPlayerUiController(this@apply, youTubePlayer)
                     customUiController.showBufferingProgress(false)
@@ -76,39 +70,30 @@ fun MovieYouTubePlayer(
         }
     }
 
-//    DisposableEffect(Unit) {
-////        lifecycleOwner.lifecycle.addObserver(youTubePlayerView)
-//        onDispose {
-//            lifecycleOwner.lifecycle.removeObserver(youTubePlayerView)
-//        }
-//    }
+    DisposableEffect(Unit) {
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(youTubePlayerView)
+        }
+    }
 
     if (isFullscreen) {
         LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
         BackHandler(onBack = onBackPress)
     }
-    val playerModifier = if (isFullscreen) {
-        Modifier
-            .fillMaxSize()
-    } else {
-        Modifier
-            .fillMaxWidth()
-            .aspectRatio(16f / 9f)
-    }
 
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
-            .let {
-                if (!isFullscreen) it.height(250.dp) else it
-            }
+            .background(if(!isFullscreen) Color.Black.copy(alpha = 0.5f) else Color.Black)
             .clickable { if (!isFullscreen) onDismiss()},
         contentAlignment = Alignment.Center
     ) {
 
         AndroidView(factory = {  youTubePlayerView},
-            modifier = Modifier.aspectRatio(16f / 9f)
+            modifier = Modifier
+                .then(if (isFullscreen) Modifier.fillMaxHeight().clip(RoundedCornerShape(14.dp)) else Modifier.fillMaxWidth().padding(18.dp))
+                .aspectRatio(16f / 9f)
+                .align(Alignment.Center)
 
         )
 
