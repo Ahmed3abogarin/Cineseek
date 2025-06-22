@@ -70,18 +70,22 @@ fun MoviesNavigatorScreen() {
         mutableStateListOf(
             BottomItem(
                 icon = Icons.Rounded.Home,
+                title = "Home",
                 color = Color(0xFFFF0000)
             ),
             BottomItem(
                 icon = icRandom,
+                title = "Random",
                 color = Color(0xFFFF0000)
             ),
             BottomItem(
                 icon = Icons.Rounded.Search,
+                title = "Search",
                 color = MyGreen
             ),
             BottomItem(
                 icon = Icons.Rounded.Favorite,
+                title = "Favorite",
                 color = MyPink
             )
         )
@@ -260,7 +264,8 @@ fun MoviesNavigatorScreen() {
                 val viewmodel: PickerViewModel = hiltViewModel()
                 MoviePickerScreen(
                     viewmodel.state.value,
-                    viewmodel,
+//                    viewmodel,
+                    navigateUp = {navController.navigateUp()},
                     navigateToDetails = { movieId -> navigateToDetails(navController, movieId) })
             }
 

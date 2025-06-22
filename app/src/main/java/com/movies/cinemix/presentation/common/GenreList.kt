@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.movies.cinemix.domain.model.GenreItem
+import com.movies.cinemix.domain.model.MovieGenre
 import com.movies.cinemix.domain.model.genres
 
 
@@ -36,7 +36,7 @@ fun GenreList(navigateToGenre: (String) -> Unit) {
 }
 
 @Composable
-fun GenreCard(item: GenreItem, onClick: () -> Unit) {
+fun GenreCard(item: MovieGenre, onClick: () -> Unit) {
     val colors = listOf(
         Color.Black,
         Color.Black.copy(alpha = .7f),

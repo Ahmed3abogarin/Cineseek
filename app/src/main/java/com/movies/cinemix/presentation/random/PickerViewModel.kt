@@ -20,6 +20,10 @@ class PickerViewModel @Inject constructor(
     private val _state = mutableStateOf<Movie?>(null)
     val state = _state
 
+    init {
+        getRandomMovie()
+    }
+
     fun getRandomMovie() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.value = null

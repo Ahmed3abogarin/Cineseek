@@ -1,12 +1,12 @@
 package com.movies.cinemix.domain.model
 
 sealed class MovieCategory(val route: String, val title: String) {
-    object NowPlaying : MovieCategory("nowPlaying", "Now Playing")
-    object TopRated : MovieCategory("topRated", "Top Rated")
-    object Upcoming : MovieCategory("upcoming", "Upcoming")
-    object Popular : MovieCategory("popular", "Popular")
-    object Arabic : MovieCategory("arabic", "Arabic")
-    object Marvel : MovieCategory("marvel", "Marvel Movies")
+    data object NowPlaying : MovieCategory("nowPlaying", "Now Playing")
+    data object TopRated : MovieCategory("topRated", "Top Rated")
+    data object Upcoming : MovieCategory("upcoming", "Upcoming")
+    data object Popular : MovieCategory("popular", "Popular")
+    data object Arabic : MovieCategory("arabic", "Arabic")
+    data object Marvel : MovieCategory("marvel", "Marvel Movies")
 
     open class GenreCategory(route: String, title: String, val genreId: Int) :
         MovieCategory(route, title)

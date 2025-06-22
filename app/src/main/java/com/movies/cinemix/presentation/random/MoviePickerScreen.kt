@@ -72,6 +72,7 @@ import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.presentation.random.components.CircularRating
 import com.movies.cinemix.presentation.random.components.RandomMoviesLoading
 import com.movies.cinemix.ui.theme.BorderColor
+import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.delay
@@ -79,8 +80,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun MoviePickerScreen(
     movie: Movie?,
-    viewModel: PickerViewModel,
     navigateToDetails: (Int) -> Unit,
+    navigateUp: () -> Unit
 ) {
     val context = LocalContext.current
     var isPlaying by remember { mutableStateOf(true) }
@@ -93,11 +94,6 @@ fun MoviePickerScreen(
         targetValue = if (rotated) 180f else 0f,
         animationSpec = tween(500)
     )
-
-    LaunchedEffect(Unit) {
-        viewModel.getRandomMovie()
-    }
-
 
     Box(
         modifier = Modifier
@@ -123,6 +119,13 @@ fun MoviePickerScreen(
         } else {
             0f
         }
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 14.dp, top = 14.dp),
+            onClick = { navigateUp() }) {
+            Icon(modifier = Modifier.size(50.dp), imageVector = Icons.Default.Close, contentDescription = null,tint = Color.LightGray)
+        }
 
         AnimatedVisibility(
             modifier = Modifier
@@ -132,13 +135,7 @@ fun MoviePickerScreen(
             enter = fadeIn(tween(300)) + scaleIn(tween(300)),
             exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
         ) {
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(start = 14.dp, top = 14.dp),
-                onClick = {}) {
-                Icon(Icons.Default.Close, contentDescription = null)
-            }
+
             Text(
                 text = "Random\nMovie Picker",
                 fontSize = 38.sp,
@@ -229,7 +226,7 @@ fun MoviePickerScreen(
                 border = BorderStroke(width = 1.dp, color = BorderColor),
                 onClick = {
                     rotated = false
-                    viewModel.getRandomMovie()
+//                    viewModel.getRandomMovie()
                 }
             ) {
                 Icon(
@@ -347,25 +344,27 @@ fun MoviePoster(
 @Preview
 @Composable
 fun MyPreview() {
-//    CinemixTheme {
-//        MoviePickerScreen(
-//            movie = Movies(
-//                2,
-//                true,
-//                "",
-//                listOf(1, 4),
-//                3,
-//                "",
-//                "",
-//                "Earl Eugene Scruggs was an American musician noted for popularizing a three-finger banjo picking style, now called .......",
-//                4.4,
-//                "",
-//                "",
-//                "Bad boys 3",
-//                false,
-//                5.0,
-//                4
-//            )
-//        )
-//    }
+    CinemixTheme {
+        MoviePickerScreen(
+            navigateToDetails = {},
+            navigateUp = {},
+            movie = Movie(
+                2,
+                true,
+                "",
+                listOf(1, 4),
+                3,
+                "",
+                "",
+                "Earl Eugene Scruggs was an American musician noted for popularizing a three-finger banjo picking style, now called .......",
+                4.4,
+                "",
+                "",
+                "Bad boys 3",
+                false,
+                5.0,
+                4
+            )
+        )
+    }
 }

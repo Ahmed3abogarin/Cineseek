@@ -2,6 +2,7 @@ package com.movies.cinemix.presentation.movies_navigator.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateIntOffsetAsState
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,13 +53,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.movies.cinemix.R
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.CinemixTheme
+import com.movies.cinemix.ui.theme.MyGray2
 import com.movies.cinemix.ui.theme.MyGreen
 import com.movies.cinemix.ui.theme.MyPink
 import kotlinx.coroutines.delay
@@ -114,14 +120,17 @@ fun MoviesBottomNav(
             .background(BottomColor)
     ) {
 
+        // The row that contains all the bottom icons
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(top = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             bottomItems.forEachIndexed { index, item ->
-                Box(
+                // This the column that been created for each icon
+                Column (
                     modifier = Modifier
                         .onGloballyPositioned {
                             val offset = it.positionInParent()
@@ -142,7 +151,7 @@ fun MoviesBottomNav(
                                 onItemClicked(index)
                             }
                         ),
-                    contentAlignment = Alignment.Center
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
                         modifier = Modifier.size(36.dp),
@@ -150,6 +159,7 @@ fun MoviesBottomNav(
                         contentDescription = null,
                         tint = Color.White
                     )
+                    Text(item.title, color = MyGray2, fontSize = 11.sp)
                 }
             }
         }
@@ -159,8 +169,8 @@ fun MoviesBottomNav(
                     indicatorOffset
                 },
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // The top line that the light effect inflate from
             Box(
                 modifier = Modifier
                     .shadow(
@@ -176,29 +186,39 @@ fun MoviesBottomNav(
             )
             AnimatedVisibility(
                 visible = !switching.value,
-                enter = expandVertically() + fadeIn(),
-                exit = shrinkVertically() + fadeOut(),
-            ) {
+                enter = expandVertically(
+                    expandFrom = Alignment.Top,
+                    animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(500)),
+                exit = shrinkVertically(
+                    shrinkTowards = Alignment.Top,
+                    animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(500)),
+            )  {
+                // The light effect
                 Box(
                     modifier = Modifier
-                        .background(Color.Yellow)
                         .width(50.dp)
                         .height(50.dp)
                         .drawBehind {
                             val path = Path()
-                            val triangleWidth = size.width * 0.8f //relative triangle width
-                            val triangleHeight = size.height * 1.5f //relative triangle height
 
-                            path.moveTo(size.width - 15f, 0f) //relative x move
-                            path.lineTo(size.width  + 15f , 0f)
-                            path.lineTo(size.height - triangleHeight * 0.8f, triangleHeight)
-                            path.lineTo(size.height + triangleWidth * 0.5f, triangleHeight)
+                            val beamTopWidth = size.width * 0.8f   // Narrow top
+                            val beamBottomWidth = size.width * 2f // Wide bottom spread
+                            val beamHeight = size.height * 2.0f     // Tall beam
 
-//                            path.moveTo(size.width + 10, 0f)
-//                            path.lineTo(size.width - (size.width - 60), 0f)
-//                            path.lineTo(size.height - 150,  195f)
-//                            path.lineTo(size.height + 60, 195f)
+                            val centerX = size.width / 2f
+                            val topLeftX = centerX - beamTopWidth / 2f
+                            val topRightX = centerX + beamTopWidth / 2f
+                            val bottomLeftX = centerX - beamBottomWidth / 2f
+                            val bottomRightX = centerX + beamBottomWidth / 2f
+
+                            path.moveTo(topLeftX, 0f)
+                            path.lineTo(topRightX, 0f)
+                            path.lineTo(bottomRightX, beamHeight)
+                            path.lineTo(bottomLeftX, beamHeight)
                             path.close()
+
                             drawPath(
                                 path = path,
                                 brush = Brush.verticalGradient(
@@ -211,7 +231,7 @@ fun MoviesBottomNav(
                                         ),
                                         Color.Transparent
                                     )
-                                ),
+                                )
                             )
                         }
                 )
@@ -223,18 +243,28 @@ fun MoviesBottomNav(
 @Preview(device = Devices.PIXEL_7_PRO, showBackground = true)
 @Composable
 fun BottomPreview() {
+    val icRandom = ImageVector.vectorResource(R.drawable.ic_random)
+
     val bottomItems = remember {
         mutableStateListOf(
             BottomItem(
                 icon = Icons.Rounded.Home,
+                title = "Home",
+                color = Color(0xFFFF0000)
+            ),
+            BottomItem(
+                icon = icRandom,
+                title = "Random",
                 color = Color(0xFFFF0000)
             ),
             BottomItem(
                 icon = Icons.Rounded.Search,
+                title = "Search",
                 color = MyGreen
             ),
             BottomItem(
                 icon = Icons.Rounded.Favorite,
+                title = "Favorite",
                 color = MyPink
             )
         )
@@ -248,6 +278,7 @@ fun BottomPreview() {
 data class BottomItem(
     val icon: ImageVector,
     val color: Color,
+    val title: String,
     val offset: Offset = Offset(0f, 0f),
-    val size: IntSize = IntSize(0, 0),
+    val size: IntSize = IntSize(10, 10),
 )

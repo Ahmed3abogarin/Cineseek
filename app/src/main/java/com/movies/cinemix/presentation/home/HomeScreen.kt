@@ -422,6 +422,8 @@ fun HomeScreen(
         Row(
             modifier = Modifier
                 .padding(start = 10.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
@@ -432,7 +434,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "Discover by genre",
-                color = Color.White,
+                color = Color.LightGray,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W100
             )

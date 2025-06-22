@@ -77,14 +77,11 @@ fun MovieList(
                     val currentMovie = moviesList[it]
                     Column {
                         MovieCard(movie, onClick = { onClick(currentMovie!!.id) })
-
                     }
                 }
-
             }
         }
     }
-
 }
 
 @Composable

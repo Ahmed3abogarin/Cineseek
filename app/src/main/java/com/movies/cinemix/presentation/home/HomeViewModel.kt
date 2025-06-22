@@ -26,6 +26,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getMovies() {
+
         val popularMovies = moviesUseCases.getPopularMovies.invoke().cachedIn(viewModelScope)
         val topRatedMovies = moviesUseCases.getTopRatedMovies.invoke().cachedIn(viewModelScope)
         val upcomingMovies = moviesUseCases.getUpcomingMovies.invoke().cachedIn(viewModelScope)
@@ -34,13 +35,13 @@ class HomeViewModel @Inject constructor(
         val arabicMovies = moviesUseCases.getArabicMovies.invoke().cachedIn(viewModelScope)
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.v("TTOO","get last iiss called")
-
-            val list = moviesUseCases.getLastMovies()
-            Log.v("TTOO","List size is: ${list.size}")
-            _state.value = _state.value.copy(lastMovies = list)
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            Log.v("TTOO","get last iiss called")
+//
+//            val list = moviesUseCases.getLastMovies()
+//            Log.v("TTOO","List size is: ${list.size}")
+//            _state.value = _state.value.copy(lastMovies = list)
+//        }
 
 
 
