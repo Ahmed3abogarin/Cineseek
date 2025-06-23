@@ -1,5 +1,7 @@
 package com.movies.cinemix.presentation.home
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +47,7 @@ import com.movies.cinemix.presentation.common.SliderList
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -54,13 +58,15 @@ fun HomeScreen(
     navigateToDetails: (Int) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val coroutine = rememberCoroutineScope()
 
 
 
     Column(
         modifier = Modifier
             .background(MyColor)
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -73,7 +79,16 @@ fun HomeScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
         ) {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                coroutine.launch {
+                    scrollState.animateScrollTo(
+                        scrollState.maxValue, animationSpec = tween(
+                            durationMillis = 800,
+                            easing = FastOutSlowInEasing
+                        )
+                    )
+                }
+            }) {
                 Icon(Icons.Default.Menu, contentDescription = "", tint = Color.White)
             }
             Image(painter = painterResource(R.drawable.app_logo), contentDescription = "App logo")
