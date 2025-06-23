@@ -264,7 +264,7 @@ fun MoviesNavigatorScreen() {
                 val viewmodel: PickerViewModel = hiltViewModel()
                 MoviePickerScreen(
                     viewmodel.state.value,
-//                    viewmodel,
+                    viewmodel,
                     navigateUp = {navController.navigateUp()},
                     navigateToDetails = { movieId -> navigateToDetails(navController, movieId) })
             }

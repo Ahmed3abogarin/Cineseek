@@ -35,13 +35,13 @@ class HomeViewModel @Inject constructor(
         val arabicMovies = moviesUseCases.getArabicMovies.invoke().cachedIn(viewModelScope)
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
-//        viewModelScope.launch(Dispatchers.IO) {
-//            Log.v("TTOO","get last iiss called")
-//
-//            val list = moviesUseCases.getLastMovies()
-//            Log.v("TTOO","List size is: ${list.size}")
-//            _state.value = _state.value.copy(lastMovies = list)
-//        }
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.v("TTOO","get last iiss called")
+
+            val list = moviesUseCases.getLastMovies()
+            Log.v("TTOO","List size is: ${list.size}")
+            _state.value = _state.value.copy(lastMovies = list)
+        }
 
 
 

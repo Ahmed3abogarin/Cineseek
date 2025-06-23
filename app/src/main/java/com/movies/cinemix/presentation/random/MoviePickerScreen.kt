@@ -59,7 +59,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -72,7 +71,6 @@ import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.presentation.random.components.CircularRating
 import com.movies.cinemix.presentation.random.components.RandomMoviesLoading
 import com.movies.cinemix.ui.theme.BorderColor
-import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.delay
@@ -80,6 +78,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun MoviePickerScreen(
     movie: Movie?,
+    viewModel: PickerViewModel,
     navigateToDetails: (Int) -> Unit,
     navigateUp: () -> Unit
 ) {
@@ -122,7 +121,7 @@ fun MoviePickerScreen(
         IconButton(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 14.dp, top = 14.dp),
+                .padding(start = 14.dp, top = 44.dp),
             onClick = { navigateUp() }) {
             Icon(modifier = Modifier.size(50.dp), imageVector = Icons.Default.Close, contentDescription = null,tint = Color.LightGray)
         }
@@ -226,7 +225,7 @@ fun MoviePickerScreen(
                 border = BorderStroke(width = 1.dp, color = BorderColor),
                 onClick = {
                     rotated = false
-//                    viewModel.getRandomMovie()
+                    viewModel.getRandomMovie()
                 }
             ) {
                 Icon(
@@ -340,31 +339,3 @@ fun MoviePoster(
     }
 }
 
-
-@Preview
-@Composable
-fun MyPreview() {
-    CinemixTheme {
-        MoviePickerScreen(
-            navigateToDetails = {},
-            navigateUp = {},
-            movie = Movie(
-                2,
-                true,
-                "",
-                listOf(1, 4),
-                3,
-                "",
-                "",
-                "Earl Eugene Scruggs was an American musician noted for popularizing a three-finger banjo picking style, now called .......",
-                4.4,
-                "",
-                "",
-                "Bad boys 3",
-                false,
-                5.0,
-                4
-            )
-        )
-    }
-}
