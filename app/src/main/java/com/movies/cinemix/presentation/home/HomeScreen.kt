@@ -83,7 +83,7 @@ fun HomeScreen(
                 coroutine.launch {
                     scrollState.animateScrollTo(
                         scrollState.maxValue, animationSpec = tween(
-                            durationMillis = 800,
+                            durationMillis = 1500,
                             easing = FastOutSlowInEasing
                         )
                     )

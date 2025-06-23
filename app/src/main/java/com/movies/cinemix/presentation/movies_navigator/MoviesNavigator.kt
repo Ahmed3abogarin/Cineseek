@@ -127,7 +127,7 @@ fun MoviesNavigatorScreen() {
             navController,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
-            startDestination = Route.RandomMovieScreen.route,
+            startDestination = Route.HomeScreen.route,
         ) {
             composable(Route.HomeScreen.route) {
                 val homeViewmodel: HomeViewModel = hiltViewModel()
