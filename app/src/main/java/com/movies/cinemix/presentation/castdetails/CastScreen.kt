@@ -21,13 +21,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,6 +46,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
+import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.MovieCard
 import com.movies.cinemix.presentation.common.parallaxLayoutModifier
 import com.movies.cinemix.ui.theme.BorderColor
@@ -100,20 +96,7 @@ fun CastScreen(
                     ),
             ) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    IconButton(
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 16.dp)
-                            .size(64.dp)
-                            .border(width = 1.dp, color = BorderColor, shape = CircleShape)
-                            .shadow(elevation = 8.dp, spotColor = Color.White, shape = CircleShape)
-                            .background(BoxColor, shape = CircleShape),
-                        onClick = { navigateUp() }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "",
-                            tint = Color.White
-                        )
-                    }
+                    BackArrow (Modifier.padding(top = 16.dp)){ navigateUp() }
                     Column(
                         modifier = Modifier
                             .padding(top = 38.dp)

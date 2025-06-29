@@ -48,8 +48,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
-import com.movies.cinemix.presentation.common.BackArrow
 import com.movies.cinemix.presentation.common.CastList
+import com.movies.cinemix.presentation.common.MovieBackArrow
 import com.movies.cinemix.presentation.common.MovieButton
 import com.movies.cinemix.presentation.common.MovieYouTubePlayer
 import com.movies.cinemix.ui.theme.BottomColor
@@ -123,7 +123,7 @@ fun DetailsScreen(
                         contentScale = ContentScale.FillBounds
                     )
 
-                    BackArrow(navigateUp = navigateUp)
+                    MovieBackArrow(navigateUp = navigateUp)
                 }
 
 
