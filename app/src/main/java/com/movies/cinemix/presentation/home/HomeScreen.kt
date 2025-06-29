@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +44,7 @@ import com.movies.cinemix.presentation.common.GenreList
 import com.movies.cinemix.presentation.common.LastMovieCard
 import com.movies.cinemix.presentation.common.MovieList
 import com.movies.cinemix.presentation.common.SliderList
-import com.movies.cinemix.ui.theme.BottomColor
+import com.movies.cinemix.ui.theme.HeaderColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.launch
@@ -65,17 +65,15 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .background(MyColor)
-            .verticalScroll(scrollState)
-            .statusBarsPadding(),
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(BottomColor)
-                .statusBarsPadding()
-                .padding(top = 20.dp),
+                .background(HeaderColor)
+                .statusBarsPadding(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
         ) {
@@ -121,9 +119,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Trending this week ",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -160,9 +156,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Last viewed",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.W100
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
 
@@ -201,9 +195,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Now playing",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -241,9 +233,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "What's Popular",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
 
             }
@@ -288,9 +278,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Upcoming movies",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -330,9 +318,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Top rated",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -370,9 +356,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Arabic Movies",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -411,9 +395,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Marvel Movies",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W100
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -449,9 +431,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "Discover by genre",
-                color = Color.LightGray,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W100
+                style = MaterialTheme.typography.titleLarge
             )
         }
 

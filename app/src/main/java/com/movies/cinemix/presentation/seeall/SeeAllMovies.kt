@@ -48,7 +48,7 @@ fun SeeAllMovies(
             BackArrow(modifier = Modifier.align(Alignment.CenterStart), navigateUp)
 
             state.category?.let {
-                Text(modifier = Modifier.align(Alignment.Center), text = it, style = MaterialTheme.typography.titleLarge, color = Color.White)
+                Text(modifier = Modifier.align(Alignment.Center), text = it, style = MaterialTheme.typography.headlineLarge, color = Color.White)
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
