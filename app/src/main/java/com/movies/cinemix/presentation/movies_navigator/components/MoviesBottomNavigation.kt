@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movies.cinemix.R
 import com.movies.cinemix.ui.theme.BottomColor
+import com.movies.cinemix.ui.theme.BottomIconColor
 import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyGray2
 import com.movies.cinemix.ui.theme.MyGreen
@@ -103,6 +104,13 @@ fun MoviesBottomNav(
     val switching = remember {
         mutableStateOf(false)
     }
+
+    val bottomIconColor by animateColorAsState(
+        targetValue = if (switching.value) Color.White else BottomIconColor,
+        animationSpec = tween(durationMillis = 1000) // Customize duration, easing, etc.
+    )
+
+
     LaunchedEffect(switching.value) {
         if (switching.value) {
             delay(250)
@@ -157,7 +165,7 @@ fun MoviesBottomNav(
                         modifier = Modifier.size(36.dp),
                         imageVector = item.icon,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = bottomIconColor
                     )
                     Text(item.title, color = MyGray2, fontSize = 11.sp)
                 }

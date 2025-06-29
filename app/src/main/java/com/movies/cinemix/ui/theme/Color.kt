@@ -22,3 +22,5 @@ val MyGreen = Color(0xFF00AA44)
 val MyRed = Color(0xFFc30101)
 
 val MyGray2 = Color(0x75FFFFFF)
+
+val BottomIconColor = Color(0xFF9E9E9E)
