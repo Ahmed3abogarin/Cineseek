@@ -105,11 +105,6 @@ fun MoviesBottomNav(
         mutableStateOf(false)
     }
 
-    val bottomIconColor by animateColorAsState(
-        targetValue = if (switching.value) Color.White else BottomIconColor,
-        animationSpec = tween(durationMillis = 1000) // Customize duration, easing, etc.
-    )
-
 
     LaunchedEffect(switching.value) {
         if (switching.value) {
@@ -138,6 +133,13 @@ fun MoviesBottomNav(
         ) {
             bottomItems.forEachIndexed { index, item ->
                 // This the column that been created for each icon
+
+                val bottomIconColor by animateColorAsState(
+                    targetValue = if (index == selectedIndex) Color.White else BottomIconColor,
+                    animationSpec = tween(durationMillis = 1000) // Customize duration, easing, etc.
+                )
+
+
                 Column (
                     modifier = Modifier
                         .onGloballyPositioned {
