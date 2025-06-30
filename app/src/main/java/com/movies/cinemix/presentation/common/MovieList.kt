@@ -334,6 +334,7 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) 
                         model = ImageRequest.Builder(context)
                             .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
                             .placeholder(R.drawable.place_holder)
+                            .crossfade(true)
                             .error(R.drawable.place_holder)
                             .build(),
                         contentDescription = null,

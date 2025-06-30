@@ -2,7 +2,6 @@ package com.movies.cinemix.presentation.movies_navigator
 
 import android.widget.Toast
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -175,7 +174,7 @@ fun MoviesNavigatorScreen() {
             }
             composable(
                 enterTransition = { slideInHorizontally(animationSpec = tween(400))},
-                popExitTransition = { slideOutHorizontally(animationSpec = tween(800)) },
+                popExitTransition = { slideOutHorizontally(targetOffsetX = {-it}) },
                 route = "seeAllScreen/{movie_category}") {
                 val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
                 SeeAllMovies(
@@ -189,25 +188,12 @@ fun MoviesNavigatorScreen() {
                     navigateUp = { navController.navigateUp() }
                 )
             }
-            composable(
-                "${Route.DetailsScreen.route}/{movie_id}",
-//                popEnterTransition = {
-//                    scaleIn() + expandVertically(
-//                        expandFrom = Alignment.CenterVertically,
-//                        animationSpec = tween(1000)
-//                    )
-//                },
-                popEnterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { x -> -x }, // Back-enter from left
-                        animationSpec = tween(durationMillis = 600)
-                    )
+            composable("${Route.DetailsScreen.route}/{movie_id}",
+                exitTransition = {
+                    slideOutHorizontally(targetOffsetX = {-it})
                 },
                 enterTransition = {
-                    scaleIn() + expandVertically(
-                        expandFrom = Alignment.CenterVertically,
-                        animationSpec = tween(1000)
-                    )
+                    scaleIn(tween(1000))
                 }) {
                 val detailsViewModel: DetailsViewModel = hiltViewModel()
 
