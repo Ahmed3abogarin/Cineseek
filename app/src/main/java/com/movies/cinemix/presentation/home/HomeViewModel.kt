@@ -1,6 +1,5 @@
 package com.movies.cinemix.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,13 +33,13 @@ class HomeViewModel @Inject constructor(
         val arabicMovies = moviesUseCases.getArabicMovies.invoke().cachedIn(viewModelScope)
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.v("TTOO","get last iiss called")
-
-            val list = moviesUseCases.getLastMovies()
-            Log.v("TTOO","List size is: ${list.size}")
-            _state.value = _state.value.copy(lastMovies = list)
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            Log.v("TTOO","get last iiss called")
+//
+//            val list = moviesUseCases.getLastMovies()
+//            Log.v("TTOO","List size is: ${list.size}")
+//            _state.value = _state.value.copy(lastMovies = list)
+//        }
 
 
 

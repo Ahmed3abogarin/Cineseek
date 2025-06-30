@@ -17,7 +17,7 @@ class PickerViewModel @Inject constructor(
     private val moviesUseCases: MoviesUseCases,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<Movie?>(null)
+    private val _state = mutableStateOf(RandomMovieState())
     val state = _state
 
     init {
@@ -26,15 +26,24 @@ class PickerViewModel @Inject constructor(
 
     fun getRandomMovie() {
         viewModelScope.launch(Dispatchers.IO) {
-            _state.value = null
+            _state.value = _state.value.copy(isLoading = true)
             val page = (1..500).random()
             val list = moviesUseCases.getRandomMovie(page)?.results
-            withContext(Dispatchers.Main) {
-                _state.value = null // if you want to show loading first
+            if (!list.isNullOrEmpty()){
                 delay(5000)
-                _state.value = list?.random()
-
+                withContext(Dispatchers.Main) {
+                    _state.value = _state.value.copy(movie = list.random())
+                }
+            }else{
+                _state.value = _state.value.copy(error = "Something went wrong :(")
             }
+            _state.value = _state.value.copy(isLoading = false)
         }
     }
 }
+
+data class RandomMovieState(
+    val isLoading: Boolean = false,
+    val movie: Movie? = null,
+    val error : String? = null
+)

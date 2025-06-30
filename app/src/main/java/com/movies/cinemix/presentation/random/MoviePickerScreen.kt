@@ -46,6 +46,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,6 +69,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movie
+import com.movies.cinemix.presentation.common.EmptyContent
 import com.movies.cinemix.presentation.random.components.CircularRating
 import com.movies.cinemix.presentation.random.components.RandomMoviesLoading
 import com.movies.cinemix.ui.theme.BorderColor
@@ -77,15 +79,14 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun MoviePickerScreen(
-    movie: Movie?,
+    state: RandomMovieState,
     viewModel: PickerViewModel,
     navigateToDetails: (Int) -> Unit,
     navigateUp: () -> Unit
 ) {
     val context = LocalContext.current
-    var isPlaying by remember { mutableStateOf(true) }
 
-    var rotated by remember { mutableStateOf(false) }
+    var rotated by rememberSaveable { mutableStateOf(false) }
 
     var flipTxt by remember { mutableStateOf("flip the card") }
 
@@ -102,9 +103,8 @@ fun MoviePickerScreen(
             .background(MyColor),
         contentAlignment = Alignment.Center
     ) {
-        val showLoading = movie == null
 
-        val angle = if (showLoading) {
+        val angle = if (state.isLoading) {
             val infiniteTransition = rememberInfiniteTransition(label = "rotation")
             infiniteTransition.animateFloat(
                 initialValue = 0f,
@@ -147,15 +147,30 @@ fun MoviePickerScreen(
 
         }
 
+
+        state.error?.let {
+            var startAnimation by remember {
+                mutableStateOf(false)
+            }
+            LaunchedEffect(key1 = true) {
+                startAnimation = true
+            }
+
+            val alphaAnimation by animateFloatAsState(
+                targetValue = if (startAnimation) 0.3f else 0f,
+                animationSpec = tween(durationMillis = 1500)
+            )
+            EmptyContent(alphaAnimation,it,R.drawable.ic_network_error)
+        }
+
         AnimatedVisibility(
-            visible = showLoading,
+            visible = state.isLoading ,
             enter = fadeIn(tween(300)) + scaleIn(tween(300)),
             exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
         ) {
             RandomMoviesLoading()
         }
-        isPlaying = false
-        movie?.let {
+        state.movie?.let {
             AnimatedVisibility(
                 visible = true,
                 enter = fadeIn() + scaleIn(tween(300)),
@@ -221,7 +236,7 @@ fun MoviePickerScreen(
                 shape = RoundedCornerShape(14.dp),
                 modifier = Modifier.padding(start = 4.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MyRed),
-                enabled = !showLoading,
+                enabled = !state.isLoading,
                 border = BorderStroke(width = 1.dp, color = BorderColor),
                 onClick = {
                     rotated = false
@@ -253,7 +268,7 @@ fun MoviePoster(
     roater: Float,
     onClick: () -> Unit,
 ) {
-    var showOverview by remember { mutableStateOf(false) }
+    var showOverview by rememberSaveable { mutableStateOf(false) }
 
 
     val targetWidth = if (showOverview) 171.dp else 229.dp

@@ -1,12 +1,11 @@
 package com.movies.cinemix.presentation.movies_navigator
 
 import android.widget.Toast
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -123,12 +122,7 @@ fun MoviesNavigatorScreen() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        NavHost(
-            navController,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            startDestination = Route.HomeScreen.route,
-        ) {
+        NavHost(navController, startDestination = Route.HomeScreen.route) {
             composable(Route.HomeScreen.route) {
                 val homeViewmodel: HomeViewModel = hiltViewModel()
                 val state = homeViewmodel.state.value
@@ -179,7 +173,10 @@ fun MoviesNavigatorScreen() {
                     )
                 })
             }
-            composable("seeAllScreen/{movie_category}") {
+            composable(
+                enterTransition = { slideInHorizontally(animationSpec = tween(400))},
+                popExitTransition = { slideOutHorizontally(animationSpec = tween(800)) },
+                route = "seeAllScreen/{movie_category}") {
                 val seeAllViewmodel: SeeAllViewModel = hiltViewModel()
                 SeeAllMovies(
                     viewModel = seeAllViewmodel,
@@ -328,9 +325,7 @@ fun navigateToTab(navController: NavController, route: String) {
 }
 
 private fun navigateToAll(navController: NavController, movieCategory: String) {
-    navController.navigate("seeAllScreen/$movieCategory") {
-        popUpTo(Route.SeeAllScreen.route)
-    }
+    navController.navigate("seeAllScreen/$movieCategory")
 }
 
 // Helper function to navigate to details screen

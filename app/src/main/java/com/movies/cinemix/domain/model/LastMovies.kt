@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class LastMovies(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val movieId: Int
 )
