@@ -466,8 +466,8 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
         Box {
             Card(
                 modifier = modifier
-                    .height(271.dp)
-                    .width(200.dp),
+                    .aspectRatio(2f / 3f)
+                    .fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -481,9 +481,7 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
                             .error(R.drawable.place_holder)
                             .build(),
                         contentDescription = null,
-                        modifier = Modifier
-                            .aspectRatio(2f / 3f)
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
                     )
                 }
