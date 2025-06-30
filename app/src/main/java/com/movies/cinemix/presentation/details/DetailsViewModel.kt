@@ -34,6 +34,7 @@ class DetailsViewModel @Inject constructor(
         savedStateHandle.get<String>("movie_id")?.let {
             getMovieById(it.toInt())
             getMovieKey(it.toInt())
+            check(it.toInt())
         }
     }
 

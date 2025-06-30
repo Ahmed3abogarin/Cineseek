@@ -39,7 +39,7 @@ fun MovieYouTubePlayer(
     updateSecond: (Float) -> Unit,
     toggleFullscreen: () -> Unit
 ) {
-    val context = LocalContext.current.applicationContext
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val youTubePlayerView = remember {
         val options = IFramePlayerOptions.Builder()
@@ -91,7 +91,7 @@ fun MovieYouTubePlayer(
 
         AndroidView(factory = {  youTubePlayerView},
             modifier = Modifier
-                .then(if (isFullscreen) Modifier.fillMaxHeight().clip(RoundedCornerShape(14.dp)) else Modifier.fillMaxWidth().padding(18.dp))
+                .then(if (isFullscreen) Modifier.fillMaxHeight() else Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).padding(18.dp))
                 .aspectRatio(16f / 9f)
                 .align(Alignment.Center)
 

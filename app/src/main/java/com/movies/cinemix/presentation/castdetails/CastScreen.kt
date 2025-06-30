@@ -150,7 +150,7 @@ fun CastScreen(
                         animationSpec = tween(durationMillis = 200)
                     ),
             ) {
-                person.also_known_as?.let {
+                if (!person.also_known_as.isNullOrEmpty()){
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
