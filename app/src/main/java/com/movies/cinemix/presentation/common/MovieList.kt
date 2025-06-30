@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -476,11 +477,12 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
                         model = ImageRequest.Builder(context)
                             .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
                             .placeholder(R.drawable.place_holder)
+                            .crossfade(true)
                             .error(R.drawable.place_holder)
                             .build(),
                         contentDescription = null,
                         modifier = Modifier
-                            .height(271.dp)
+                            .aspectRatio(2f / 3f)
                             .fillMaxWidth(),
                         contentScale = ContentScale.FillBounds
                     )
