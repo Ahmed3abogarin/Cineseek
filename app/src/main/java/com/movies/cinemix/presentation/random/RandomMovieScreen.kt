@@ -1,6 +1,5 @@
 package com.movies.cinemix.presentation.random
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,10 +14,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,12 +29,27 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.movies.cinemix.R
 import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun RandomMovieScreen(navigateToMoviePicker: () -> Unit) {
+    var isPlaying by remember { mutableStateOf(false) }
+    val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.random_start_lottie))
+    val progress by animateLottieCompositionAsState(
+        composition = composition.value,
+        isPlaying = isPlaying
+    )
+
+    val coroutine = rememberCoroutineScope()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -60,15 +78,22 @@ fun RandomMovieScreen(navigateToMoviePicker: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            Image(
+            LottieAnimation(
                 modifier = Modifier.size(300.dp),
-                painter = painterResource(R.drawable.random_ill),
-                contentDescription = ""
+                composition = composition.value,
+                progress = { progress }
+
             )
             Spacer(modifier = Modifier.height(56.dp))
 
             Button(
-                onClick = { navigateToMoviePicker() },
+                onClick = {
+                    isPlaying = true
+                    coroutine.launch {
+                        delay(1600)
+                        navigateToMoviePicker()
+                    }
+                },
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFE09B2D))
             ) {

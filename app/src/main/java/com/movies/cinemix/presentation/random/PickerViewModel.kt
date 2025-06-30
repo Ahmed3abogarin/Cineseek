@@ -26,6 +26,7 @@ class PickerViewModel @Inject constructor(
 
     fun getRandomMovie() {
         viewModelScope.launch(Dispatchers.IO) {
+            _state.value = _state.value.copy(movie = null)
             _state.value = _state.value.copy(isLoading = true)
             val page = (1..500).random()
             val list = moviesUseCases.getRandomMovie(page)?.results
