@@ -162,7 +162,7 @@ fun HomeScreen(
             }
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(it, key = { it.id}) { movie ->
-                    LastMovieCard(movie, modifier = Modifier.animateItem()){}
+                    LastMovieCard(movie, modifier = Modifier.animateItem()){navigateToDetails(movie.id)}
                 }
             }
         }
