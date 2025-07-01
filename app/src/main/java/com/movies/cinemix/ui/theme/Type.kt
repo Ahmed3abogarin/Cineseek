@@ -19,7 +19,7 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = FontFamily(Font(R.font.nunito_extralight)),
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 28.sp,
