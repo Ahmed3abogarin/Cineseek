@@ -48,9 +48,9 @@ interface MoviesRepository {
     fun getArabicMovies(): Flow<PagingData<Movie>>
 
     suspend fun upsertLastMovie(movieId: Int)
-    suspend fun getLastMovies() : List<MovieDetails>
+    fun getLastMovies() : Flow<List<MovieDetails>>
 
-    suspend fun getMovieById(movieId: Int): MovieDetails
+    suspend fun getMovieById(movieId: Int): MovieDetails?
 
     suspend fun getRandomMovie(page: Int):MovieResponse?
 

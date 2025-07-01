@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.domain.model.LastMovies
 
-@Database(entities = [MovieDetails::class, LastMovies::class], version = 8)
+@Database(entities = [MovieDetails::class, LastMovies::class], version = 12)
 @TypeConverters(MoviesTypeConverter::class)
 abstract class MovieDatabase: RoomDatabase() {
     abstract val moviesDao: MoviesDao

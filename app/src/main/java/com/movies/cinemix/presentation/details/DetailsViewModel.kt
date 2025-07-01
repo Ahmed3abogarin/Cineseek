@@ -43,13 +43,16 @@ class DetailsViewModel @Inject constructor(
             val movie = moviesUseCases.getMovieById(id)
             _state.value = _state.value.copy(movie = movie)
             getMovieCast(id)
-            addMovieToLast(movie.id)
+            addMovieToLast(movie?.id)
         }
 
     }
 
-    private suspend fun addMovieToLast(movieId: Int) {
-        moviesUseCases.upsertLastMovie(movieId )
+    private suspend fun addMovieToLast(movieId: Int?) {
+        movieId?.let {
+            moviesUseCases.upsertLastMovie(movieId )
+        }
+
     }
 
     private suspend fun getMovieCast(movieId: Int) {

@@ -49,7 +49,6 @@ import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun HomeScreen(
     state: HomeState,
@@ -159,20 +158,10 @@ fun HomeScreen(
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
-
-                Text(
-                    "See all",
-                    color = Color.White,
-                    fontSize = 12.sp,
-                    modifier = Modifier.clickable(onClick = {
-                        navigateToAll("nowPlaying")
-                    })
-                )
             }
-
-            LazyRow {
-                items(it) { movie ->
-                    LastMovieCard(movie) { }
+            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                items(it, key = { it.id}) { movie ->
+                    LastMovieCard(movie, modifier = Modifier.animateItem()){}
                 }
             }
         }

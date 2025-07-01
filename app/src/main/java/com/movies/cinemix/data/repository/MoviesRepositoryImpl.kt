@@ -17,7 +17,7 @@ import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.domain.model.PersonResponse
 import com.movies.cinemix.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
@@ -154,27 +154,30 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun upsertLastMovie(movieId: Int) {
-        lastMoviesDao.upsertMovie(LastMovies(movieId))
+        lastMoviesDao.upsertMovie(LastMovies(movieId = movieId))
+        lastMoviesDao.deleteOldEntries()
     }
 
-    override suspend fun getLastMovies(): List<MovieDetails> {
-        Log.v("TTOO", "from impl called")
-        val movies = mutableListOf<MovieDetails>()
-
-        val listOfMovieIds = lastMoviesDao.getLastMovies().first()  // collect only the first emission
-        listOfMovieIds.forEach { movieId ->
-            getMovieById(movieId)?.let { movie ->
-                movies.add(movie)
+    override fun getLastMovies(): Flow<List<MovieDetails>> =
+        lastMoviesDao.getLastMovies().map { ids ->
+                ids.mapNotNull { id ->
+                    try {
+                        getMovieById(id)
+                    } catch (e: Exception) {
+                        Log.e("LastMovies", "Error loading $id", e)
+                        null
+                    }
+                }
             }
+
+
+    override suspend fun getMovieById(movieId: Int): MovieDetails? {
+        return try {
+            moviesApi.getMovieById(movieId)
+        }catch (e: Exception){
+            Log.v("TTOO", "The error: ${e.message}")
+            null
         }
-
-        Log.v("TTOO", "List size is: ${movies.size}")
-        return movies
-    }
-
-
-    override suspend fun getMovieById(movieId: Int): MovieDetails {
-        return moviesApi.getMovieById(movieId)
     }
 
     override suspend fun getRandomMovie(page: Int): MovieResponse? {

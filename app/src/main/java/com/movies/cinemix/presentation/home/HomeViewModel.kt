@@ -7,16 +7,20 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.movies.cinemix.domain.usecases.movies.MoviesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val moviesUseCases: MoviesUseCases
+    private val moviesUseCases: MoviesUseCases,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(HomeState())
     val state: State<HomeState> = _state
+
+
 
 
     init {
@@ -33,30 +37,13 @@ class HomeViewModel @Inject constructor(
         val arabicMovies = moviesUseCases.getArabicMovies.invoke().cachedIn(viewModelScope)
         val marvelMovies = moviesUseCases.getMarvelMovies.invoke().cachedIn(viewModelScope)
 
-//        viewModelScope.launch(Dispatchers.IO) {
-//            Log.v("TTOO","get last iiss called")
-//
-//            val list = moviesUseCases.getLastMovies()
-//            Log.v("TTOO","List size is: ${list.size}")
-//            _state.value = _state.value.copy(lastMovies = list)
-//        }
+
+        moviesUseCases.getLastMovies()
+            .onEach { list ->
+                _state.value = _state.value.copy(lastMovies = list.asReversed())
+            }.launchIn(viewModelScope)
 
 
-
-
-
-//        viewModelScope.launch(Dispatchers.IO) {
-//            moviesUseCases.getLastMovies()
-//                .collect { list ->
-//                    val moviesList = mutableListOf<SingleMovie>()
-//                    list.forEach {
-//                        Log.v("TTTOO", "movie id is: $it")
-//                        moviesList.add(moviesUseCases.getMovieById(it))
-//                    }
-//                    Log.v("TTTOO", "list size is: ${moviesList.size}")
-//                    _state.value = _state.value.copy(lastMovies = moviesList.asReversed())
-//                }
-//        }
 
         viewModelScope.launch {
             _state.value = _state.value.copy(nowPlaying = nowPlayingMovies)
