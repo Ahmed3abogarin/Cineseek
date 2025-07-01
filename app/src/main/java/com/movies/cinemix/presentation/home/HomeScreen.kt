@@ -72,6 +72,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(HeaderColor)
+                .padding(top = 12.dp)
                 .statusBarsPadding(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
