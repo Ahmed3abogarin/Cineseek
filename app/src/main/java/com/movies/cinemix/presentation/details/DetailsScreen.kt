@@ -138,7 +138,7 @@ fun DetailsScreen(
                             Text(
                                 modifier = Modifier.weight(1f),
                                 text = movie.title,
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W900)
+                                style = MaterialTheme.typography.titleLarge
                             )
                             IconButton(
                                 modifier = Modifier

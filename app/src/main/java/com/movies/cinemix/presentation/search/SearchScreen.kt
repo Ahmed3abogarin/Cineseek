@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.movies.cinemix.presentation.common.EmptySearch
@@ -24,6 +28,12 @@ fun SearchScreen(
     navigateToDetails: (Int) -> Unit,
 ) {
 
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     Column(
         modifier = Modifier
             .background(MyColor)
@@ -32,6 +42,7 @@ fun SearchScreen(
     ) {
 
         MySearchBar(
+            modifier = Modifier.focusRequester(focusRequester),
             text = state.searchQuery,
             readOnly = false,
             onValueChange = { event(SearchEvent.UpdateSearchQuery(searchQuery = it)) },
