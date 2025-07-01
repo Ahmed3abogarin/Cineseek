@@ -131,17 +131,14 @@ fun DetailsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(70.dp)
-                                .padding(end = 12.dp, top = 12.dp),
+                                .padding(top = 12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 modifier = Modifier.weight(1f),
                                 text = movie.title,
-                                style = MaterialTheme.typography.titleLarge.copy(
-                                    Color.White,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W900)
                             )
                             IconButton(
                                 modifier = Modifier
@@ -176,7 +173,7 @@ fun DetailsScreen(
                                     tint = Color.White,
                                     modifier = Modifier
                                         .size(42.dp)
-                                        .padding(end = 5.dp, bottom = 7.dp)
+                                        .padding(bottom = 7.dp)
                                 )
                             }
 
@@ -227,12 +224,12 @@ fun DetailsScreen(
                         ) {
                             Text(
                                 text = movie.release_date,
-                                style = MaterialTheme.typography.bodyLarge.copy(Color.White)
+                                style = MaterialTheme.typography.bodyLarge.copy(Color.White,fontWeight = FontWeight.Bold)
                             )
 
                             Text(
                                 text = "IMDB ${"%.1f".format(Locale.US, movie.vote_average)}",
-                                style = MaterialTheme.typography.bodyLarge.copy(color = Gold)
+                                style = MaterialTheme.typography.bodyLarge.copy(color = Gold, fontWeight = FontWeight.Bold)
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
