@@ -137,7 +137,8 @@ fun HomeScreen(
             val trendMovies = state.trendWeek.collectAsLazyPagingItems()
             SliderList(movies = trendMovies, onClick = { navigateToDetails(it) })
         }
-        state.lastMovies?.let {
+        if(!state.lastMovies.isNullOrEmpty()) {
+            val movies = state.lastMovies
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
@@ -161,7 +162,7 @@ fun HomeScreen(
                 }
             }
             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(it, key = { it.id}) { movie ->
+                items(movies, key = { it.id}) { movie ->
                     LastMovieCard(movie, modifier = Modifier.animateItem()){navigateToDetails(movie.id)}
                 }
             }
