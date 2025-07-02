@@ -53,6 +53,7 @@ import com.movies.cinemix.presentation.search.SearchScreen
 import com.movies.cinemix.presentation.search.SearchViewModel
 import com.movies.cinemix.presentation.seeall.SeeAllMovies
 import com.movies.cinemix.presentation.seeall.SeeAllViewModel
+import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyGreen
 import com.movies.cinemix.ui.theme.MyPink
 
@@ -74,7 +75,7 @@ fun MoviesNavigatorScreen() {
             BottomItem(
                 icon = icRandom,
                 title = "Random",
-                color = Color(0xFFFF0000)
+                color = Gold
             ),
             BottomItem(
                 icon = Icons.Rounded.Search,
