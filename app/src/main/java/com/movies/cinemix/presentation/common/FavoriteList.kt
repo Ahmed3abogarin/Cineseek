@@ -145,7 +145,7 @@ fun FavoriteCard(
                 ) {
                     Text(
                         text = "Watch Trailer",
-                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                     )
                     Image(
                         painter = painterResource(R.drawable.ic_p),

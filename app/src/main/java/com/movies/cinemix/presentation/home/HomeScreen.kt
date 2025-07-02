@@ -119,7 +119,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Trending this week ",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
@@ -156,7 +156,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Last viewed",
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.headlineMedium
                     )
                 }
             }
@@ -185,7 +185,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Now playing",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
@@ -223,7 +223,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "What's Popular",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
 
             }
@@ -268,7 +268,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Upcoming movies",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
@@ -308,7 +308,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Top rated",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
@@ -346,7 +346,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Arabic Movies",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
@@ -385,7 +385,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "Marvel Movies",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
 
@@ -421,7 +421,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "Discover by genre",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineMedium
             )
         }
 

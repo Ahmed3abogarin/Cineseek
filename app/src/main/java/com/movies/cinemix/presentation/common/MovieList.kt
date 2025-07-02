@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -432,7 +433,7 @@ fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: (
                             .size(18.dp)
                             .padding(top = 6.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontFamily = FontFamily.Default, fontSize = 12.sp)
                 }
             }
         }

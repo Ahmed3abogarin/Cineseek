@@ -40,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -138,7 +137,7 @@ fun DetailsScreen(
                             Text(
                                 modifier = Modifier.weight(1f),
                                 text = movie.title,
-                                style = MaterialTheme.typography.titleLarge
+                                style = MaterialTheme.typography.headlineLarge
                             )
                             IconButton(
                                 modifier = Modifier
@@ -249,8 +248,7 @@ fun DetailsScreen(
                         ) {
                             Text(
                                 text = movie.overview,
-                                textAlign = TextAlign.Justify,
-                                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
 
