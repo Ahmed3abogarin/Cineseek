@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
-    kotlin("kapt")
+    id("kotlin-kapt")
 }
 
 android {
@@ -17,8 +17,8 @@ android {
         applicationId = "com.movies.cinemix"
         minSdk = 28
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
 
 
         val properties = Properties()

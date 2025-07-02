@@ -77,7 +77,7 @@ fun OnBoardingScreen(
 
             Text(
                 text = "Dive into the world of movies, save your favorites, Uncover cast details, behind-the-scenes stories, and everything you love, all in one place",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(24.dp))
