@@ -10,13 +10,9 @@ import androidx.compose.ui.unit.sp
 import com.movies.cinemix.R
 
 
-val Montserrat = FontFamily(
-    Font(R.font.montserrat_bold, FontWeight.Bold),
-    Font(R.font.montserrat_semibold, FontWeight.SemiBold),
-)
-
-val Inter = FontFamily(
-    Font(R.font.inter_semibold, FontWeight.SemiBold),
+val Nuntio = FontFamily(
+    Font(R.font.nunito, FontWeight.Normal),
+    Font(R.font.nunito_semibold, FontWeight.SemiBold),
 )
 
 val Poppins = FontFamily(
@@ -26,22 +22,32 @@ val Poppins = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    displayLarge = TextStyle(
-        fontFamily = Montserrat,
-        fontWeight = FontWeight.Bold,
-        fontSize = 30.sp,
+    titleSmall = TextStyle(
+        fontFamily = Nuntio,
+        fontWeight = FontWeight.Normal,
+        fontSize = 11.sp,
         color = Color.White,
-        letterSpacing = 1.sp,
-        lineHeight = 36.sp
+    ) ,
+    titleMedium = TextStyle(
+        fontFamily = Nuntio,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        color = Color.White
+    ) ,
+    headlineSmall = TextStyle(
+        fontFamily = Nuntio,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        color = Color.White,
     ),
     headlineMedium = TextStyle(
-        fontFamily = Inter,
+        fontFamily = Nuntio,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         color = Color.White
     ),
     headlineLarge = TextStyle(
-        fontFamily = Inter,
+        fontFamily = Nuntio,
         fontWeight = FontWeight.SemiBold,
         fontSize = 22.sp,
         color = Color.White

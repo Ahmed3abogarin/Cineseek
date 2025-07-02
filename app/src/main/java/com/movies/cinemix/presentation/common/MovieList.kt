@@ -43,7 +43,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -353,16 +352,14 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) 
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                     .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         tint = Gold,
-                        modifier = Modifier
-                            .size(18.dp)
-                            .padding(top = 6.dp)
+                        modifier = Modifier.size(16.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, style = MaterialTheme.typography.headlineSmall)
                 }
             }
         }
@@ -378,7 +375,7 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) 
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,
                 fontSize = 12.sp,
-                color = Color.White,
+                color = Color.LightGray,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -424,16 +421,14 @@ fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: (
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                     .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         tint = Gold,
-                        modifier = Modifier
-                            .size(18.dp)
-                            .padding(top = 6.dp)
+                        modifier = Modifier.size(16.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontFamily = FontFamily.Default, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, style = MaterialTheme.typography.headlineSmall)
                 }
             }
         }
@@ -449,7 +444,7 @@ fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: (
                 modifier = Modifier.padding(3.dp),
                 text = movie.title,
                 fontSize = 12.sp,
-                color = Color.White,
+                color = Color.LightGray,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -495,16 +490,14 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                     .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         tint = Gold,
-                        modifier = Modifier
-                            .size(18.dp)
-                            .padding(top = 6.dp)
+                        modifier = Modifier.size(16.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, fontSize = 12.sp)
+                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, style = MaterialTheme.typography.headlineSmall)
                 }
             }
         }

@@ -80,7 +80,6 @@ fun FavoriteCard(
 
     Row(
         modifier = Modifier
-            .height(190.dp)
             .fillMaxWidth()
             .clickable {
                 onClick()
@@ -145,12 +144,12 @@ fun FavoriteCard(
                 ) {
                     Text(
                         text = "Watch Trailer",
-                        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                     )
                     Image(
                         painter = painterResource(R.drawable.ic_p),
                         contentDescription = null,
-                        modifier = Modifier.size(35.dp)
+                        modifier = Modifier.size(28.dp)
                     )
 
                 }

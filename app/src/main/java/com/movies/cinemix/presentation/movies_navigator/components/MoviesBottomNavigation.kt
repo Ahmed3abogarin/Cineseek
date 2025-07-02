@@ -30,6 +30,7 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +57,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.movies.cinemix.R
 import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.BottomIconColor
@@ -124,7 +124,7 @@ fun MoviesBottomNav(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 14.dp),
+                .padding(top = 14.dp, bottom = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -166,7 +166,7 @@ fun MoviesBottomNav(
                         contentDescription = null,
                         tint = bottomIconColor
                     )
-                    Text(item.title, color = MyGray2, fontSize = 11.sp)
+                    Text(item.title, style = MaterialTheme.typography.titleSmall, color = MyGray2)
                 }
             }
         }

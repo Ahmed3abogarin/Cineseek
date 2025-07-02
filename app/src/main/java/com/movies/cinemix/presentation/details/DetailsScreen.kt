@@ -2,6 +2,7 @@ package com.movies.cinemix.presentation.details
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,7 +51,6 @@ import com.movies.cinemix.presentation.common.CastList
 import com.movies.cinemix.presentation.common.MovieBackArrow
 import com.movies.cinemix.presentation.common.MovieButton
 import com.movies.cinemix.presentation.common.MovieYouTubePlayer
-import com.movies.cinemix.ui.theme.BottomColor
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import java.util.Locale
@@ -96,12 +97,8 @@ fun DetailsScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.FillBounds
                 )
-
                 MovieBackArrow(navigateUp = navigateUp)
             }
-
-
-
 
             Box(
                 modifier = Modifier
@@ -109,7 +106,6 @@ fun DetailsScreen(
                     .align(Alignment.Center)
                     .padding(top = 190.dp)
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -117,14 +113,9 @@ fun DetailsScreen(
                         .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
                         .clip(shape = RoundedCornerShape(20.dp))
                         .background(Color.Black.copy(alpha = .68f))
-
-
                 ) {
-
                     Column(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
                     ) {
                         Row(
                             modifier = Modifier
@@ -192,13 +183,15 @@ fun DetailsScreen(
                                 items(genres) { genre ->
                                     Text(
                                         text = genre.name,
-                                        fontSize = 14.sp,
-                                        color = Color.White,
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                                         modifier = Modifier
-                                            .clip(
-                                                RoundedCornerShape(30.dp)
+                                            .clip(CircleShape)
+                                            .border(
+                                                width = 0.7.dp,
+                                                color = Color.White,
+                                                shape = CircleShape
                                             )
-                                            .background(BottomColor)
+                                            .background(Color.Black.copy(alpha = 0.7f))
                                             .padding(start = 8.dp, end = 8.dp)
                                     )
                                 }
@@ -223,12 +216,18 @@ fun DetailsScreen(
                         ) {
                             Text(
                                 text = movie.release_date,
-                                style = MaterialTheme.typography.bodyLarge.copy(Color.White,fontWeight = FontWeight.Bold)
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
                             )
 
                             Text(
                                 text = "IMDB ${"%.1f".format(Locale.US, movie.vote_average)}",
-                                style = MaterialTheme.typography.bodyLarge.copy(color = Gold, fontWeight = FontWeight.Bold)
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    color = Gold,
+                                    fontWeight = FontWeight.Bold
+                                )
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
@@ -236,7 +235,7 @@ fun DetailsScreen(
 
                         Text(
                             "Summery",
-                            style = MaterialTheme.typography.titleMedium.copy(Color.White)
+                            style = MaterialTheme.typography.headlineMedium
                         )
 
                         Spacer(modifier = Modifier.height(5.dp))
@@ -248,7 +247,7 @@ fun DetailsScreen(
                         ) {
                             Text(
                                 text = movie.overview,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
 

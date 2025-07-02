@@ -125,7 +125,7 @@ fun CastScreen(
 
                         Text(
                             text = person.name,
-                            style = MaterialTheme.typography.titleLarge.copy(color = Color.White)
+                            style = MaterialTheme.typography.headlineLarge
                         )
                     }
 

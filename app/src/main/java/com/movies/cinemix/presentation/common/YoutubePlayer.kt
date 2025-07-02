@@ -91,7 +91,7 @@ fun MovieYouTubePlayer(
 
         AndroidView(factory = {  youTubePlayerView},
             modifier = Modifier
-                .then(if (isFullscreen) Modifier.fillMaxHeight() else Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).padding(18.dp))
+                .then(if (isFullscreen) Modifier.fillMaxHeight() else Modifier.clip(RoundedCornerShape(14.dp)).fillMaxWidth().padding(18.dp))
                 .aspectRatio(16f / 9f)
                 .align(Alignment.Center)
 
