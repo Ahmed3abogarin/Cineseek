@@ -29,7 +29,7 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchMovie() {
-        if (state.value.searchQuery != " "){
+        if (state.value.searchQuery.isNotEmpty()){
             val movies = moviesUseCases.searchMovie(
                 movieName = state.value.searchQuery
             ).cachedIn(viewModelScope)
