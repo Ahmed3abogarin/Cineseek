@@ -27,7 +27,7 @@ class DetailsViewModel @Inject constructor(
 
 
     var sideEffect by mutableStateOf<String?>(null)
-        private set // this mean it can not be changed out side this fucking class
+        private set // this mean it can not be changed outside this fucking class
 
 
     init {

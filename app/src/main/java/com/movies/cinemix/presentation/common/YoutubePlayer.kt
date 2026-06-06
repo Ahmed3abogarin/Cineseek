@@ -3,6 +3,8 @@ package com.movies.cinemix.presentation.common
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,9 +44,17 @@ fun MovieYouTubePlayer(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val youTubePlayerView = remember {
-        val options = IFramePlayerOptions.Builder()
-            .controls(1)
+
+    // Animate overlay alpha
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (isFullscreen) 1f else 0.5f,
+        animationSpec = tween(400),
+        label = "backgroundAlpha"
+    )
+
+    val youTubePlayerView = remember(videoId) {
+        val options = IFramePlayerOptions.Builder(context)
+            .controls(0)
             .rel(0)
             .build()
 
@@ -73,6 +84,7 @@ fun MovieYouTubePlayer(
     DisposableEffect(Unit) {
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(youTubePlayerView)
+            youTubePlayerView.release()
         }
     }
 
@@ -82,36 +94,38 @@ fun MovieYouTubePlayer(
     }
 
     Box(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(if(!isFullscreen) Color.Black.copy(alpha = 0.5f) else Color.Black)
-            .clickable { if (!isFullscreen) onDismiss()},
+            .background(Color.Black.copy(alpha = backgroundAlpha))
+            .clickable { if (!isFullscreen) onDismiss() },
         contentAlignment = Alignment.Center
     ) {
-
-        AndroidView(factory = {  youTubePlayerView},
-            modifier = Modifier
+        AndroidView(
+            factory = { youTubePlayerView },
+            modifier =  Modifier
                 .then(if (isFullscreen) Modifier.fillMaxHeight() else Modifier.clip(RoundedCornerShape(14.dp)).fillMaxWidth().padding(18.dp))
                 .aspectRatio(16f / 9f)
-                .align(Alignment.Center)
-
+                .align(Alignment.Center),
+            update = { view ->
+                view.layoutParams = android.view.ViewGroup.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
         )
-
     }
 }
-
 
 @Composable
 fun LockScreenOrientation(orientation: Int) {
     val context = LocalContext.current
     val activity = context as? Activity
 
-    DisposableEffect(Unit) {
+    DisposableEffect(orientation) {
         val originalOrientation = activity?.requestedOrientation
         activity?.requestedOrientation = orientation
 
         onDispose {
-            // Restore original orientation when composable is removed
             originalOrientation?.let {
                 activity.requestedOrientation = it
             }

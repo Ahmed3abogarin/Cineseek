@@ -71,7 +71,6 @@ fun DetailsScreen(
 
 
     state.movie?.let {
-        val movie = it
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +87,7 @@ fun DetailsScreen(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
+                        .data("https://image.tmdb.org/t/p/w500/" + it.poster_path)
                         .placeholder(R.drawable.place_holder)
                         .crossfade(true)
                         .error(R.drawable.place_holder)
@@ -127,7 +126,7 @@ fun DetailsScreen(
                         ) {
                             Text(
                                 modifier = Modifier.weight(1f),
-                                text = movie.title,
+                                text = it.title,
                                 style = MaterialTheme.typography.headlineLarge
                             )
                             IconButton(
@@ -135,7 +134,7 @@ fun DetailsScreen(
                                     .padding(end = 5.dp, bottom = 7.dp)
                                     .size(42.dp),
                                 onClick = {
-                                    event(DetailsEvent.SaveDeleteMovie(movie))
+                                    event(DetailsEvent.SaveDeleteMovie(it))
                                 }) {
                                 Icon(
                                     modifier = Modifier.size(40.dp),
@@ -215,7 +214,7 @@ fun DetailsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = movie.release_date,
+                                text = it.release_date,
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     Color.White,
                                     fontWeight = FontWeight.Bold
@@ -223,7 +222,7 @@ fun DetailsScreen(
                             )
 
                             Text(
-                                text = "IMDB ${"%.1f".format(Locale.US, movie.vote_average)}",
+                                text = "IMDB ${"%.1f".format(Locale.US, it.vote_average)}",
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     color = Gold,
                                     fontWeight = FontWeight.Bold
@@ -246,7 +245,7 @@ fun DetailsScreen(
                                 .verticalScroll(rememberScrollState())
                         ) {
                             Text(
-                                text = movie.overview,
+                                text = it.overview,
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }

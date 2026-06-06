@@ -36,7 +36,7 @@ import com.movies.cinemix.domain.usecases.movies.UpsertMovie
 import com.movies.cinemix.domain.usecases.app_entry.AppEntryUseCases
 import com.movies.cinemix.domain.usecases.app_entry.ReadAppEntry
 import com.movies.cinemix.domain.usecases.app_entry.SaveAppEntry
-import com.movies.cinemix.util.Constants.NOW_PLAYING_URL
+import com.movies.cinemix.util.Constants.MOVIES_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,7 +53,7 @@ object AppModule {
     @Singleton
     fun provideMoviesRepository(): MoviesApi {
         return Retrofit.Builder()
-            .baseUrl(NOW_PLAYING_URL)
+            .baseUrl(MOVIES_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MoviesApi::class.java)
