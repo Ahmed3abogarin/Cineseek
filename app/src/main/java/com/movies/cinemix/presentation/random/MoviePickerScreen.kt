@@ -15,7 +15,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,8 +33,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -64,15 +61,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.movies.cinemix.R
 import com.movies.cinemix.domain.model.Movie
 import com.movies.cinemix.presentation.common.EmptyContent
+import com.movies.cinemix.presentation.common.RandomButton
 import com.movies.cinemix.presentation.random.components.CircularRating
 import com.movies.cinemix.presentation.random.components.RandomMoviesLoading
-import com.movies.cinemix.ui.theme.BorderColor
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyRed
 import kotlinx.coroutines.delay
@@ -82,7 +78,7 @@ fun MoviePickerScreen(
     state: RandomMovieState,
     viewModel: PickerViewModel,
     navigateToDetails: (Int) -> Unit,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -94,6 +90,22 @@ fun MoviePickerScreen(
         targetValue = if (rotated) 180f else 0f,
         animationSpec = tween(500)
     )
+    var showOverview by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(roater) {
+        if (roater == 180f) {
+            showOverview = false
+            delay(1500)
+            showOverview = true
+        }
+    }
+
+
+    val targetWidth = if (showOverview) 171.dp else 229.dp
+    val targetHeight = if (showOverview) 242.dp else 300.dp
+
+    val scaleW by animateDpAsState(targetValue = targetWidth, animationSpec = tween(500))
+    val scaleH by animateDpAsState(targetValue = targetHeight, animationSpec = tween(500))
 
     Box(
         modifier = Modifier
@@ -103,6 +115,7 @@ fun MoviePickerScreen(
             .background(MyColor),
         contentAlignment = Alignment.Center
     ) {
+
 
         val angle = if (state.isLoading) {
             val infiniteTransition = rememberInfiniteTransition(label = "rotation")
@@ -123,7 +136,12 @@ fun MoviePickerScreen(
                 .align(Alignment.TopStart)
                 .padding(start = 14.dp, top = 44.dp),
             onClick = { navigateUp() }) {
-            Icon(modifier = Modifier.size(50.dp), imageVector = Icons.Default.Close, contentDescription = null,tint = Color.LightGray)
+            Icon(
+                modifier = Modifier.size(50.dp),
+                imageVector = Icons.Default.Close,
+                contentDescription = null,
+                tint = Color.LightGray
+            )
         }
 
         AnimatedVisibility(
@@ -134,7 +152,6 @@ fun MoviePickerScreen(
             enter = fadeIn(tween(300)) + scaleIn(tween(300)),
             exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
         ) {
-
             Text(
                 text = "Random\nMovie Picker",
                 fontSize = 38.sp,
@@ -144,9 +161,7 @@ fun MoviePickerScreen(
                 fontWeight = FontWeight.SemiBold,
                 lineHeight = TextUnit(1.3f, TextUnitType.Em)
             )
-
         }
-
 
         state.error?.let {
             var startAnimation by remember {
@@ -160,13 +175,13 @@ fun MoviePickerScreen(
                 targetValue = if (startAnimation) 0.3f else 0f,
                 animationSpec = tween(durationMillis = 1500)
             )
-            EmptyContent(alphaAnimation,it,R.drawable.ic_network_error)
+            EmptyContent(alphaAnimation, it, R.drawable.ic_network_error)
         }
 
         AnimatedVisibility(
             visible = state.isLoading ,
             enter = fadeIn(tween(300)) + scaleIn(tween(300)),
-            exit = fadeOut(animationSpec = tween(300)) + scaleOut(tween(300))
+            exit = fadeOut(animationSpec = tween(1200)) + scaleOut(tween(800))
         ) {
             RandomMoviesLoading()
         }
@@ -211,18 +226,24 @@ fun MoviePickerScreen(
                         } else {
                             flipTxt = ""
                             MoviePoster(
-                                imagePainter,
+                                image = {
+                                    Image(
+                                        painter = imagePainter,
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .size(scaleW, scaleH)
+                                            .clip(RoundedCornerShape(16.dp))
+                                    )
+                                },
                                 it,
                                 roater,
                                 onClick = { navigateToDetails(it.id) }
                             )
                         }
-
                     }
                 }
-
             }
-
         }
         Column(
             modifier =
@@ -232,30 +253,16 @@ fun MoviePickerScreen(
                     .padding(bottom = 105.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.padding(start = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MyRed),
+            RandomButton(
+                modifier = Modifier.rotate(angle),
+                icon = Icons.Default.Refresh,
+                text = "Pick another movie",
                 enabled = !state.isLoading,
-                border = BorderStroke(width = 1.dp, color = BorderColor),
-                onClick = {
+                onclick = {
                     rotated = false
                     viewModel.getRandomMovie()
                 }
-            ) {
-                Icon(
-                    modifier = Modifier.rotate(angle),
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "",
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Pick another",
-                    fontSize = 22.sp,
-                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 4.dp)
-                )
-            }
+            )
         }
 
     }
@@ -263,29 +270,11 @@ fun MoviePickerScreen(
 
 @Composable
 fun MoviePoster(
-    image: AsyncImagePainter,
+    image: @Composable () -> Unit,
     movie: Movie,
     roater: Float,
     onClick: () -> Unit,
 ) {
-    var showOverview by rememberSaveable { mutableStateOf(false) }
-
-
-    val targetWidth = if (showOverview) 171.dp else 229.dp
-    val targetHeight = if (showOverview) 242.dp else 300.dp
-
-    val scaleW by animateDpAsState(targetValue = targetWidth, animationSpec = tween(500))
-    val scaleH by animateDpAsState(targetValue = targetHeight, animationSpec = tween(500))
-
-
-    LaunchedEffect(roater) {
-        if (roater == 180f) {
-            showOverview = false
-            delay(1500)
-            showOverview = true
-        }
-    }
-
     Column(
         modifier = Modifier
             .graphicsLayer {
@@ -294,8 +283,6 @@ fun MoviePoster(
             .clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         Row(
             modifier = Modifier
                 .animateContentSize(
@@ -306,15 +293,16 @@ fun MoviePoster(
                 )
                 .padding(horizontal = 8.dp)
         ) {
-            Image(
-                painter = image,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(scaleW, scaleH)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-            if (showOverview) {
+            image()
+//            Image(
+//                painter = image,
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .size(scaleW, scaleH)
+//                    .clip(RoundedCornerShape(16.dp))
+//            )
+            if (roater == 180f) {
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier = Modifier.animateContentSize()) {
                     Text(
@@ -340,7 +328,7 @@ fun MoviePoster(
             }
         }
 
-        if (showOverview) {
+        if (roater == 180f) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp),

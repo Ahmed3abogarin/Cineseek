@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +31,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.movies.cinemix.R
+import com.movies.cinemix.presentation.common.RandomButton
 import com.movies.cinemix.ui.theme.CinemixTheme
 import com.movies.cinemix.ui.theme.MyColor
 import kotlinx.coroutines.delay
@@ -63,7 +61,7 @@ fun RandomMovieScreen(navigateToMoviePicker: () -> Unit) {
         ) {
             Text(
                 text = "Random\nMovie Picker",
-                fontSize = 38.sp,
+                fontSize = 36.sp,
                 color = Color.White,
                 letterSpacing = TextUnit(0.1f, TextUnitType.Em),
                 textAlign = TextAlign.Center,
@@ -86,25 +84,14 @@ fun RandomMovieScreen(navigateToMoviePicker: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(56.dp))
 
-            Button(
-                onClick = {
-                    isPlaying = true
-                    coroutine.launch {
-                        delay(1600)
-                        navigateToMoviePicker()
-                    }
-                },
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0XFFE09B2D))
-            ) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 4.dp),
-                    text = "Pick a Movie",
-                    fontSize = 22.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            RandomButton(text = "Pick a movie", onclick = {
+                isPlaying = true
+                coroutine.launch {
+                    delay(1600)
+                    navigateToMoviePicker()
+                }
+            })
+            Spacer(modifier = Modifier.height(110.dp))
         }
     }
 }

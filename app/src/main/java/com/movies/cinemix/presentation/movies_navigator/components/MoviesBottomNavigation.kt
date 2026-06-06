@@ -271,7 +271,7 @@ fun BottomPreview() {
         )
     }
     CinemixTheme {
-        MoviesBottomNav(onItemClicked = {}, bottomItems = bottomItems, selectedIndex = 0)
+        MoviesBottomNav(onItemClicked = {}, bottomItems = bottomItems, selectedIndex = 1)
     }
 }
 

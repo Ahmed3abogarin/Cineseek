@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -52,13 +51,14 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.movies.cinemix.R
-import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.domain.model.Cast
 import com.movies.cinemix.domain.model.Movie
+import com.movies.cinemix.domain.model.MovieDetails
 import com.movies.cinemix.ui.theme.Gold
 import com.movies.cinemix.ui.theme.MyColor
 import com.movies.cinemix.ui.theme.MyColor2
 import com.movies.cinemix.ui.theme.MyRed
+import com.movies.cinemix.util.Constants.gradientBackground
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import java.util.Locale
@@ -69,6 +69,7 @@ fun MovieList(
     moviesList: LazyPagingItems<Movie>,
     onClick: (Int) -> Unit,
 ) {
+
     val handlePagingResult = handlePagingResult(movies = moviesList)
     val visibleMovies = minOf(20, moviesList.itemCount)
     if (handlePagingResult) {
@@ -94,11 +95,6 @@ fun SliderList(movies: LazyPagingItems<Movie>, onClick: (Int) -> Unit) {
             initialPage = 1
         )
         val context = LocalContext.current
-        val colors = listOf(
-            Color.Black,
-            Color.Black.copy(alpha = .7f),
-            Color.Transparent
-        ).reversed()
 
 
 
@@ -157,7 +153,7 @@ fun SliderList(movies: LazyPagingItems<Movie>, onClick: (Int) -> Unit) {
                         )
                         Row(
                             modifier = Modifier
-                                .background(brush = Brush.verticalGradient(colors))
+                                .background(brush = gradientBackground)
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth()
                                 .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
@@ -229,13 +225,14 @@ fun CastList(cast: List<Cast>, navigateToCastDetails: (Int) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         items(cast) { person ->
-            Column(modifier = Modifier
-                .width(74.dp)
-                .clickable(
-                    onClick = {
-                        navigateToCastDetails(person.id)
-                    }
-                )) {
+            Column(
+                modifier = Modifier
+                    .width(74.dp)
+                    .clickable(
+                        onClick = {
+                            navigateToCastDetails(person.id)
+                        }
+                    )) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .data("https://image.tmdb.org/t/p/w500/" + person.profile_path)
@@ -319,7 +316,6 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) 
 
     Column(modifier = Modifier.clickable { onClick() }) {
         Box {
-
             Card(
                 modifier = modifier
                     .height(231.dp)
@@ -352,33 +348,27 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) 
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                     .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.padding(
+                        start = 4.dp,
+                        end = 4.dp,
+                        top = 6.dp,
+                        bottom = 6.dp
+                    ), verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         tint = Gold,
                         modifier = Modifier.size(16.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = "%.1f".format(Locale.US, movie.vote_average),
+                        color = Gold,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
             }
-        }
-
-
-        Spacer(modifier = Modifier.height(7.dp))
-        Box(
-            modifier = Modifier
-                .width(140.dp)
-                .padding(start = 5.dp)
-        ) {
-            Text(
-                modifier = Modifier.padding(3.dp),
-                text = movie.title,
-                fontSize = 12.sp,
-                color = Color.LightGray,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
         }
     }
 }
@@ -389,7 +379,6 @@ fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: (
 
     Column(modifier = Modifier.clickable { onClick() }) {
         Box {
-
             Card(
                 modifier = modifier
                     .height(231.dp)
@@ -421,33 +410,27 @@ fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: (
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                     .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.padding(
+                        start = 4.dp,
+                        end = 4.dp,
+                        top = 6.dp,
+                        bottom = 6.dp
+                    ), verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         tint = Gold,
                         modifier = Modifier.size(16.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = "%.1f".format(Locale.US, movie.vote_average),
+                        color = Gold,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
             }
-        }
-
-
-        Spacer(modifier = Modifier.height(7.dp))
-        Box(
-            modifier = Modifier
-                .width(140.dp)
-                .padding(start = 5.dp)
-        ) {
-            Text(
-                modifier = Modifier.padding(3.dp),
-                text = movie.title,
-                fontSize = 12.sp,
-                color = Color.LightGray,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
         }
     }
 }
@@ -456,10 +439,11 @@ fun LastMovieCard(movie: MovieDetails, modifier: Modifier = Modifier, onClick: (
 fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val context = LocalContext.current
 
-    Column(modifier = Modifier
-        .background(MyColor)
-        .clickable { onClick() }) {
-
+    Column(
+        modifier = Modifier
+            .background(MyColor)
+            .clickable { onClick() }
+    ) {
         Box {
             Card(
                 modifier = modifier
@@ -467,9 +451,8 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                Column(modifier = Modifier.background(MyColor2)) {
+                Box {
                     AsyncImage(
                         model = ImageRequest.Builder(context)
                             .data("https://image.tmdb.org/t/p/w500/" + movie.poster_path)
@@ -481,6 +464,11 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
                     )
+                    Column (modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth().background(brush = gradientBackground )){
+                        Text(text= movie.title)
+                        Text(text= movie.release_date.split("-")[0])
+
+                    }
                 }
             }
             Box(
@@ -490,14 +478,25 @@ fun MovieCard2(movie: Movie, modifier: Modifier = Modifier, onClick: () -> Unit)
                     .shadow(2.dp, shape = RoundedCornerShape(30.dp))
                     .background(Color.Black.copy(alpha = .5f)), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.padding(
+                        start = 4.dp,
+                        end = 4.dp,
+                        top = 6.dp,
+                        bottom = 6.dp
+                    ), verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         Icons.Rounded.Star,
                         contentDescription = null,
                         tint = Gold,
                         modifier = Modifier.size(16.dp)
                     )
-                    Text(text = "%.1f".format(Locale.US,movie.vote_average), color = Gold, style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = "%.1f".format(Locale.US, movie.vote_average),
+                        color = Gold,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
             }
         }
