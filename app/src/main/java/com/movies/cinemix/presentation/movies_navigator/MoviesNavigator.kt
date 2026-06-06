@@ -1,10 +1,13 @@
 package com.movies.cinemix.presentation.movies_navigator
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -250,7 +253,8 @@ fun MoviesNavigatorScreen() {
                     viewmodel.state.value,
                     viewmodel,
                     navigateUp = {navController.navigateUp()},
-                    navigateToDetails = { movieId -> navigateToDetails(navController, movieId) })
+                    navigateToDetails = { movieId -> navigateToDetails(navController, movieId) }
+                )
             }
 
             composable(Route.RandomMovieScreen.route) {
@@ -266,7 +270,11 @@ fun MoviesNavigatorScreen() {
                 .navigationBarsPadding()
                 .padding(bottom = 22.dp)
         ) {
-            if (isBottomBarVisible) {
+            AnimatedVisibility(
+                visible = isBottomBarVisible,
+                exit = slideOutVertically (animationSpec = tween(200)){ it },
+                enter = slideInVertically { it }
+            ) {
                 MoviesBottomNav(
                     selectedIndex = selectedItem,
                     bottomItems = bottomItems,
@@ -295,9 +303,7 @@ fun MoviesNavigatorScreen() {
                     }
                 )
             }
-
         }
-
     }
 }
 

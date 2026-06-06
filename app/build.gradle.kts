@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace = "com.movies.cinemix"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.movies.cinemix"
         minSdk = 28
-        targetSdk = 35
-        versionCode = 4
-        versionName = "1.3"
+        targetSdk = 37
+        versionCode = 5
+        versionName = "1.4"
 
 
         val properties = Properties()
